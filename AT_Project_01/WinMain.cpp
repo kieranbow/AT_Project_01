@@ -7,6 +7,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		break;
+	case WM_KEYDOWN:
+		if (wParam == 'D')
+		{
+			SetWindowText(hWnd, L"New Text");
+		}
+		break;
+	case WM_KEYUP:
+		if (wParam == 'F')
+		{
+			SetWindowText(hWnd, L"More Text");
+		}
+		break;
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
@@ -45,10 +57,19 @@ int CALLBACK WinMain(
 	ShowWindow(hWnd, SW_SHOW);
 
 	MSG msg;
-	while (GetMessage(&msg, nullptr, 0, 0) > 0)
+	BOOL gResult;
+	while (gResult = GetMessage(&msg, nullptr, 0, 0) > 0)
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+	}
+	if (gResult == -1)
+	{
+		return -1;
+	}
+	else
+	{
+		return msg.wParam;
 	}
 	return 0;
 }
