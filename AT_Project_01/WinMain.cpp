@@ -1,27 +1,4 @@
-#include <Windows.h>
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_CLOSE:
-		PostQuitMessage(0);
-		break;
-	case WM_KEYDOWN:
-		if (wParam == 'D')
-		{
-			SetWindowText(hWnd, L"New Text");
-		}
-		break;
-	case WM_KEYUP:
-		if (wParam == 'F')
-		{
-			SetWindowText(hWnd, L"More Text");
-		}
-		break;
-	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
+#include "Window.h"
 
 int CALLBACK WinMain(
 	_In_ HINSTANCE hInstance, 
@@ -29,47 +6,16 @@ int CALLBACK WinMain(
 	_In_ LPSTR lpCmdLine, 
 	_In_ int nCmdShow)
 {
-	const auto pClassName = L"Windows";
+	// Creates window instance
+	Window window(hInstance, L"funny box", L"WindowClass", { 800, 600 }, {200, 200});
 
-	WNDCLASSEX wc = { 0 };
-	wc.cbSize = sizeof(wc);
-	wc.style = CS_OWNDC;
-	wc.lpfnWndProc = WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = nullptr;
-	wc.hCursor = nullptr;
-	wc.hbrBackground = nullptr;
-	wc.lpszMenuName = nullptr;
-	wc.lpszClassName = pClassName;
-	wc.hIconSm = nullptr;
-	RegisterClassEx(&wc);
+	// Render Window
+	window.Render(SW_SHOWDEFAULT);
 
-
-	HWND hWnd = CreateWindowEx(
-		0, pClassName,
-		L"Window",
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		200, 200, 640, 480,
-		nullptr, nullptr, hInstance, nullptr
-	);
-	ShowWindow(hWnd, SW_SHOW);
-
-	MSG msg;
-	BOOL gResult;
-	while (gResult = GetMessage(&msg, nullptr, 0, 0) > 0)
+	// Process window messages
+	while (window.ProcessMessages() == true)
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-	if (gResult == -1)
-	{
-		return -1;
-	}
-	else
-	{
-		return msg.wParam;
+
 	}
 	return 0;
 }
