@@ -5,22 +5,6 @@
 // C++
 #include <string>
 
-struct StructWndClass
-{
-	UINT			cbSize;
-	UINT			style;
-	WNDPROC   lpfnWndProc;
-	int				cbClsExtra;
-	int				cbWndExtra;
-	HINSTANCE hInstance;
-	HICON		hIcon;
-	HCURSOR   hCursor;
-	HBRUSH		hbrBackground;
-	LPCWSTR	lpszMenuName;
-	LPCWSTR	lpszClassName;
-	HICON		hIconSm;
-};
-
 struct V2Int
 {
 	V2Int(int _x, int _y) : x(_x), y(_y) {}
@@ -50,16 +34,18 @@ class Window
 		bool ProcessMessages();
 		
 	private:
-		HWND handle = NULL; // Window Handler
-		HINSTANCE hInstance = NULL; // Handler to instance of Window application
+		HWND handle				= NULL; // Window Handler
+		HINSTANCE hInstance	= NULL; // Handler to instance of Window application
 
-		LPCWSTR window_title = L"WindowTitle";
-		LPCWSTR window_class_name = L"WindowClass";
+		LPCWSTR window_title				= L"WindowTitle";
+		LPCWSTR window_class_name	= L"WindowClass";
+
+		static LRESULT CALLBACK SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		static LRESULT CALLBACK RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 		int wnd_width		= 0;
 		int wnd_height		= 0;
 		int wnd_posX		= 0;
 		int wnd_posY		= 0;
-
-		
 };
