@@ -28,11 +28,18 @@ struct V2Int
 	int y;
 };
 
+struct V2Uint
+{
+	V2Uint(unsigned int _x, unsigned int _y) : x(_x), y(_y) {}
+	unsigned int x;
+	unsigned int y;
+};
+
 class Window
 {
 	public:
 		// Constructor & Destructor
-		Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, V2Int size, V2Int position);
+		Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y);
 		~Window();
 
 		// Copy/Copy-Assign Operator
@@ -43,14 +50,16 @@ class Window
 		bool ProcessMessages();
 		
 	private:
-		int width		= 0;
-		int height	= 0;
-		int pos_x	= 0;
-		int pos_y	= 0;
+		HWND handle = NULL; // Window Handler
+		HINSTANCE hInstance = NULL; // Handler to instance of Window application
 
-		HWND handle				= NULL; // Window Handler
-		HINSTANCE hInstance	= NULL; // Handler to instance of Window application
+		LPCWSTR window_title = L"WindowTitle";
+		LPCWSTR window_class_name = L"WindowClass";
 
-		LPCWSTR window_title				= L"Default";
-		LPCWSTR window_class_name	= L"Default";
+		int wnd_width		= 0;
+		int wnd_height		= 0;
+		int wnd_posX		= 0;
+		int wnd_posY		= 0;
+
+		
 };

@@ -1,21 +1,47 @@
 #include "Window.h"
 
-Window::Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, V2Int size, V2Int position)
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	// Set Base Window Propertice
+	switch (msg)
+	{
+	case WM_CLOSE:
+		PostQuitMessage(0);
+		break;
+
+	case WM_KEYDOWN:
+		if (wParam == 'D')
+		{
+			SetWindowText(hWnd, L"New Text");
+		}
+		break;
+
+	case WM_KEYUP:
+		if (wParam == 'F')
+		{
+			SetWindowText(hWnd, L"More Text");
+		}
+		break;
+
+	}
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+Window::Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y)
+{
+	// Set Base Window Propertise
 	hInstance					= hInst;
 	window_title				= wnd_title;
 	window_class_name		= wnd_class;
-	width							= size.x;
-	height						= size.y;
-	pos_x							= position.x;
-	pos_y							= position.y;
+	wnd_width					= width;
+	wnd_height					= height;
+	wnd_posX					= pos_x;
+	wnd_posY					= pos_y;
 
 	// Create Window Class Extenstion
 	WNDCLASSEX wc = { 0 };
 	ZeroMemory(&wc, sizeof(wc));
 	wc.style					= CS_OWNDC;
-	wc.lpfnWndProc		= DefWindowProc;
+	wc.lpfnWndProc		= WndProc;
 	wc.cbClsExtra			= 0;
 	wc.cbWndExtra		= 0;
 	wc.hInstance			= hInstance;
@@ -30,7 +56,7 @@ Window::Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, V2Int size
 	// Register Window Class Extention
 	RegisterClassEx(&wc);
 
-	// Creates window
+	// Create window
 	handle = CreateWindowEx(
 		0,
 		window_class_name,
@@ -63,6 +89,7 @@ bool Window::ProcessMessages()
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
+	// 
 	if (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
@@ -81,3 +108,4 @@ bool Window::ProcessMessages()
 
 	return true;
 }
+
