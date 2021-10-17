@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "Engine.h"
 
 // Main entry point for WinAPI
 int CALLBACK WinMain(
@@ -8,15 +8,13 @@ int CALLBACK WinMain(
 	_In_ int nCmdShow)
 {
 	// Creates window instance
-	Window window(hInstance, L"funny box", L"MyWindow", 800, 600, 200, 200);
-
-	// Render Window
-	window.Render(SW_SHOWDEFAULT);
+	Engine bowEngine(L"funny box", L"MyWindow", 800, 600, 200, 200);
 
 	// Process window messages
-	while (window.ProcessMessages()== true)
+	while (bowEngine.ProcessWndMessages()== true)
 	{
 
 	}
+
 	return 0;
 }

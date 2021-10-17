@@ -26,16 +26,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-Window::Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y)
+Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y)
 {
 	// Set Base Window Propertise
-	hInstance					= hInst;
-	window_title				= wnd_title;
-	window_class_name		= wnd_class;
-	wnd_width					= width;
-	wnd_height					= height;
-	wnd_posX					= pos_x;
-	wnd_posY					= pos_y;
+	hInstance				= GetModuleHandle(NULL);
+	window_title			= wnd_title;
+	window_class_name	= wnd_class;
+	wnd_width				= width;
+	wnd_height				= height;
+	wnd_posX				= pos_x;
+	wnd_posY				= pos_y;
 
 	// Create Window Class Extenstion
 	WNDCLASSEX wc = { 0 };

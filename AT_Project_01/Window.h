@@ -23,7 +23,7 @@ class Window
 {
 	public:
 		// Constructor & Destructor
-		Window(HINSTANCE hInst, LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y);
+		Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y);
 		~Window();
 
 		// Copy/Copy-Assign Operator
@@ -44,8 +44,8 @@ class Window
 		static LRESULT CALLBACK RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-		int wnd_width		= 0;
-		int wnd_height		= 0;
-		int wnd_posX		= 0;
-		int wnd_posY		= 0;
+		int wnd_width	 = 0;
+		int wnd_height	 = 0;
+		int wnd_posX	 = 0;
+		int wnd_posY	 = 0;
 };
