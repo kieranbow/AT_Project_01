@@ -7,7 +7,7 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 
 bool Engine::ProcessWndMessages()
 {
-	return window.ProcessMessages() == true;
+	return window.ProcessMessages();
 }
 
 void Engine::Update()
@@ -20,12 +20,47 @@ void Engine::Update()
 		out_msg += "\n";
 		OutputDebugStringA(out_msg.c_str());
 	}
+
+	while (!keyboard.IsKeyBufferEmpty())
+	{
+		unsigned char keycode = keyboard.ReadKeycode().GetKeyCode();
+		std::string out_msg = "Keycode: ";
+		out_msg += keycode;
+		out_msg += "\n";
+		OutputDebugStringA(out_msg.c_str());
+	}
 }
 
 LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_KEYDOWN:
+		{
+			unsigned char keycode = static_cast<unsigned char>(wParam);
+
+			if (keyboard.IsAutoRepeatKeyOn())
+			{
+				keyboard.OnKeyPressed(keycode);
+			}
+			else
+			{
+				const bool wasPressed = lParam & 0x40000000;
+				if (!wasPressed)
+				{
+					keyboard.OnKeyPressed(keycode);
+				}
+			}
+			break;
+		}
+
+		case WM_KEYUP:
+		{
+			unsigned char keycode = static_cast<unsigned char>(wParam);
+			keyboard.OnKeyReleased(keycode);
+			break;
+		}
+
 		case WM_CHAR:
 		{
 			unsigned char ch = static_cast<unsigned char>(wParam);
@@ -42,9 +77,8 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					keyboard.OnChar(ch);
 				}
 			}
-			return 0;
+			break;
 		}
-
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}

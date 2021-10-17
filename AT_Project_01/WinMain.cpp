@@ -11,7 +11,7 @@ int CALLBACK WinMain(
 	Engine bowEngine(L"funny box", L"MyWindow", 800, 600, 200, 200);
 
 	// Process window messages
-	while (bowEngine.ProcessWndMessages()== true)
+	while (bowEngine.ProcessWndMessages() == true)
 	{
 		bowEngine.Update();
 	}

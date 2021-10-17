@@ -16,6 +16,7 @@ public:
 	Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos);
 
 	bool ProcessWndMessages();
+	LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	void Update();
 
@@ -23,7 +24,7 @@ private:
 	Window window;
 	Keyboard keyboard;
 
-	LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	
 
 	void RenderFrame();
 

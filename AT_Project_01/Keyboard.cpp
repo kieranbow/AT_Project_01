@@ -72,7 +72,7 @@ Keyboard::Event Keyboard::ReadKeycode()
 
 unsigned char Keyboard::ReadChar()
 {
-	if (IsKeyBufferEmpty())
+	if (IsCharBufferEmpty())
 	{
 		return 0u;
 	}

@@ -1,30 +1,5 @@
 #include "Window.h"
-
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_CLOSE:
-		PostQuitMessage(0);
-		break;
-
-	case WM_KEYDOWN:
-		if (wParam == 'D')
-		{
-			SetWindowText(hWnd, L"New Text");
-		}
-		break;
-
-	case WM_KEYUP:
-		if (wParam == 'F')
-		{
-			SetWindowText(hWnd, L"More Text");
-		}
-		break;
-
-	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
+#include "Engine.h"
 
 Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y)
 {
@@ -95,9 +70,9 @@ bool Window::ProcessMessages()
 
 	if (msg.message == WM_NULL)
 	{
-		if (!IsWindow(this->handle))
+		if (!IsWindow(handle))
 		{
-			this->handle = NULL;
+			handle = NULL;
 			UnregisterClass(window_class_name, hInstance);
 			return false;
 		}
@@ -139,7 +114,7 @@ LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 	if (msg == WM_NCCREATE) // NCCREATE = Non-client Create
 	{
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
-		Window* const pWindow = reinterpret_cast<Window*>(pCreate->lpCreateParams);
+		Engine* const pWindow = reinterpret_cast<Engine*>(pCreate->lpCreateParams);
 
 		if (pWindow == NULL)
 		{
@@ -149,7 +124,8 @@ LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
 		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Window::RedirectMsg));
-		return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
+		// return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
+		return pWindow->WndProc(hWnd, msg, wParam, lParam);
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 
@@ -157,9 +133,18 @@ LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 
 LRESULT CALLBACK Window::RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (msg == WM_CLOSE)
+	{
+		DestroyWindow(hWnd);
+		return 0;
+	}
+
 	// Gets the long pointer from the window and passes msg info to HandleMsg function
-	Window* const pWindow = reinterpret_cast<Window*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-	return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
+	Engine* const pWindow = reinterpret_cast<Engine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+	
+	return pWindow->WndProc(hWnd, msg, wParam, lParam);
+	
+	// return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
 }
 
 LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -187,4 +172,3 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-
