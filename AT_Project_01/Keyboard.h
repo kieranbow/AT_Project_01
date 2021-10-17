@@ -3,13 +3,18 @@
 #include <array>
 #include <queue>
 
+// Description
+// Keyboard class that handles reading char and keycodes.
 class Keyboard
 {
 private:
-	class Event // Nested Class
+	// Description
+	// Nested Event Class for the KeyBoard class which contains 
+	// an enum class of EventType and functions to control these EventType.
+	class Event
 	{
 	public:
-		enum EventType
+		enum class EventType
 		{
 			Press,
 			Release,
@@ -21,11 +26,10 @@ private:
 		Event(const EventType _type, const unsigned char _keycode);
 		~Event() = default;
 
-		bool IsPressed() const;
-		bool IsReleased() const;
-		bool IsValid() const;
+		bool IsEventPressed() const;
+		bool IsEventReleased() const;
+		bool IsEventValid() const;
 		unsigned char GetKeyCode() const;
-
 
 	private:
 		EventType type;
@@ -69,10 +73,9 @@ private:
 	bool autoRepeatedChar = false;
 
 	// Keystates
-	std::array<bool, 256>keyStates;
+	std::array<bool, 256>keyStates = { { false } };
 
 	// Buffers
 	std::queue<Event> keyBuffer; // FIFO First-in, first-out
 	std::queue<unsigned char> charBuffer; // FIFO First-in, first-out
 };
-

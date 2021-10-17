@@ -57,30 +57,6 @@ void Window::Render(int nCmdShow)
 	ShowWindow(handle, nCmdShow);
 }
 
-bool Window::ProcessMessages()
-{
-	MSG msg;
-	ZeroMemory(&msg, sizeof(msg));
-
-	if (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
-	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-
-	if (msg.message == WM_NULL)
-	{
-		if (!IsWindow(handle))
-		{
-			handle = NULL;
-			UnregisterClass(window_class_name, hInstance);
-			return false;
-		}
-	}
-
-	return true;
-}
-
 void Window::RegisterWindowClass()
 {
 	// Create Window Class Extenstion
@@ -108,7 +84,31 @@ void Window::RegisterWindowClass()
 }
 
 // ---------------Messages-------------------
-//
+
+bool Window::ProcessMessages()
+{
+	MSG msg;
+	ZeroMemory(&msg, sizeof(msg));
+
+	if (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	if (msg.message == WM_NULL)
+	{
+		if (!IsWindow(handle))
+		{
+			handle = NULL;
+			UnregisterClass(window_class_name, hInstance);
+			return false;
+		}
+	}
+
+	return true;
+}
+
 LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (msg == WM_NCCREATE) // NCCREATE = Non-client Create
@@ -124,6 +124,7 @@ LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
 		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Window::RedirectMsg));
+		
 		// return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
 		return pWindow->WndProc(hWnd, msg, wParam, lParam);
 	}
@@ -141,7 +142,6 @@ LRESULT CALLBACK Window::RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 
 	// Gets the long pointer from the window and passes msg info to HandleMsg function
 	Engine* const pWindow = reinterpret_cast<Engine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-	
 	return pWindow->WndProc(hWnd, msg, wParam, lParam);
 	
 	// return pWindow->HandleMsg(hWnd, msg, wParam, lParam);

@@ -1,6 +1,7 @@
 #pragma once
 // C++
 #include <string>
+#include <memory>
 
 // Window
 #include "Window.h"
@@ -23,8 +24,6 @@ public:
 private:
 	Window window;
 	Keyboard keyboard;
-
-	
 
 	void RenderFrame();
 

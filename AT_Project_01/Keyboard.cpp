@@ -2,7 +2,6 @@
 
 //----------Event----------
 //
-//Default Constructor
 Keyboard::Event::Event() : type(EventType::Invalid), keycode(0u)
 {
 }
@@ -11,17 +10,17 @@ Keyboard::Event::Event(const EventType _type, const unsigned char _keycode) : ty
 {
 }
 
-bool Keyboard::Event::IsPressed() const
+bool Keyboard::Event::IsEventPressed() const
 {
 	return type == EventType::Press;
 }
 
-bool Keyboard::Event::IsReleased() const
+bool Keyboard::Event::IsEventReleased() const
 {
 	return type == EventType::Release;
 }
 
-bool Keyboard::Event::IsValid() const
+bool Keyboard::Event::IsEventValid() const
 {
 	return type != EventType::Invalid;
 }
@@ -100,6 +99,8 @@ void Keyboard::OnChar(const unsigned char keycode)
 	charBuffer.push(keycode);
 }
 
+//----------Auto Repeats----------
+//
 void Keyboard::EnableAutoRepeatKey()
 {
 	autoRepeatedKey = true;

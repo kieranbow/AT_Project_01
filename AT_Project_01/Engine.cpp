@@ -51,14 +51,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					keyboard.OnKeyPressed(keycode);
 				}
 			}
-			break;
+			return 0;
 		}
 
 		case WM_KEYUP:
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
 			keyboard.OnKeyReleased(keycode);
-			break;
+			return 0;
 		}
 
 		case WM_CHAR:
@@ -77,7 +77,7 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 					keyboard.OnChar(ch);
 				}
 			}
-			break;
+			return 0;
 		}
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
