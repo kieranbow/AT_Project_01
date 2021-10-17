@@ -1,7 +1,12 @@
 #pragma once
+// C++
+#include <string>
+
+// Window
 #include "Window.h"
 
-// #include "Keyboard.h"
+// Inputs
+#include "Keyboard.h"
 // #include "Mouse.h"
 
 class Engine
@@ -16,6 +21,9 @@ public:
 
 private:
 	Window window;
+	Keyboard keyboard;
+
+	LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	void RenderFrame();
 

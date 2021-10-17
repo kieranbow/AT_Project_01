@@ -13,7 +13,7 @@ int CALLBACK WinMain(
 	// Process window messages
 	while (bowEngine.ProcessWndMessages()== true)
 	{
-
+		bowEngine.Update();
 	}
 
 	return 0;

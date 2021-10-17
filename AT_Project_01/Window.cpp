@@ -37,29 +37,6 @@ Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	wnd_posX				= pos_x;
 	wnd_posY				= pos_y;
 
-	// Create Window Class Extenstion
-	WNDCLASSEX wc = { 0 };
-	ZeroMemory(&wc, sizeof(wc));
-	wc.style					= CS_OWNDC;
-	wc.lpfnWndProc		= WndProc;
-	wc.cbClsExtra			= 0;
-	wc.cbWndExtra		= 0;
-	wc.hInstance			= hInstance;
-	wc.hIcon				= NULL;
-	wc.hCursor				= NULL;
-	wc.hbrBackground	= NULL;
-	wc.lpszMenuName	= NULL;
-	wc.lpszClassName		= window_class_name;
-	wc.hIconSm			= NULL;
-	wc.cbSize				= sizeof(wc);
-
-	// Register Window Class Extention
-	if (!RegisterClassEx(&wc))
-	{
-		int nResult = GetLastError();
-		MessageBox(NULL, TEXT("Window class creation failed"), TEXT("Window Class Failed"), MB_ICONERROR);
-	}
-
 	// Adjust window size to fit client region size
 	RECT wndRect;
 	wndRect.left = 100;
@@ -68,6 +45,7 @@ Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	wndRect.bottom = height + wndRect.top;
 	AdjustWindowRect(&wndRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
 
+	RegisterWindowClass();
 
 	// Create window
 	handle = CreateWindowEx(
@@ -82,7 +60,7 @@ Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 		NULL,
 		NULL,
 		hInstance,
-		nullptr);
+		this);
 
 	if (!handle)
 	{
@@ -109,7 +87,6 @@ bool Window::ProcessMessages()
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
 
-	// 
 	if (PeekMessage(&msg, handle, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
@@ -129,16 +106,42 @@ bool Window::ProcessMessages()
 	return true;
 }
 
+void Window::RegisterWindowClass()
+{
+	// Create Window Class Extenstion
+	WNDCLASSEX wc = { 0 };
+	ZeroMemory(&wc, sizeof(wc));
+	wc.style = CS_OWNDC;
+	wc.lpfnWndProc = SetUpMsgHandle;
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = hInstance;
+	wc.hIcon = NULL;
+	wc.hCursor = NULL;
+	wc.hbrBackground = NULL;
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = window_class_name;
+	wc.hIconSm = NULL;
+	wc.cbSize = sizeof(wc);
+
+	// Register Window Class Extention
+	if (!RegisterClassEx(&wc))
+	{
+		int nResult = GetLastError();
+		MessageBox(NULL, TEXT("Window class creation failed"), TEXT("Window Class Failed"), MB_ICONERROR);
+	}
+}
+
 // ---------------Messages-------------------
 //
 LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (msg == WM_NCCREATE)
+	if (msg == WM_NCCREATE) // NCCREATE = Non-client Create
 	{
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
 		Window* const pWindow = reinterpret_cast<Window*>(pCreate->lpCreateParams);
 
-		if (pWindow == nullptr)
+		if (pWindow == NULL)
 		{
 			// Error logger goes here
 			exit(-1);
@@ -165,7 +168,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CLOSE:
 		PostQuitMessage(0);
-		return 0;
+		break;
 
 	case WM_KEYDOWN:
 		if (wParam == 'D')

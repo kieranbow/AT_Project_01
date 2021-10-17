@@ -40,6 +40,8 @@ class Window
 		LPCWSTR window_title				= L"WindowTitle";
 		LPCWSTR window_class_name	= L"WindowClass";
 
+		void RegisterWindowClass();
+
 		static LRESULT CALLBACK SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static LRESULT CALLBACK RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
