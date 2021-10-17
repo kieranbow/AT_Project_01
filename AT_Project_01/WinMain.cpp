@@ -7,7 +7,7 @@ int CALLBACK WinMain(
 	_In_ LPSTR lpCmdLine, 
 	_In_ int nCmdShow)
 {
-	// Creates window instance
+	// Creates engine instance
 	Engine bowEngine(L"funny box", L"MyWindow", 800, 600, 200, 200);
 
 	// Process window messages
