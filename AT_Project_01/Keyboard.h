@@ -11,7 +11,7 @@ private:
 	// Description
 	// Nested Event Class for the KeyBoard class which contains 
 	// an enum class of EventType and functions to control these EventType.
-	class Event
+	class KeyboardEvent
 	{
 	public:
 		enum class EventType
@@ -22,9 +22,9 @@ private:
 		};
 
 		// Constructor & Destructor
-		Event();
-		Event(const EventType _type, const unsigned char _keycode);
-		~Event() = default;
+		KeyboardEvent();
+		KeyboardEvent(const EventType _type, const unsigned char _keycode);
+		~KeyboardEvent() = default;
 
 		bool IsEventPressed() const;
 		bool IsEventReleased() const;
@@ -49,7 +49,7 @@ public:
 	bool IsKeyBufferEmpty();
 	bool IsCharBufferEmpty();
 
-	Event ReadKeycode();
+	KeyboardEvent ReadKeycode();
 	unsigned char ReadChar();
 
 	void OnKeyPressed(const unsigned char keycode);
@@ -76,6 +76,6 @@ private:
 	std::array<bool, 256>keyStates = { { false } };
 
 	// Buffers
-	std::queue<Event> keyBuffer; // FIFO First-in, first-out
+	std::queue<KeyboardEvent> keyBuffer; // FIFO First-in, first-out
 	std::queue<unsigned char> charBuffer; // FIFO First-in, first-out
 };

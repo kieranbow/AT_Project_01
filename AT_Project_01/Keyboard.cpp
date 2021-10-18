@@ -2,30 +2,30 @@
 
 //----------Event----------
 //
-Keyboard::Event::Event() : type(EventType::Invalid), keycode(0u)
+Keyboard::KeyboardEvent::KeyboardEvent() : type(EventType::Invalid), keycode(0u)
 {
 }
 
-Keyboard::Event::Event(const EventType _type, const unsigned char _keycode) : type(_type), keycode(_keycode)
+Keyboard::KeyboardEvent::KeyboardEvent(const EventType _type, const unsigned char _keycode) : type(_type), keycode(_keycode)
 {
 }
 
-bool Keyboard::Event::IsEventPressed() const
+bool Keyboard::KeyboardEvent::IsEventPressed() const
 {
 	return type == EventType::Press;
 }
 
-bool Keyboard::Event::IsEventReleased() const
+bool Keyboard::KeyboardEvent::IsEventReleased() const
 {
 	return type == EventType::Release;
 }
 
-bool Keyboard::Event::IsEventValid() const
+bool Keyboard::KeyboardEvent::IsEventValid() const
 {
 	return type != EventType::Invalid;
 }
 
-unsigned char Keyboard::Event::GetKeyCode() const
+unsigned char Keyboard::KeyboardEvent::GetKeyCode() const
 {
 	return keycode;
 }
@@ -56,15 +56,15 @@ bool Keyboard::IsCharBufferEmpty()
 	return charBuffer.empty();
 }
 
-Keyboard::Event Keyboard::ReadKeycode()
+Keyboard::KeyboardEvent Keyboard::ReadKeycode()
 {
 	if (IsKeyBufferEmpty())
 	{
-		return Keyboard::Event();
+		return Keyboard::KeyboardEvent();
 	}
 
 	// Gets the first element in the buffer, removes it and returns buffer
-	Event event = keyBuffer.front();
+	KeyboardEvent event = keyBuffer.front();
 	keyBuffer.pop();
 	return event;
 }
@@ -85,13 +85,13 @@ unsigned char Keyboard::ReadChar()
 void Keyboard::OnKeyPressed(const unsigned char keycode)
 {
 	keyStates.at(keycode) = true;
-	keyBuffer.push(Event(Event::EventType::Press, keycode));
+	keyBuffer.push(KeyboardEvent(KeyboardEvent::EventType::Press, keycode));
 }
 
 void Keyboard::OnKeyReleased(const unsigned char keycode)
 {
 	keyStates.at(keycode) = false;
-	keyBuffer.push(Event(Event::EventType::Release, keycode));
+	keyBuffer.push(KeyboardEvent(KeyboardEvent::EventType::Release, keycode));
 }
 
 void Keyboard::OnChar(const unsigned char keycode)
