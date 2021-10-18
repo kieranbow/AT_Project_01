@@ -8,7 +8,7 @@
 
 // Inputs
 #include "Keyboard.h"
-// #include "Mouse.h"
+#include "Mouse.h"
 
 class Engine
 {
@@ -23,7 +23,10 @@ public:
 
 private:
 	Window window;
+
+	// Inputs
 	Keyboard keyboard;
+	Mouse mouse;
 
 	void RenderFrame();
 

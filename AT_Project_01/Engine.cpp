@@ -29,12 +29,26 @@ void Engine::Update()
 		out_msg += "\n";
 		OutputDebugStringA(out_msg.c_str());
 	}
+
+	while (!mouse.EventBufferIsEmpty())
+	{
+		Mouse::MouseEvent msEvent = mouse.ReadEvent();
+		if (msEvent.GetType() == Mouse::MouseEvent::EventType::WheelUp)
+		{
+			OutputDebugStringA("MouseWheel Up\n");
+		}
+		if (msEvent.GetType() == Mouse::MouseEvent::EventType::WheelDown)
+		{
+			OutputDebugStringA("MouseWheel Down\n");
+		}
+	}
 }
 
 LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		// Keyboard
 		case WM_KEYDOWN:
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
@@ -79,6 +93,80 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			return 0;
 		}
+
+		// ----------Mouse----------
+
+		case WM_MOUSEMOVE:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnMouseMove(x, y);
+			return 0;
+		}
+		// Left Button
+		case WM_LBUTTONDOWN:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnLeftBtnPressed(x, y);
+			return 0;
+		}
+		case WM_LBUTTONUP:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnLeftBtnReleased(x, y);
+			return 0;
+		}
+
+		// Right Button
+		case WM_RBUTTONDOWN:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnRightBtnPressed(x, y);
+			return 0;
+		}
+		case WM_RBUTTONUP:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnRightBtnReleased(x, y);
+			return 0;
+		}
+
+		// Middle Button
+		case WM_MBUTTONDOWN:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnMiddleBtnPressed(x, y);
+			return 0;
+		}
+		case WM_MBUTTONUP:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			mouse.OnMiddleBtnReleased(x, y);
+			return 0;
+		}
+		case WM_MOUSEWHEEL:
+		{
+			int x = LOWORD(lParam);
+			int y = HIWORD(lParam);
+			if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+			{
+				mouse.OnWheelUp(x, y);
+			}
+			if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+			{
+				mouse.OnWheelDown(x, y);
+			}
+			return 0;
+		}
+
+
+
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}

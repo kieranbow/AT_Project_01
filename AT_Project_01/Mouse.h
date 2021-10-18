@@ -9,7 +9,7 @@ struct MousePoint
 
 class Mouse
 {
-	private:
+	public:
 		class MouseEvent
 		{
 			public:
@@ -55,12 +55,16 @@ class Mouse
 
 		void OnLeftBtnPressed(int x, int y);
 		void OnLeftBtnReleased(int x, int y);
+		
 		void OnRightBtnPressed(int x, int y);
 		void OnRightBtnReleased(int x, int y);
+		
 		void OnMiddleBtnPressed(int x, int y);
 		void OnMiddleBtnReleased(int x, int y);
+		
 		void OnWheelUp(int x, int y);
 		void OnWheelDown(int x, int y);
+		
 		void OnMouseMove(int _x, int _y);
 
 		bool IsLeftBtnDown();
