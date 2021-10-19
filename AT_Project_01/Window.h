@@ -1,5 +1,6 @@
 #pragma once
 // Windows
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
 // C++
@@ -49,6 +50,9 @@ class Window
 		// Uses PeekMessage to look at the msg without stopping the program
 		// and translate/dispatches the message.
 		bool ProcessMessages();
+
+		// Getter
+		HWND GetWindowHandle();
 		
 	private:
 		// Description

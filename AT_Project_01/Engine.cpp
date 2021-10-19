@@ -3,6 +3,7 @@
 Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos) : window(wnd_title, wnd_class, width, height, x_pos, y_pos)
 {
 	window.Render(SW_SHOWDEFAULT);
+	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle());
 }
 
 bool Engine::ProcessWndMessages()
@@ -174,6 +175,8 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Engine::RenderFrame()
 {
+	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
+	pGraphics->EndFrame();
 	// Clear Buffer
 
 	//SwapChain present

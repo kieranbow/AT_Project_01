@@ -14,6 +14,7 @@ int CALLBACK WinMain(
 	while (bowEngine.ProcessWndMessages() == true)
 	{
 		bowEngine.Update();
+		bowEngine.RenderFrame();
 	}
 
 	return 0;

@@ -109,6 +109,11 @@ bool Window::ProcessMessages()
 	return true;
 }
 
+HWND Window::GetWindowHandle()
+{
+	return handle;
+}
+
 LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (msg == WM_NCCREATE) // NCCREATE = Non-client Create

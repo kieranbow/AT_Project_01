@@ -10,6 +10,9 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
+// Graphics
+#include "Graphics.h"
+
 class Engine
 {
 public:
@@ -20,6 +23,7 @@ public:
 	LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	void Update();
+	void RenderFrame();
 
 private:
 	Window window;
@@ -28,7 +32,9 @@ private:
 	Keyboard keyboard;
 	Mouse mouse;
 
-	void RenderFrame();
+	std::unique_ptr<Graphics> pGraphics;
+
+
 
 };
 
