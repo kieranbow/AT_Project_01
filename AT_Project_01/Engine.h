@@ -33,8 +33,5 @@ private:
 	Mouse mouse;
 
 	std::unique_ptr<Graphics> pGraphics;
-
-
-
 };
 

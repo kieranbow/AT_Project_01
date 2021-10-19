@@ -45,6 +45,8 @@ Graphics::Graphics(HWND hwnd)
 		&pDeviceContext
 	);
 
+	InitLayout();
+
 	// Back Buffer
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
 	pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer); // Add error checker
@@ -56,6 +58,50 @@ void Graphics::ClearBuffer(float red, float green, float blue)
 {
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
+}
+
+void Graphics::VertexShader()
+{
+	LPCWSTR shaderFolder = L"";
+
+#pragma region DetermineShaderPath
+	if (IsDebuggerPresent() == TRUE)
+	{
+		#ifdef _DEBUG
+			#ifdef _WIN64
+				shaderFolder = L"..\\x64\\Debug\\";
+			#else
+				shaderFolder = L"..\\Debug\\";
+			#endif // _WIN64
+		#else
+			#ifdef _WIN64
+				shaderFolder = L"..\\x64\\Release\\";
+			#else
+				shaderFolder = L"..\\Release\\";
+			#endif // _WIN64
+		#endif // _DEBUG
+
+	}
+
+	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", pVertexShaderBuffer.GetAddressOf()); //Error log this
+	pDevice->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, pVertexShader.GetAddressOf()); // Error log this;
+
+}
+
+void Graphics::InitLayout()
+{
+	// Input assembler
+	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+	UINT numElements = ARRAYSIZE(layoutDesc);
+
+	VertexShader();
+
+	// Error Check this
+	pDevice->CreateInputLayout(layoutDesc, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), pInputLayout.GetAddressOf());
 }
 
 void Graphics::EndFrame()

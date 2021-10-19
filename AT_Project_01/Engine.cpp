@@ -13,6 +13,7 @@ bool Engine::ProcessWndMessages()
 
 void Engine::Update()
 {
+	// Remove this
 	while (!keyboard.IsCharBufferEmpty())
 	{
 		unsigned char ch = keyboard.ReadChar();
@@ -22,6 +23,7 @@ void Engine::Update()
 		OutputDebugStringA(out_msg.c_str());
 	}
 
+	// Remove this
 	while (!keyboard.IsKeyBufferEmpty())
 	{
 		unsigned char keycode = keyboard.ReadKeycode().GetKeyCode();
@@ -31,6 +33,7 @@ void Engine::Update()
 		OutputDebugStringA(out_msg.c_str());
 	}
 
+	// Remove this
 	while (!mouse.EventBufferIsEmpty())
 	{
 		Mouse::MouseEvent msEvent = mouse.ReadEvent();
@@ -177,7 +180,4 @@ void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
 	pGraphics->EndFrame();
-	// Clear Buffer
-
-	//SwapChain present
 }

@@ -19,6 +19,15 @@
     <Filter Include="Source Files\Inputs">
       <UniqueIdentifier>{168688b0-0d59-4f34-9776-97680449129f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics">
+      <UniqueIdentifier>{5022b47d-6a66-4fc4-9f0d-44e1e8255441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics">
+      <UniqueIdentifier>{ac2d47af-14ca-4fc4-8eb8-cd7d5197c65d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Shaders">
+      <UniqueIdentifier>{5e7084b2-7162-4927-a093-33f97954a458}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -56,5 +65,10 @@
     <ClInclude Include="Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Header Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
