@@ -33,9 +33,15 @@ class Graphics
 
 		void ClearBuffer(float red, float green, float blue);
 
-		void VertexShader();
+		void CreateVertexBuffer();
 
-		void InitLayout(); // change this
+		void VertexShader(); // <-Refactor this
+
+		void InitLayout(); // <-Refactor this
+
+		void CreatePixelBuffer();
+
+		void PixelShader(); // <-Refactor this
 
 		void EndFrame();
 
@@ -46,9 +52,25 @@ class Graphics
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
 		Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
+		
+		// Input Layout
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+
+		// Vertex Buffer
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
 
 		// Vertex Shader
 		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
 		Microsoft::WRL::ComPtr<ID3D10Blob> pVertexShaderBuffer;
+
+		// Pixel Buffer
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pPixelBuffer;
+
+		// Pixel Shader
+		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
+		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBuffer;
+
+		
+
+		
 };
