@@ -60,9 +60,9 @@ void Graphics::CreateVertexBuffer()
 {
 	Vertex vertices[] =
 	{
-		Vertex(0.0f, 0.5f), // Center Point
-		Vertex(-0.5f, 0.0f), // Left Point
-		Vertex(0.5f, 0.0f), // Right Point
+		Vertex(0.0f, 0.5f, 1.0f, 0.0f, 0.0f), // Center Point
+		Vertex(0.5f, -0.5f, 0.0f, 1.0f, 0.0f), // Left Point
+		Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f), // Right Point
 	};
 
 	// Buffer Description
@@ -148,9 +148,9 @@ void Graphics::drawTriangle()
 	// Vertices
 	Vertex vertices[] =
 	{
-		Vertex(0.0f, 0.5f), // Center Point
-		Vertex(0.5f, -0.5f), // Left Point
-		Vertex(-0.5f, -0.5f), // Right Point
+		Vertex(-0.5f, -0.5f, 1.0f, 0.0f, 0.0f), // Left Point
+		Vertex(0.0f, 0.5f, 0.0f, 1.0f, 0.0f), // Center Point
+		Vertex(0.5f, -0.5f, 0.0f, 0.0f, 1.0f), // Right Point
 	};
 
 	// Vertex Buffer
@@ -187,6 +187,7 @@ void Graphics::drawTriangle()
 	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
 	UINT numElements = std::size(layoutDesc);
