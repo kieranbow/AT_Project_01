@@ -220,6 +220,18 @@ void Graphics::drawTriangle()
 
 	pDeviceContext->RSSetViewports(1, &viewport);
 
+	// Rasterizer
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+
+	rasterizerDesc.FillMode		= D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode		= D3D11_CULL_MODE::D3D11_CULL_BACK;
+	 
+	pDevice->CreateRasterizerState(&rasterizerDesc, rasterizerState.GetAddressOf());
+	
+	// Bind
+	pDeviceContext->RSSetState(rasterizerState.Get());
+
 	pDeviceContext->Draw(std::size(vertices), 0u);
 
 }

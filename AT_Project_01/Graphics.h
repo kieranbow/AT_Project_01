@@ -69,4 +69,6 @@ class Graphics
 		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
 		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBuffer;
 
+		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+
 };
