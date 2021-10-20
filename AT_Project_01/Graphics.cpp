@@ -1,5 +1,4 @@
 #include "Graphics.h"
-#include <array>
 
 Graphics::Graphics(HWND hwnd)
 {
@@ -45,67 +44,25 @@ Graphics::Graphics(HWND hwnd)
 		&pDeviceContext
 	);
 
-	InitLayout();
-
 	// Back Buffer
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
 	pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer); // Add error checker
 	pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, &pRenderTargetView);
-
-	// Output Merger
-	pDeviceContext->OMSetRenderTargets(1, pRenderTargetView.GetAddressOf(), NULL);
-
-	// Viewport
-	D3D11_VIEWPORT viewport;
-	ZeroMemory(&viewport, sizeof(viewport));
-
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width = 800; // <-Change this
-	viewport.Height = 600; // <-Change this
-
-	pDeviceContext->RSSetViewports(1, &viewport);
-
 }
 
 void Graphics::ClearBuffer(float red, float green, float blue)
 {
 	const float color[] = { red, green, blue, 1.0f };
-
-	// Clear Render Target
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
-
-	// Set Input Layout
-	pDeviceContext->IASetInputLayout(pInputLayout.Get());
-
-	// Set order of topology rendering
-	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-	// Set Shaders
-	pDeviceContext->VSSetShader(pVertexShader.Get(), NULL, 0);
-	pDeviceContext->PSSetShader(pPixelShader.Get(), NULL, 0);
-
-	// Set Vertex Buffer
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	pDeviceContext->IASetVertexBuffers(0, 1, pVertexBuffer.GetAddressOf(), &stride, &offset);
-
-	// Draw Vertices
-	pDeviceContext->Draw(4, 0);
-
-
-	EndFrame();
-
 }
 
 void Graphics::CreateVertexBuffer()
 {
-	Vertex vertex[] =
+	Vertex vertices[] =
 	{
 		Vertex(0.0f, 0.5f), // Center Point
 		Vertex(-0.5f, 0.0f), // Left Point
 		Vertex(0.5f, 0.0f), // Right Point
-		Vertex(0.0f, 0.5f)	// Top Point
 	};
 
 	// Buffer Description
@@ -113,22 +70,24 @@ void Graphics::CreateVertexBuffer()
 	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * ARRAYSIZE(vertex);
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags - 0; // Stops CPU having access to this buffer
 	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.ByteWidth = sizeof(vertices);
+	vertexBufferDesc.StructureByteStride = sizeof(Vertex);
 
 	// Buffer Data
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = vertex;
+	vertexBufferData.pSysMem = vertices;
 
 	// Create Buffer
-	pDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, pVertexBuffer.GetAddressOf());
+	pDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &pVertexBuffer);
 
 	// Bind Buffer
-
-
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0u;
+	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 }
 
 void Graphics::VertexShader()
@@ -151,37 +110,152 @@ void Graphics::VertexShader()
 				shaderFolder = L"..\\Release\\";
 			#endif // _WIN64
 		#endif // _DEBUG
-
 	}
 
-	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", pVertexShaderBuffer.GetAddressOf()); //Error log this
-	pDevice->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, pVertexShader.GetAddressOf()); // Error log this;
-
+	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", &pVertexShaderBuffer); //Error log this
+	pDevice->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, &pVertexShader); // Error log this;
+	pDeviceContext->VSSetShader(pVertexShader.Get(), NULL, 0);
 }
 
-void Graphics::InitLayout()
+void Graphics::InitializeInputLayout()
 {
-	// Input assembler
+	// Layout Description
+	// Vertex Shader will have access to propertices like POSITION and COLOR
 	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	UINT numElements = ARRAYSIZE(layoutDesc);
-
-	CreateVertexBuffer();
-	VertexShader();
-
-	PixelShader();
+	UINT numElements = std::size(layoutDesc);
 
 	// Error Check this
-	pDevice->CreateInputLayout(layoutDesc, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), pInputLayout.GetAddressOf());
+	pDevice->CreateInputLayout(layoutDesc, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), &pInputLayout);
+
+	// Set Input Layout
+	pDeviceContext->IASetInputLayout(pInputLayout.Get());
+
 }
 
 void Graphics::PixelShader()
 {
-	D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", pPixelShaderBuffer.GetAddressOf()); //Error log this
-	pDevice->CreatePixelShader(pPixelShaderBuffer->GetBufferPointer(), pPixelShaderBuffer->GetBufferSize(), NULL, pPixelShader.GetAddressOf());
+	D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pPixelShaderBuffer); //Error log this
+	pDevice->CreatePixelShader(pPixelShaderBuffer->GetBufferPointer(), pPixelShaderBuffer->GetBufferSize(), NULL, &pPixelShader);
+	pDeviceContext->PSSetShader(pPixelShader.Get(), NULL, 0);
+}
+
+void Graphics::drawTriangle()
+{
+	// Vertices
+	Vertex vertices[] =
+	{
+		Vertex(0.0f, 0.5f), // Center Point
+		Vertex(0.5f, -0.5f), // Left Point
+		Vertex(-0.5f, -0.5f), // Right Point
+	};
+
+	// Vertex Buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.CPUAccessFlags = 0; // Stops CPU having access to this buffer
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.ByteWidth = sizeof(vertices);
+	vertexBufferDesc.StructureByteStride = sizeof(Vertex);
+
+	// Vertex Buffer Data
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+
+	vertexBufferData.pSysMem = vertices;
+
+	// Create Vertex Buffer
+	pDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &pVertexBuffer);
+
+	// Bind Vertex Buffer
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0u;
+	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	// Vertex Shader
+	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", &pVertexShaderBuffer); //Error log this
+	pDevice->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, &pVertexShader); // Error log this
+	pDeviceContext->VSSetShader(pVertexShader.Get(), NULL, 0);
+
+	// Input assembler
+	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	UINT numElements = std::size(layoutDesc);
+
+	// Create Input Assembler
+	pDevice->CreateInputLayout(layoutDesc, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), &pInputLayout);
+
+	// Pixel Shader
+	D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pPixelShaderBuffer); //Error log this
+	pDevice->CreatePixelShader(pPixelShaderBuffer->GetBufferPointer(), pPixelShaderBuffer->GetBufferSize(), NULL, &pPixelShader);
+	pDeviceContext->PSSetShader(pPixelShader.Get(), NULL, 0u);
+
+	// Set Input Layout
+	pDeviceContext->IASetInputLayout(pInputLayout.Get());
+
+	// Output Merger
+	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), NULL);
+
+	// Set order of topology rendering
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// Viewport
+	D3D11_VIEWPORT viewport;
+	ZeroMemory(&viewport, sizeof(viewport));
+
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = 800; // <-Change this
+	viewport.Height = 600; // <-Change this
+
+	pDeviceContext->RSSetViewports(1, &viewport);
+
+	pDeviceContext->Draw(std::size(vertices), 0u);
+
+}
+
+void Graphics::drawTestTriangle()
+{
+	CreateVertexBuffer();
+	VertexShader();
+	InitializeInputLayout();
+	PixelShader();
+
+	// Output Merger
+	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), NULL);
+
+	// Set order of topology rendering
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	CreateViewport();
+
+	// Draw Vertices
+	pDeviceContext->Draw(3, 0u);
+
+
+}
+
+void Graphics::CreateViewport()
+{
+	// Viewport
+	D3D11_VIEWPORT viewport;
+	ZeroMemory(&viewport, sizeof(viewport));
+
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = 800; // <-Change this
+	viewport.Height = 600; // <-Change this
+
+	pDeviceContext->RSSetViewports(1, &viewport);
 }
 
 void Graphics::EndFrame()

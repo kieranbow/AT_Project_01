@@ -179,4 +179,6 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
+	pGraphics->drawTriangle();
+	pGraphics->EndFrame();
 }

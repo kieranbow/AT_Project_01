@@ -11,16 +11,10 @@
 #include <wrl/client.h>
 
 // C++
+#include <memory>
 
-struct Vertex
-{
-	// Struct Constructors
-	Vertex(){}
-	Vertex(float x, float y) : position(x, y) {}
-
-	DirectX::XMFLOAT2 position;
-};
-
+// Graphic Utility
+#include "Vertex.h"
 
 class Graphics
 {
@@ -37,11 +31,16 @@ class Graphics
 
 		void VertexShader(); // <-Refactor this
 
-		void InitLayout(); // <-Refactor this
+		void InitializeInputLayout(); // <-Refactor this
 
 		void CreatePixelBuffer();
 
 		void PixelShader(); // <-Refactor this
+
+		void drawTriangle();
+		void drawTestTriangle();
+
+		void CreateViewport();
 
 		void EndFrame();
 
@@ -70,7 +69,4 @@ class Graphics
 		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
 		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBuffer;
 
-		
-
-		
 };

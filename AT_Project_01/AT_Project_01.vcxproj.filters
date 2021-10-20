@@ -28,6 +28,12 @@
     <Filter Include="Header Files\Shaders">
       <UniqueIdentifier>{5e7084b2-7162-4927-a093-33f97954a458}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Buffers">
+      <UniqueIdentifier>{6de774de-8bcc-4c38-9087-41dc5d9f930e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Buffer">
+      <UniqueIdentifier>{8a66bec0-ea90-4c37-8e9f-07c74932ec82}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -46,7 +52,10 @@
       <Filter>Source Files\Inputs</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Source Files\Graphics\Buffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,7 +72,16 @@
       <Filter>Header Files\Inputs</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Header Files\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Header Files\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Header Files\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
