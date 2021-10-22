@@ -145,12 +145,27 @@ void Graphics::PixelShader()
 
 void Graphics::drawTriangle()
 {
+	// Pipeline
+	// Input Assembler
+	// Vertex Shader
+	// Tessellation
+	// Geometry Shader
+	// Render Target
+	// Output merger
+	// Pixel Shader
+	// Rasterizer
+
 	// Vertices
 	Vertex vertices[] =
 	{
-		Vertex(-0.5f, -0.5f, 1.0f, 0.0f, 0.0f), // Left Point
-		Vertex(0.0f, 0.5f, 0.0f, 1.0f, 0.0f), // Center Point
-		Vertex(0.5f, -0.5f, 0.0f, 0.0f, 1.0f), // Right Point
+		// Position						Color
+		Vertex(-0.5f, -0.5f,		1.0f, 0.0f, 0.0f), // Bottom Left Point
+		Vertex(-0.5f, 0.5f,		0.0f, 1.0f, 0.0f), // Top Left Point
+		Vertex(0.5f, -0.5f,		0.0f, 0.0f, 1.0f), // Bottom Right Point
+
+		Vertex(-0.5f, 0.5f,		0.0f, 1.0f, 0.0f), // Top Left Point
+		Vertex(0.5f, 0.5f,			1.0f, 0.0f, 0.0f), // Top Right Point
+		Vertex(0.5f, -0.5f,		0.0f, 0.0f, 1.0f), // Bottom Right Point
 	};
 
 	// Vertex Buffer
@@ -167,7 +182,6 @@ void Graphics::drawTriangle()
 	// Vertex Buffer Data
 	D3D11_SUBRESOURCE_DATA vertexBufferData;
 	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-
 	vertexBufferData.pSysMem = vertices;
 
 	// Create Vertex Buffer
@@ -177,6 +191,66 @@ void Graphics::drawTriangle()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0u;
 	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+
+	// Indices Buffer
+	const unsigned short indices[] =
+	{
+		0
+	};
+	// Create Indices buffer
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
+
+	//Indices buffer description
+	D3D11_BUFFER_DESC indicesBufferDesc;
+	indicesBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indicesBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indicesBufferDesc.CPUAccessFlags = 0u;
+	indicesBufferDesc.MiscFlags = 0u;
+	indicesBufferDesc.ByteWidth = sizeof(indices);
+	indicesBufferDesc.StructureByteStride = sizeof(unsigned short);
+
+	D3D11_SUBRESOURCE_DATA isd = {};
+	isd.pSysMem = indices;
+
+	pDevice->CreateBuffer(&indicesBufferDesc, &isd, &pIndexBuffer);
+
+	pDeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
+	// Constant buffer
+	struct ConstantBuffer
+	{
+		DirectX::XMMATRIX transform;
+	};
+
+	const ConstantBuffer constBuffer =
+	{
+		DirectX::XMMatrixTranspose(
+			DirectX::XMMatrixRotationZ(45) *
+			DirectX::XMMatrixRotationX(0) *
+			DirectX::XMMatrixTranslation(xPos, yPos, 4.0f) *
+			DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f))
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
+
+	D3D11_BUFFER_DESC constBufferDesc;
+	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constBufferDesc.MiscFlags = 0u;
+	constBufferDesc.ByteWidth = sizeof(constBuffer);
+	constBufferDesc.StructureByteStride = 0u;
+
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &constBuffer;
+
+	pDevice->CreateBuffer(&constBufferDesc, &csd, &pConstantBuffer);
+
+	// bind constant buffer to vertex shader
+	pDeviceContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+
+
 
 	// Vertex Shader
 	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", &pVertexShaderBuffer); //Error log this

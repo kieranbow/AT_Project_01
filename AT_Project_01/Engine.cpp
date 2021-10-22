@@ -179,6 +179,10 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
+	pGraphics->SetPosition(
+		mouse.GetPosX() / 400.f - 1.0f, 
+		-mouse.GetPosY() / 300.f + 1.0f);
+
 	pGraphics->drawTriangle();
 	pGraphics->EndFrame();
 }

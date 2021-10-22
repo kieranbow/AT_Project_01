@@ -44,6 +44,12 @@ class Graphics
 
 		void EndFrame();
 
+		void SetPosition(float x, float y)
+		{
+			xPos = x;
+			yPos = y;
+		}
+
 	private:
 		HRESULT hResult;
 
@@ -70,5 +76,8 @@ class Graphics
 		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBuffer;
 
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
+
+		float xPos = 0;
+		float yPos = 0;
 
 };

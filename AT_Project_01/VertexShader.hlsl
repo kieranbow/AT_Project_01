@@ -1,21 +1,27 @@
 struct VS_INPUT
 {
-    float2 inPosition : POSITION;
-    float3 inColor : COLOR;
+    float3 position : POSITION;
+    float3 color : COLOR;
 };
 
 struct VS_OUTPUT
 {
-    float4 outPosition : SV_POSITION;
-    float3 outColor : COLOR;
+    float4 position : SV_POSITION;
+    float3 color : COLOR;
 };
+
+cbuffer constBuffer
+{
+    matrix transform;
+};
+
 
 // Main Entry Point for Vertex Shader
 VS_OUTPUT main(VS_INPUT input)
 {
     VS_OUTPUT output;
-    output.outPosition = float4(input.inPosition, 0.0f, 1.0f);
-    output.outColor = input.inColor;
+    output.position = mul(float4(input.position, 1.0f), transform);
+    output.color = input.color;
     
     return output;
 }
