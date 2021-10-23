@@ -214,9 +214,12 @@ void Graphics::drawTriangle(float x, float y)
 	cbd.MiscFlags = 0u;
 	cbd.ByteWidth = sizeof(cb);
 	cbd.StructureByteStride = 0u;
+
 	D3D11_SUBRESOURCE_DATA csd = {};
 	csd.pSysMem = &cb;
-	pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer);
+
+	hResult = pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to create Constant Buffer");
 
 	// bind constant buffer to vertex shader
 	pDeviceContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
@@ -244,7 +247,9 @@ void Graphics::drawTriangle(float x, float y)
 			{0.0f,1.0f,1.0f},
 		}
 	};
+
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer2;
+
 	D3D11_BUFFER_DESC cbd2;
 	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cbd2.Usage = D3D11_USAGE_DEFAULT;
@@ -252,9 +257,12 @@ void Graphics::drawTriangle(float x, float y)
 	cbd2.MiscFlags = 0u;
 	cbd2.ByteWidth = sizeof(cb2);
 	cbd2.StructureByteStride = 0u;
+
 	D3D11_SUBRESOURCE_DATA csd2 = {};
 	csd2.pSysMem = &cb2;
-	pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2);
+
+	hResult = pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to create Constant buffer");
 
 	// bind constant buffer to pixel shader
 	pDeviceContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
@@ -265,7 +273,9 @@ void Graphics::drawTriangle(float x, float y)
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
 	D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pBlob);
-	pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
+	
+	hResult = pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to create Pixel Shader");
 
 	// bind pixel shader
 	pDeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
@@ -274,7 +284,9 @@ void Graphics::drawTriangle(float x, float y)
 	// create vertex shader
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
 	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", &pBlob);
-	pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
+	
+	hResult = pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to Create Vertex Shader");
 
 	// bind vertex shader
 	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
@@ -286,12 +298,13 @@ void Graphics::drawTriangle(float x, float y)
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
-	pDevice->CreateInputLayout(
+	hResult = pDevice->CreateInputLayout(
 		ied, (UINT)std::size(ied),
 		pBlob->GetBufferPointer(),
 		pBlob->GetBufferSize(),
 		&pInputLayout
 	);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to create Input Layout");
 
 	// bind vertex layout
 	pDeviceContext->IASetInputLayout(pInputLayout.Get());

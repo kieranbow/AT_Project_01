@@ -22,10 +22,12 @@
 class Graphics
 {
 	public:
-		// Pipeline
+		// -----------------Pipeline
 		// Input Assembler
 		// Vertex Shader
+		// Hull shader
 		// Tessellation
+		// Domain shader
 		// Geometry Shader
 		// Render Target
 		// Output merger
