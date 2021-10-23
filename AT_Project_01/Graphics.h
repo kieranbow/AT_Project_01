@@ -37,18 +37,12 @@ class Graphics
 
 		void PixelShader(); // <-Refactor this
 
-		void drawTriangle();
+		void drawTriangle(float x, float y);
 		void drawTestTriangle();
 
 		void CreateViewport();
 
 		void EndFrame();
-
-		void SetPosition(float x, float y)
-		{
-			xPos = x;
-			yPos = y;
-		}
 
 	private:
 		HRESULT hResult;
@@ -77,7 +71,6 @@ class Graphics
 
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 
-		float xPos = 0;
-		float yPos = 0;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthView;
 
 };

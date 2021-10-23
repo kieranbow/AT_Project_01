@@ -48,12 +48,48 @@ Graphics::Graphics(HWND hwnd)
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
 	pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer); // Add error checker
 	pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, &pRenderTargetView);
+
+	// Depth buffer
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
+	depthStencilDesc.DepthEnable = TRUE;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	// Create Depth State
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
+	pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState);
+
+	// Bind Depth state
+	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
+
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
+	D3D11_TEXTURE2D_DESC depthDesc = {};
+	depthDesc.Width = 800u;
+	depthDesc.Height = 600u;
+	depthDesc.MipLevels = 1u; // Only use one mip level
+	depthDesc.ArraySize = 1u;
+	depthDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	depthDesc.SampleDesc.Count = 1u; // anti-alising
+	depthDesc.SampleDesc.Quality = 0u;
+	depthDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	pDevice->CreateTexture2D(&depthDesc, NULL, &pDepthStencil);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0u;
+
+	pDevice->CreateDepthStencilView(pDepthStencil.Get(), &descDSV, &pDepthView);
+	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 }
 
 void Graphics::ClearBuffer(float red, float green, float blue)
 {
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
+	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
 void Graphics::CreateVertexBuffer()
@@ -143,7 +179,7 @@ void Graphics::PixelShader()
 	pDeviceContext->PSSetShader(pPixelShader.Get(), NULL, 0);
 }
 
-void Graphics::drawTriangle()
+void Graphics::drawTriangle(float x, float y)
 {
 	// Pipeline
 	// Input Assembler
@@ -239,7 +275,7 @@ void Graphics::drawTriangle()
 			DirectX::XMMatrixTranspose(
 				DirectX::XMMatrixRotationZ(5) *
 				DirectX::XMMatrixRotationX(20) *
-				DirectX::XMMatrixTranslation(xPos, yPos, 4.0f) *
+				DirectX::XMMatrixTranslation(x, y, 4.0f) *
 				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f ,0.5f, 10.0f)
 			)
 		}
@@ -334,11 +370,6 @@ void Graphics::drawTriangle()
 
 	// bind vertex layout
 	pDeviceContext->IASetInputLayout(pInputLayout.Get());
-
-
-	// bind render target
-	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), nullptr);
-
 
 	// Set primitive topology to triangle list (groups of 3 vertices)
 	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
