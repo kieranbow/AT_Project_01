@@ -74,14 +74,20 @@
     <ClInclude Include="Graphics.h">
       <Filter>Header Files\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Buffer.h">
-      <Filter>Header Files\Graphics\Buffers</Filter>
-    </ClInclude>
     <ClInclude Include="VertexBuffer.h">
       <Filter>Header Files\Graphics\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorChecker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WinHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Header Files\Graphics\Buffers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

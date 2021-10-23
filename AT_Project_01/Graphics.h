@@ -16,48 +16,64 @@
 // Graphic Utility
 #include "Vertex.h"
 
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+
 class Graphics
 {
 	public:
+		// Pipeline
+		// Input Assembler
+		// Vertex Shader
+		// Tessellation
+		// Geometry Shader
+		// Render Target
+		// Output merger
+		// Pixel Shader
+		// Rasterizer
+
 		Graphics(HWND hwnd);
 		~Graphics() = default;
 
 		Graphics(const Graphics&) = delete;
 		Graphics& operator=(const Graphics&) = delete;
 
-		void ClearBuffer(float red, float green, float blue);
-
-		void CreateVertexBuffer();
-
-		void VertexShader(); // <-Refactor this
-
-		void InitializeInputLayout(); // <-Refactor this
-
-		void CreatePixelBuffer();
-
-		void PixelShader(); // <-Refactor this
-
-		void drawTriangle(float x, float y);
-		void drawTestTriangle();
-
 		void CreateViewport();
 
+		void InitalizeIAstage();
+
+		void InitalizeRenderData();
+
+		void ClearBuffer(float red, float green, float blue);
+		void DrawFrame();
 		void EndFrame();
 
-	private:
-		HRESULT hResult;
+
+
+		void drawTriangle(float x, float y);
 
 		Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
 		Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
+
+	private:
+		HRESULT hResult;
+
+		//----------
+		// IA Stage
+		//----------
+
 		
-		// Input Layout
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
 
-		// Vertex Buffer
-		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+		
+		//Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+		VertexBuffer vertexBuffer; // Vertex Buffer
+		IndexBuffer indexBuffer; // IndexBuffer
 
+
+		
 		// Vertex Shader
 		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
 		Microsoft::WRL::ComPtr<ID3D10Blob> pVertexShaderBuffer;

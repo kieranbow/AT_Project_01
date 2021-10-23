@@ -1,4 +1,5 @@
 #include "Graphics.h"
+#include "ErrorChecker.h"
 
 Graphics::Graphics(HWND hwnd)
 {
@@ -43,11 +44,16 @@ Graphics::Graphics(HWND hwnd)
 		NULL,
 		&pDeviceContext
 	);
+	ErrorChecker::ThrowIf(hResult, "SwapChain Failed");
 
 	// Back Buffer
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
-	pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer); // Add error checker
-	pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, &pRenderTargetView);
+
+	hResult = pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
+	ErrorChecker::ThrowIf(hResult, "Swap Chain failed to get buffer");
+
+	hResult = pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, &pRenderTargetView);
+	ErrorChecker::ThrowIf(hResult, "Device failed to create render target view");
 
 	// Depth buffer
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
@@ -57,7 +63,9 @@ Graphics::Graphics(HWND hwnd)
 
 	// Create Depth State
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
-	pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState);
+
+	hResult = pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to create Depth Stencil State");
 
 	// Bind Depth state
 	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
@@ -74,7 +82,8 @@ Graphics::Graphics(HWND hwnd)
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
-	pDevice->CreateTexture2D(&depthDesc, NULL, &pDepthStencil);
+	hResult = pDevice->CreateTexture2D(&depthDesc, NULL, &pDepthStencil);
+	ErrorChecker::ThrowIf(hResult, "Device Failed To Create Depth Texture");
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
 	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
@@ -82,6 +91,8 @@ Graphics::Graphics(HWND hwnd)
 	descDSV.Texture2D.MipSlice = 0u;
 
 	pDevice->CreateDepthStencilView(pDepthStencil.Get(), &descDSV, &pDepthView);
+	ErrorChecker::ThrowIf(hResult, "Device Failed To Create Depth Stencil View");
+
 	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 }
 
@@ -90,93 +101,6 @@ void Graphics::ClearBuffer(float red, float green, float blue)
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
 	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-}
-
-void Graphics::CreateVertexBuffer()
-{
-	Vertex vertices[] =
-	{
-		Vertex(0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f), // Center Point
-		Vertex(0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f), // Left Point
-		Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f), // Right Point
-	};
-
-	// Buffer Description
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
-
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.CPUAccessFlags - 0; // Stops CPU having access to this buffer
-	vertexBufferDesc.MiscFlags = 0;
-	vertexBufferDesc.ByteWidth = sizeof(vertices);
-	vertexBufferDesc.StructureByteStride = sizeof(Vertex);
-
-	// Buffer Data
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = vertices;
-
-	// Create Buffer
-	pDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &pVertexBuffer);
-
-	// Bind Buffer
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0u;
-	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
-}
-
-void Graphics::VertexShader()
-{
-	LPCWSTR shaderFolder = L"";
-
-#pragma region DetermineShaderPath
-	if (IsDebuggerPresent() == TRUE)
-	{
-		#ifdef _DEBUG
-			#ifdef _WIN64
-				shaderFolder = L"..\\x64\\Debug\\";
-			#else
-				shaderFolder = L"..\\Debug\\";
-			#endif // _WIN64
-		#else
-			#ifdef _WIN64
-				shaderFolder = L"..\\x64\\Release\\";
-			#else
-				shaderFolder = L"..\\Release\\";
-			#endif // _WIN64
-		#endif // _DEBUG
-	}
-
-	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", &pVertexShaderBuffer); //Error log this
-	pDevice->CreateVertexShader(pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), NULL, &pVertexShader); // Error log this;
-	pDeviceContext->VSSetShader(pVertexShader.Get(), NULL, 0);
-}
-
-void Graphics::InitializeInputLayout()
-{
-	// Layout Description
-	// Vertex Shader will have access to propertices like POSITION and COLOR
-	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
-
-	UINT numElements = std::size(layoutDesc);
-
-	// Error Check this
-	pDevice->CreateInputLayout(layoutDesc, numElements, pVertexShaderBuffer->GetBufferPointer(), pVertexShaderBuffer->GetBufferSize(), &pInputLayout);
-
-	// Set Input Layout
-	pDeviceContext->IASetInputLayout(pInputLayout.Get());
-
-}
-
-void Graphics::PixelShader()
-{
-	D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pPixelShaderBuffer); //Error log this
-	pDevice->CreatePixelShader(pPixelShaderBuffer->GetBufferPointer(), pPixelShaderBuffer->GetBufferSize(), NULL, &pPixelShader);
-	pDeviceContext->PSSetShader(pPixelShader.Get(), NULL, 0);
 }
 
 void Graphics::drawTriangle(float x, float y)
@@ -191,77 +115,79 @@ void Graphics::drawTriangle(float x, float y)
 	// Pixel Shader
 	// Rasterizer
 
-	struct Vertex
-	{
-		struct
-		{
-			float x;
-			float y;
-			float z;
-		} pos;
 
-		struct
-		{
-			float r;
-			float g;
-			float b;
-		} color;
-	};
+	// Vertex Buffer
+	std::vector<Vertex> cubeVertices;
+	cubeVertices.emplace_back(-1.0f,-1.0f,-1.0f, 1.0f, 0, 0);
+	cubeVertices.emplace_back(1.0f, -1.0f, -1.0f, 0, 1.0f, 0);
+	cubeVertices.emplace_back(-1.0f, 1.0f, -1.0f, 0, 0, 1.0f);
+	cubeVertices.emplace_back(1.0f, 1.0f, -1.0f, 1.0f, 0, 0);
+	cubeVertices.emplace_back(-1.0f, -1.0f, 1.0f, 0, 1.0f, 0);
+	cubeVertices.emplace_back(1.0f, -1.0f, 1.0f, 0, 0, 1.0f);
+	cubeVertices.emplace_back(-1.0f, 1.0f, 1.0f, 1.0f, 0, 0);
+	cubeVertices.emplace_back(1.0f, 1.0f, 1.0f, 0, 1.0f, 0);
 
-	// create vertex buffer (1 2d triangle at center of screen)
-	Vertex vertices[] =
-	{
-		{ -1.0f,-1.0f,-1.0f,	 1.0f, 0, 0},
-		{ 1.0f,-1.0f,-1.0f,	 0, 1.0f, 0},
-		{ -1.0f,1.0f,-1.0f,	 0, 0, 1.0f},
-		{ 1.0f,1.0f,-1.0f,		 1.0f, 0, 0},
-		{ -1.0f,-1.0f,1.0f,	 0, 1.0f, 0},
-		{ 1.0f,-1.0f,1.0f,		 0, 0, 1.0f},
-		{ -1.0f,1.0f,1.0f,		 1.0f, 0, 0},
-		{ 1.0f,1.0f,1.0f,	     0, 1.0f, 0},
-	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-	D3D11_BUFFER_DESC bd = {};
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.CPUAccessFlags = 0u;
-	bd.MiscFlags = 0u;
-	bd.ByteWidth = sizeof(vertices);
-	bd.StructureByteStride = sizeof(Vertex);
-	D3D11_SUBRESOURCE_DATA sd = {};
-	sd.pSysMem = vertices;
-	pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer);
+	hResult = vertexBuffer.CreateVertexBuffer(pDevice.Get(), cubeVertices);
+	ErrorChecker::ThrowIf(hResult, "Vertex Buffer Failed to Create Buffer");
 
-	// Bind vertex buffer to pipeline
-	const UINT stride = sizeof(Vertex);
-	const UINT offset = 0u;
-	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+	vertexBuffer.BindBuffer(pDeviceContext.Get());
+
+	// Index Buffer
+	std::vector<unsigned short> cubeIndices;
+	cubeIndices.emplace_back(0);
+	cubeIndices.emplace_back(2);
+	cubeIndices.emplace_back(1);
+
+	cubeIndices.emplace_back(2);
+	cubeIndices.emplace_back(3);
+	cubeIndices.emplace_back(1);
+
+	cubeIndices.emplace_back(1);
+	cubeIndices.emplace_back(3);
+	cubeIndices.emplace_back(5);
+
+	cubeIndices.emplace_back(3);
+	cubeIndices.emplace_back(7);
+	cubeIndices.emplace_back(5);
+
+	cubeIndices.emplace_back(2);
+	cubeIndices.emplace_back(6);
+	cubeIndices.emplace_back(3);
+
+	cubeIndices.emplace_back(3);
+	cubeIndices.emplace_back(6);
+	cubeIndices.emplace_back(7);
+
+	cubeIndices.emplace_back(4);
+	cubeIndices.emplace_back(5);
+	cubeIndices.emplace_back(7);
+
+	cubeIndices.emplace_back(4);
+	cubeIndices.emplace_back(7);
+	cubeIndices.emplace_back(6);
+
+	cubeIndices.emplace_back(0);
+	cubeIndices.emplace_back(4);
+	cubeIndices.emplace_back(2);
+
+	cubeIndices.emplace_back(2);
+	cubeIndices.emplace_back(4);
+	cubeIndices.emplace_back(6);
+
+	cubeIndices.emplace_back(0);
+	cubeIndices.emplace_back(1);
+	cubeIndices.emplace_back(4);
+
+	cubeIndices.emplace_back(1);
+	cubeIndices.emplace_back(5);
+	cubeIndices.emplace_back(4);
 
 
-	// create index buffer
-	const unsigned short indices[] =
-	{
-		0,2,1, 2,3,1,
-		1,3,5, 3,7,5,
-		2,6,3, 3,6,7,
-		4,5,7, 4,7,6,
-		0,4,2, 2,4,6,
-		0,1,4, 1,5,4
-	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-	D3D11_BUFFER_DESC ibd = {};
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.Usage = D3D11_USAGE_DEFAULT;
-	ibd.CPUAccessFlags = 0u;
-	ibd.MiscFlags = 0u;
-	ibd.ByteWidth = sizeof(indices);
-	ibd.StructureByteStride = sizeof(unsigned short);
-	D3D11_SUBRESOURCE_DATA isd = {};
-	isd.pSysMem = indices;
-	pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer);
+	hResult = indexBuffer.CreateIndexBuffer(pDevice.Get(), cubeIndices);
+	ErrorChecker::ThrowIf(hResult, "Index Buffer Failed To Create Buffer");
 
-	// bind index buffer
-	pDeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+	indexBuffer.BindBuffer(pDeviceContext.Get());
+
 
 
 	// create constant buffer for transformation matrix
@@ -273,8 +199,8 @@ void Graphics::drawTriangle(float x, float y)
 	{
 		{
 			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(5) *
-				DirectX::XMMatrixRotationX(20) *
+				DirectX::XMMatrixRotationZ(0) *
+				DirectX::XMMatrixRotationX(0) *
 				DirectX::XMMatrixTranslation(x, y, 4.0f) *
 				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f ,0.5f, 10.0f)
 			)
@@ -353,9 +279,8 @@ void Graphics::drawTriangle(float x, float y)
 	// bind vertex shader
 	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
 
-
-	// input (vertex) layout (2d position only)
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
+
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -386,28 +311,8 @@ void Graphics::drawTriangle(float x, float y)
 	pDeviceContext->RSSetViewports(1u, &vp);
 
 
-	pDeviceContext->DrawIndexed((UINT)std::size(indices), 0u, 0u);
-}
-
-void Graphics::drawTestTriangle()
-{
-	CreateVertexBuffer();
-	VertexShader();
-	InitializeInputLayout();
-	PixelShader();
-
-	// Output Merger
-	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), NULL);
-
-	// Set order of topology rendering
-	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	CreateViewport();
-
-	// Draw Vertices
-	pDeviceContext->Draw(3, 0u);
-
-
+	// pDeviceContext->DrawIndexed((UINT)std::size(indices), 0u, 0u);
+	pDeviceContext->DrawIndexed(static_cast<UINT>(cubeIndices.size()), 0u, 0u);
 }
 
 void Graphics::CreateViewport()
