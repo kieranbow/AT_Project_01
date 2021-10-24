@@ -219,15 +219,21 @@ void Graphics::drawTriangle(float x, float y)
 	// Bind Pixel Constant Buffer
 	pixelConstBuffer.SetPSConstBuffer(pDeviceContext.Get(), 0u, 1u);
 
-	// create pixel shader
-	hResult = D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pPixelShaderBlob);
-	ErrorChecker::ThrowIf(hResult, "Failed to load/Read Pixel Shader");
 
-	hResult = pDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), nullptr, &pPixelShader);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to create Pixel Shader");
 
-	// bind pixel shader
-	pDeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
+
+	// Read Pixel Shader
+	hResult = psShader.ReadPSShaderToBlob(L"..\\x64\\Debug\\PixelShader.cso");
+	ErrorChecker::ThrowIf(hResult, "Failed to read Pixel Shader");
+
+	// Create Pixel Shader
+	hResult = psShader.CreatePSShader(pDevice.Get());
+	ErrorChecker::ThrowIf(hResult, "Failed to create pixel Shader");
+
+	// Bind Pixel Shader
+	psShader.SetPSShader(pDeviceContext.Get(), 0u);
+
+
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{

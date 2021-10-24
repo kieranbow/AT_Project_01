@@ -101,6 +101,9 @@
     <ClInclude Include="VSShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="PSShader.h">
+      <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

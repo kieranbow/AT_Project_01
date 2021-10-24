@@ -163,6 +163,7 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PSShader.h" />
     <ClInclude Include="VSShader.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />

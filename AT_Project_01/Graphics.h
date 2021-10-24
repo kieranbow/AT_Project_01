@@ -20,6 +20,7 @@
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
 #include "VSShader.h"
+#include "PSShader.h"
 
 class Graphics
 {
@@ -71,7 +72,9 @@ class Graphics
 
 		VertexBuffer vertexBuffer;
 		IndexBuffer indexBuffer;
+		
 		VSShader vsShader;
+		PSShader psShader;
 		
 		// Constant Buffers
 		ConstantBuffer vertexConstBuffer;
