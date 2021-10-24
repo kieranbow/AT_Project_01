@@ -1,6 +1,7 @@
 #include "Graphics.h"
 #include "ErrorChecker.h"
 
+
 Graphics::Graphics(HWND hwnd)
 {
 	// Create Swap Chain Description
@@ -115,115 +116,78 @@ void Graphics::drawTriangle(float x, float y)
 	// Pixel Shader
 	// Rasterizer
 
+	const std::vector<Vertex> cubeVertices =
+	{
+		{ {-1.0f, -1.0f, -1.0f},	{1.0f, 0.0f, 0.0f} },
+		{ {1.0f, -1.0f, -1.0f},	{0.0f, 1.0f, 0.0f} },
+		{ {-1.0f, 1.0f, -1.0f},	{0.0f, 0.0f, 1.0f} },
+		{ {1.0f, 1.0f, -1.0f},		{1.0f, 0.0f, 0.0f} },
+		{ {-1.0f, -1.0f, 1.0f},	{0.0f, 1.0f, 0.0f} },
+		{ {1.0f, -1.0f, 1.0f},		{0.0f, 0.0f, 1.0f} },
+		{ {-1.0f, 1.0f, 1.0f},		{1.0f, 0.0f, 0.0f} },
+		{ {1.0f, 1.0f, 1.0f},		{0.0f, 1.0f, 0.0f} },
+	};
 
-	// Vertex Buffer
-	std::vector<Vertex> cubeVertices;
-	cubeVertices.emplace_back(-1.0f,-1.0f,-1.0f, 1.0f, 0, 0);
-	cubeVertices.emplace_back(1.0f, -1.0f, -1.0f, 0, 1.0f, 0);
-	cubeVertices.emplace_back(-1.0f, 1.0f, -1.0f, 0, 0, 1.0f);
-	cubeVertices.emplace_back(1.0f, 1.0f, -1.0f, 1.0f, 0, 0);
-	cubeVertices.emplace_back(-1.0f, -1.0f, 1.0f, 0, 1.0f, 0);
-	cubeVertices.emplace_back(1.0f, -1.0f, 1.0f, 0, 0, 1.0f);
-	cubeVertices.emplace_back(-1.0f, 1.0f, 1.0f, 1.0f, 0, 0);
-	cubeVertices.emplace_back(1.0f, 1.0f, 1.0f, 0, 1.0f, 0);
-
+	// Create Vertex Buffer
 	hResult = vertexBuffer.CreateVertexBuffer(pDevice.Get(), cubeVertices);
 	ErrorChecker::ThrowIf(hResult, "Vertex Buffer Failed to Create Buffer");
 
+	// Bind Vertex Buffer to pipeline
 	vertexBuffer.BindBuffer(pDeviceContext.Get());
 
-	// Index Buffer
-	std::vector<unsigned short> cubeIndices;
-	cubeIndices.emplace_back(0);
-	cubeIndices.emplace_back(2);
-	cubeIndices.emplace_back(1);
 
-	cubeIndices.emplace_back(2);
-	cubeIndices.emplace_back(3);
-	cubeIndices.emplace_back(1);
+	const std::vector<unsigned short> cubeIndices =
+	{
+		0,2,1, 2,3,1,
+		1,3,5, 3,7,5,
+		2,6,3, 3,6,7,
+		4,5,7, 4,7,6,
+		0,4,2, 2,4,6,
+		0,1,4, 1,5,4,
+	};
 
-	cubeIndices.emplace_back(1);
-	cubeIndices.emplace_back(3);
-	cubeIndices.emplace_back(5);
-
-	cubeIndices.emplace_back(3);
-	cubeIndices.emplace_back(7);
-	cubeIndices.emplace_back(5);
-
-	cubeIndices.emplace_back(2);
-	cubeIndices.emplace_back(6);
-	cubeIndices.emplace_back(3);
-
-	cubeIndices.emplace_back(3);
-	cubeIndices.emplace_back(6);
-	cubeIndices.emplace_back(7);
-
-	cubeIndices.emplace_back(4);
-	cubeIndices.emplace_back(5);
-	cubeIndices.emplace_back(7);
-
-	cubeIndices.emplace_back(4);
-	cubeIndices.emplace_back(7);
-	cubeIndices.emplace_back(6);
-
-	cubeIndices.emplace_back(0);
-	cubeIndices.emplace_back(4);
-	cubeIndices.emplace_back(2);
-
-	cubeIndices.emplace_back(2);
-	cubeIndices.emplace_back(4);
-	cubeIndices.emplace_back(6);
-
-	cubeIndices.emplace_back(0);
-	cubeIndices.emplace_back(1);
-	cubeIndices.emplace_back(4);
-
-	cubeIndices.emplace_back(1);
-	cubeIndices.emplace_back(5);
-	cubeIndices.emplace_back(4);
-
-
+	// Create Index Buffer
 	hResult = indexBuffer.CreateIndexBuffer(pDevice.Get(), cubeIndices);
 	ErrorChecker::ThrowIf(hResult, "Index Buffer Failed To Create Buffer");
 
+	// Bind Index Buffer to pipeline
 	indexBuffer.BindBuffer(pDeviceContext.Get());
-
-
 
 	// create constant buffer for transformation matrix
 	struct ConstantBuffer
 	{
 		DirectX::XMMATRIX transform;
 	};
+
 	const ConstantBuffer cb =
 	{
 		{
 			DirectX::XMMatrixTranspose(
 				DirectX::XMMatrixRotationZ(0) *
 				DirectX::XMMatrixRotationX(0) *
-				DirectX::XMMatrixTranslation(x, y, 4.0f) *
+				DirectX::XMMatrixTranslation(x, y, 1.0f) *
 				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f ,0.5f, 10.0f)
 			)
 		}
 	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
-	D3D11_BUFFER_DESC cbd;
-	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd.Usage = D3D11_USAGE_DYNAMIC;
-	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	cbd.MiscFlags = 0u;
-	cbd.ByteWidth = sizeof(cb);
-	cbd.StructureByteStride = 0u;
 
-	D3D11_SUBRESOURCE_DATA csd = {};
-	csd.pSysMem = &cb;
+	// Create Constant buffer
+	hResult = vertexConstBuffer.CreateConstantBuffer(pDevice.Get(), cb);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to VS create Constant Buffer");
 
-	hResult = pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to create Constant Buffer");
+	// Bind Constant Buffer to pipeline
+	vertexConstBuffer.SetVSConstBuffer(pDeviceContext.Get(), 0u, 1u);
 
-	// bind constant buffer to vertex shader
-	pDeviceContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+	// Read vertex shader
+	vsShader.ReadVSShaderToBlob(L"..\\x64\\Debug\\VertexShader.cso");
+	ErrorChecker::ThrowIf(hResult, "Failed to read Vertex Shader");
 
+	// Create Vertex Shader
+	vsShader.CreateVSShader(pDevice.Get());
+	ErrorChecker::ThrowIf(hResult, "Device Failed to Create Vertex Shader");
+
+	// Bind Vertex Shader
+	vsShader.SetVSShader(pDeviceContext.Get(), 0u);
 
 	// lookup table for cube face colors
 	struct ConstantBuffer2
@@ -248,62 +212,36 @@ void Graphics::drawTriangle(float x, float y)
 		}
 	};
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer2;
+	// Create Pixel Constant Buffer
+	hResult = pixelConstBuffer.CreateConstantBuffer(pDevice.Get(), cb2);
+	ErrorChecker::ThrowIf(hResult, "Device Failed to Create PS Constant Buffer");
 
-	D3D11_BUFFER_DESC cbd2;
-	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd2.Usage = D3D11_USAGE_DEFAULT;
-	cbd2.CPUAccessFlags = 0u;
-	cbd2.MiscFlags = 0u;
-	cbd2.ByteWidth = sizeof(cb2);
-	cbd2.StructureByteStride = 0u;
-
-	D3D11_SUBRESOURCE_DATA csd2 = {};
-	csd2.pSysMem = &cb2;
-
-	hResult = pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffer2);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to create Constant buffer");
-
-	// bind constant buffer to pixel shader
-	pDeviceContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
-
-
+	// Bind Pixel Constant Buffer
+	pixelConstBuffer.SetPSConstBuffer(pDeviceContext.Get(), 0u, 1u);
 
 	// create pixel shader
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-	D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pBlob);
-	
-	hResult = pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader);
+	hResult = D3DReadFileToBlob(L"..\\x64\\Debug\\PixelShader.cso", &pPixelShaderBlob);
+	ErrorChecker::ThrowIf(hResult, "Failed to load/Read Pixel Shader");
+
+	hResult = pDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), nullptr, &pPixelShader);
 	ErrorChecker::ThrowIf(hResult, "Device Failed to create Pixel Shader");
 
 	// bind pixel shader
 	pDeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
-
-
-	// create vertex shader
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-	D3DReadFileToBlob(L"..\\x64\\Debug\\VertexShader.cso", &pBlob);
-	
-	hResult = pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to Create Vertex Shader");
-
-	// bind vertex shader
-	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
-
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
+
 	hResult = pDevice->CreateInputLayout(
-		ied, (UINT)std::size(ied),
-		pBlob->GetBufferPointer(),
-		pBlob->GetBufferSize(),
-		&pInputLayout
-	);
+		ied,
+		(UINT)std::size(ied),
+		vsShader.GetVSBlob()->GetBufferPointer(),
+		vsShader.GetVSBlob()->GetBufferSize(),
+		&pInputLayout);
+
 	ErrorChecker::ThrowIf(hResult, "Device Failed to create Input Layout");
 
 	// bind vertex layout
@@ -315,6 +253,7 @@ void Graphics::drawTriangle(float x, float y)
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
+	ZeroMemory(&vp, sizeof(vp));
 	vp.Width = 800;
 	vp.Height = 600;
 	vp.MinDepth = 0;
@@ -328,21 +267,8 @@ void Graphics::drawTriangle(float x, float y)
 	pDeviceContext->DrawIndexed(static_cast<UINT>(cubeIndices.size()), 0u, 0u);
 }
 
-void Graphics::CreateViewport()
-{
-	// Viewport
-	D3D11_VIEWPORT viewport;
-	ZeroMemory(&viewport, sizeof(viewport));
-
-	viewport.TopLeftX = 0;
-	viewport.TopLeftY = 0;
-	viewport.Width = 800; // <-Change this
-	viewport.Height = 600; // <-Change this
-
-	pDeviceContext->RSSetViewports(1, &viewport);
-}
-
 void Graphics::EndFrame()
 {
-	pSwapChain->Present(1u, 0u);
+	hResult = pSwapChain->Present(1u, 0u);
+	ErrorChecker::ThrowIf(hResult, "Swapchain failed to present");
 }

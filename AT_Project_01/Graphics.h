@@ -18,6 +18,8 @@
 
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "ConstantBuffer.h"
+#include "VSShader.h"
 
 class Graphics
 {
@@ -39,8 +41,6 @@ class Graphics
 
 		Graphics(const Graphics&) = delete;
 		Graphics& operator=(const Graphics&) = delete;
-
-		void CreateViewport();
 
 		void InitalizeIAstage();
 
@@ -69,23 +69,21 @@ class Graphics
 		
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
 
+		VertexBuffer vertexBuffer;
+		IndexBuffer indexBuffer;
+		VSShader vsShader;
 		
-		//Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-		VertexBuffer vertexBuffer; // Vertex Buffer
-		IndexBuffer indexBuffer; // IndexBuffer
-
-
+		// Constant Buffers
+		ConstantBuffer vertexConstBuffer;
+		ConstantBuffer pixelConstBuffer;
 		
-		// Vertex Shader
-		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-		Microsoft::WRL::ComPtr<ID3D10Blob> pVertexShaderBuffer;
 
 		// Pixel Buffer
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pPixelBuffer;
 
 		// Pixel Shader
 		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBuffer;
+		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBlob;
 
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 
