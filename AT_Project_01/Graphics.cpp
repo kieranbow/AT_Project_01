@@ -45,20 +45,20 @@ Graphics::Graphics(HWND hwnd)
 		NULL,
 		&pDeviceContext
 	);
-	ErrorChecker::ThrowIf(hResult, "SwapChain Failed");
+	Logging::ThrowIf(hResult, "SwapChain Failed");
 
 	// Back Buffer
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
 
 	hResult = pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
-	ErrorChecker::ThrowIf(hResult, "Swap Chain failed to get buffer");
+	Logging::ThrowIf(hResult, "Swap Chain failed to get buffer");
 
 	hResult = pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, &pRenderTargetView);
-	ErrorChecker::ThrowIf(hResult, "Device failed to create render target view");
+	Logging::ThrowIf(hResult, "Device failed to create render target view");
 
 	// Depth buffer
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
-	depthStencilDesc.DepthEnable = TRUE;
+	depthStencilDesc.DepthEnable = FALSE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
@@ -66,7 +66,7 @@ Graphics::Graphics(HWND hwnd)
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
 
 	hResult = pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to create Depth Stencil State");
+	Logging::ThrowIf(hResult, "Device Failed to create Depth Stencil State");
 
 	// Bind Depth state
 	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
@@ -84,7 +84,7 @@ Graphics::Graphics(HWND hwnd)
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 	hResult = pDevice->CreateTexture2D(&depthDesc, NULL, &pDepthStencil);
-	ErrorChecker::ThrowIf(hResult, "Device Failed To Create Depth Texture");
+	Logging::ThrowIf(hResult, "Device Failed To Create Depth Texture");
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
 	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
@@ -92,7 +92,7 @@ Graphics::Graphics(HWND hwnd)
 	descDSV.Texture2D.MipSlice = 0u;
 
 	pDevice->CreateDepthStencilView(pDepthStencil.Get(), &descDSV, &pDepthView);
-	ErrorChecker::ThrowIf(hResult, "Device Failed To Create Depth Stencil View");
+	Logging::ThrowIf(hResult, "Device Failed To Create Depth Stencil View");
 
 	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 }
@@ -106,34 +106,47 @@ void Graphics::ClearBuffer(float red, float green, float blue)
 
 void Graphics::drawTriangle(float x, float y)
 {
-	// Pipeline
-	// Input Assembler
-	// Vertex Shader
-	// Tessellation
-	// Geometry Shader
-	// Render Target
-	// Output merger
-	// Pixel Shader
-	// Rasterizer
 
 	const std::vector<Vertex> cubeVertices =
 	{
-		{ {-1.0f, -1.0f, -1.0f},	{1.0f, 0.0f, 0.0f} },
-		{ {1.0f, -1.0f, -1.0f},	{0.0f, 1.0f, 0.0f} },
-		{ {-1.0f, 1.0f, -1.0f},	{0.0f, 0.0f, 1.0f} },
-		{ {1.0f, 1.0f, -1.0f},		{1.0f, 0.0f, 0.0f} },
-		{ {-1.0f, -1.0f, 1.0f},	{0.0f, 1.0f, 0.0f} },
-		{ {1.0f, -1.0f, 1.0f},		{0.0f, 0.0f, 1.0f} },
-		{ {-1.0f, 1.0f, 1.0f},		{1.0f, 0.0f, 0.0f} },
-		{ {1.0f, 1.0f, 1.0f},		{0.0f, 1.0f, 0.0f} },
+		{-1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f},
+		{1.0f, -1.0f, -1.0f,	0.0f, 1.0f, 0.0f},
+		{-1.0f, 1.0f, -1.0f,	0.0f, 0.0f, 1.0f},
+		{1.0f, 1.0f, -1.0f,		1.0f, 0.0f, 0.0f},
+		{-1.0f, -1.0f, 1.0f,	0.0f, 1.0f, 0.0f},
+		{1.0f, -1.0f, 1.0f,		0.0f, 0.0f, 1.0f},
+		{-1.0f, 1.0f, 1.0f,		1.0f, 0.0f, 0.0f},
+		{1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 0.0f},
 	};
 
-	// Create Vertex Buffer
-	hResult = vertexBuffer.CreateVertexBuffer(pDevice.Get(), cubeVertices);
-	ErrorChecker::ThrowIf(hResult, "Vertex Buffer Failed to Create Buffer");
+	// Vertex Buffer
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 
-	// Bind Vertex Buffer to pipeline
-	vertexBuffer.BindBuffer(pDeviceContext.Get());
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.CPUAccessFlags = 0; // Stops CPU having access to this buffer
+	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * cubeVertices.size());
+	vertexBufferDesc.StructureByteStride = sizeof(Vertex);
+
+	// Vertex Buffer Data
+	D3D11_SUBRESOURCE_DATA vertexBufferData;
+	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
+	vertexBufferData.pSysMem = cubeVertices.data();
+
+	// Create Vertex Buffer
+	pDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &pVertexBuffer);
+
+	// Bind Vertex Buffer
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0u;
+	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	if (pVertexBuffer == NULL)
+	{
+		Logging::LogWarn("Vertex Buffer is NULL");
+	}
 
 
 	const std::vector<unsigned short> cubeIndices =
@@ -148,10 +161,12 @@ void Graphics::drawTriangle(float x, float y)
 
 	// Create Index Buffer
 	hResult = indexBuffer.CreateIndexBuffer(pDevice.Get(), cubeIndices);
-	ErrorChecker::ThrowIf(hResult, "Index Buffer Failed To Create Buffer");
+	Logging::ThrowIf(hResult, "Index Buffer Failed To Create Buffer");
 
 	// Bind Index Buffer to pipeline
 	indexBuffer.BindBuffer(pDeviceContext.Get());
+
+
 
 	// create constant buffer for transformation matrix
 	struct ConstantBuffer
@@ -163,9 +178,9 @@ void Graphics::drawTriangle(float x, float y)
 	{
 		{
 			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(0) *
-				DirectX::XMMatrixRotationX(0) *
-				DirectX::XMMatrixTranslation(x, y, 1.0f) *
+				DirectX::XMMatrixRotationZ(35) *
+				DirectX::XMMatrixRotationX(20) *
+				DirectX::XMMatrixTranslation(x, y, 4.0f) *
 				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f ,0.5f, 10.0f)
 			)
 		}
@@ -173,67 +188,23 @@ void Graphics::drawTriangle(float x, float y)
 
 	// Create Constant buffer
 	hResult = vertexConstBuffer.CreateConstantBuffer(pDevice.Get(), cb);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to VS create Constant Buffer");
+	Logging::ThrowIf(hResult, "Device Failed to VS create Constant Buffer");
 
 	// Bind Constant Buffer to pipeline
 	vertexConstBuffer.SetVSConstBuffer(pDeviceContext.Get(), 0u, 1u);
 
+
+
 	// Read vertex shader
 	vsShader.ReadVSShaderToBlob(L"..\\x64\\Debug\\VertexShader.cso");
-	ErrorChecker::ThrowIf(hResult, "Failed to read Vertex Shader");
+	Logging::ThrowIf(hResult, "Failed to read Vertex Shader");
 
 	// Create Vertex Shader
 	vsShader.CreateVSShader(pDevice.Get());
-	ErrorChecker::ThrowIf(hResult, "Device Failed to Create Vertex Shader");
+	Logging::ThrowIf(hResult, "Device Failed to Create Vertex Shader");
 
 	// Bind Vertex Shader
 	vsShader.SetVSShader(pDeviceContext.Get(), 0u);
-
-	// lookup table for cube face colors
-	struct ConstantBuffer2
-	{
-		struct
-		{
-			float r;
-			float g;
-			float b;
-			float a;
-		} face_colors[6];
-	};
-	const ConstantBuffer2 cb2 =
-	{
-		{
-			{1.0f,0.0f,1.0f},
-			{1.0f,0.0f,0.0f},
-			{0.0f,1.0f,0.0f},
-			{0.0f,0.0f,1.0f},
-			{1.0f,1.0f,0.0f},
-			{0.0f,1.0f,1.0f},
-		}
-	};
-
-	// Create Pixel Constant Buffer
-	hResult = pixelConstBuffer.CreateConstantBuffer(pDevice.Get(), cb2);
-	ErrorChecker::ThrowIf(hResult, "Device Failed to Create PS Constant Buffer");
-
-	// Bind Pixel Constant Buffer
-	pixelConstBuffer.SetPSConstBuffer(pDeviceContext.Get(), 0u, 1u);
-
-
-
-
-	// Read Pixel Shader
-	hResult = psShader.ReadPSShaderToBlob(L"..\\x64\\Debug\\PixelShader.cso");
-	ErrorChecker::ThrowIf(hResult, "Failed to read Pixel Shader");
-
-	// Create Pixel Shader
-	hResult = psShader.CreatePSShader(pDevice.Get());
-	ErrorChecker::ThrowIf(hResult, "Failed to create pixel Shader");
-
-	// Bind Pixel Shader
-	psShader.SetPSShader(pDeviceContext.Get(), 0u);
-
-
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
@@ -248,7 +219,22 @@ void Graphics::drawTriangle(float x, float y)
 		vsShader.GetVSBlob()->GetBufferSize(),
 		&pInputLayout);
 
-	ErrorChecker::ThrowIf(hResult, "Device Failed to create Input Layout");
+	Logging::ThrowIf(hResult, "Device Failed to create Input Layout");
+
+
+
+	// Read Pixel Shader
+	hResult = psShader.ReadPSShaderToBlob(L"..\\x64\\Debug\\PixelShader.cso");
+	Logging::ThrowIf(hResult, "Failed to read Pixel Shader");
+
+	// Create Pixel Shader
+	hResult = psShader.CreatePSShader(pDevice.Get());
+	Logging::ThrowIf(hResult, "Failed to create pixel Shader");
+
+	// Bind Pixel Shader
+	psShader.SetPSShader(pDeviceContext.Get(), 0u);
+
+
 
 	// bind vertex layout
 	pDeviceContext->IASetInputLayout(pInputLayout.Get());
@@ -276,5 +262,5 @@ void Graphics::drawTriangle(float x, float y)
 void Graphics::EndFrame()
 {
 	hResult = pSwapChain->Present(1u, 0u);
-	ErrorChecker::ThrowIf(hResult, "Swapchain failed to present");
+	Logging::ThrowIf(hResult, "Swapchain failed to present");
 }

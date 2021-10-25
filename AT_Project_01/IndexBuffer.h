@@ -22,7 +22,7 @@ class IndexBuffer
 			indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 			indexBufferDesc.CPUAccessFlags = 0u;
 			indexBufferDesc.MiscFlags = 0u;
-			indexBufferDesc.ByteWidth = sizeof(indices);
+			indexBufferDesc.ByteWidth = static_cast<UINT>(indices.size() * sizeof(unsigned short));
 			indexBufferDesc.StructureByteStride = sizeof(unsigned short);
 			
 			// Set buffer sub-resource description

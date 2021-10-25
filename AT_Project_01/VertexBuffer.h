@@ -14,10 +14,10 @@ class Graphics;
 class VertexBuffer
 {
 	public:
-		VertexBuffer() {}
+		VertexBuffer() = default;
 
-		VertexBuffer(const VertexBuffer&) = delete;
-		VertexBuffer& operator=(const VertexBuffer&) = delete;
+		// VertexBuffer(const VertexBuffer&) = delete;
+		// VertexBuffer& operator=(const VertexBuffer&) = delete;
 
 		HRESULT CreateVertexBuffer(ID3D11Device* device, const std::vector<Vertex>& vertices)
 		{
@@ -37,13 +37,13 @@ class VertexBuffer
 			ZeroMemory(&vertexBufferSRD, sizeof(vertexBufferSRD));
 			vertexBufferSRD.pSysMem = vertices.data();
 
-			HRESULT hResult = device->CreateBuffer(&vertexBufferDesc, &vertexBufferSRD, pVertexBuffer.GetAddressOf());
+			HRESULT hResult = device->CreateBuffer(&vertexBufferDesc, &vertexBufferSRD, &pVertexBuffer);
 			return hResult;
 		}
 
 		void BindBuffer(ID3D11DeviceContext* deviceContext)
 		{
-			deviceContext->IAGetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, 0u);
+			deviceContext->IASetVertexBuffers(0u, 1u, &pVertexBuffer, &stride, 0u);
 		}
 
 		// Address Getters
@@ -57,12 +57,10 @@ class VertexBuffer
 			return pVertexBuffer.GetAddressOf();
 		}
 
-		UINT stride = 0u;
-
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;	// Buffer
 		D3D11_BUFFER_DESC vertexBufferDesc = {};				// Buffer Description
 		D3D11_SUBRESOURCE_DATA vertexBufferSRD = {};		// Buffer Data
 
-
+		UINT stride = 0u;
 };

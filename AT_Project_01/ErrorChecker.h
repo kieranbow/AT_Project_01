@@ -3,15 +3,9 @@
 #include <string>
 #include <comdef.h>
 
-class ErrorChecker
+class Logging
 {
 	public:
-		static std::wstring StringToWideString(std::string input_str)
-		{
-			std::wstring w_string(input_str.begin(), input_str.end());
-			return w_string;
-		}
-
 		static void LogError(std::string message)
 		{
 			std::string error_msg = "Error: " + message;
@@ -38,12 +32,21 @@ class ErrorChecker
 			{
 				LogError(hr, msg);
 			}
-			// if (SUCCEEDED(hr))
-			// {
-				// OutputDebugStringA("Success\n");
-			// }
+		}
+
+		static void LogWarn(std::string msg)
+		{
+			std::string warn_msg = "Warn: " + msg;
+			MessageBoxA(NULL, warn_msg.c_str(), "Warn", MB_ICONWARNING);
 		}
 
 	private:
+		
+		static std::wstring StringToWideString(std::string input_str)
+		{
+			std::wstring w_string(input_str.begin(), input_str.end());
+			return w_string;
+		}
+
 };
 

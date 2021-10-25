@@ -70,7 +70,8 @@ class Graphics
 		
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
 
-		VertexBuffer vertexBuffer;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+
 		IndexBuffer indexBuffer;
 		
 		VSShader vsShader;
@@ -80,14 +81,6 @@ class Graphics
 		ConstantBuffer vertexConstBuffer;
 		ConstantBuffer pixelConstBuffer;
 		
-
-		// Pixel Buffer
-		Microsoft::WRL::ComPtr<ID3D11Buffer> pPixelBuffer;
-
-		// Pixel Shader
-		Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-		Microsoft::WRL::ComPtr<ID3D10Blob> pPixelShaderBlob;
-
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthView;

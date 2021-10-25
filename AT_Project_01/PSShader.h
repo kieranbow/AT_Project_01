@@ -35,7 +35,7 @@ public:
 		deviceContext->PSSetShader(pPixelShader.Get(), NULL, NumInstance);
 	}
 
-	ID3D11PixelShader* GetPSShader()const
+	ID3D11PixelShader* GetPSShader() const
 	{
 		return pPixelShader.Get();
 	}
