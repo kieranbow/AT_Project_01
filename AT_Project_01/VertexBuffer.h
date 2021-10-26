@@ -16,13 +16,13 @@ class VertexBuffer
 	public:
 		VertexBuffer() = default;
 
-		// VertexBuffer(const VertexBuffer&) = delete;
-		// VertexBuffer& operator=(const VertexBuffer&) = delete;
+		VertexBuffer(const VertexBuffer&) = delete;
+		VertexBuffer& operator=(const VertexBuffer&) = delete;
 
-		HRESULT CreateVertexBuffer(ID3D11Device* device, const std::vector<Vertex>& vertices)
+		HRESULT CreateVertexBuffer(ID3D11Device* device, const std::vector<Vertex>& vertices, UINT _offset)
 		{
-			// Set buffer size and stride
 			stride = sizeof(Vertex);
+			offset = _offset;
 
 			// Set buffer Description
 			ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
@@ -41,12 +41,12 @@ class VertexBuffer
 			return hResult;
 		}
 
-		void BindBuffer(ID3D11DeviceContext* deviceContext)
+		void BindBuffer(UINT startSlot, UINT numBuffer, ID3D11DeviceContext* deviceContext)
 		{
-			deviceContext->IASetVertexBuffers(0u, 1u, &pVertexBuffer, &stride, 0u);
+			deviceContext->IASetVertexBuffers(startSlot, numBuffer, pVertexBuffer.GetAddressOf(), &stride, &offset);
 		}
 
-		// Address Getters
+
 		ID3D11Buffer* Get() const
 		{
 			return pVertexBuffer.Get();
@@ -63,4 +63,5 @@ class VertexBuffer
 		D3D11_SUBRESOURCE_DATA vertexBufferSRD = {};		// Buffer Data
 
 		UINT stride = 0u;
+		UINT offset = 0u;
 };

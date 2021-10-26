@@ -25,18 +25,6 @@
 class Graphics
 {
 	public:
-		// -----------------Pipeline
-		// Input Assembler
-		// Vertex Shader
-		// Hull shader
-		// Tessellation
-		// Domain shader
-		// Geometry Shader
-		// Render Target
-		// Output merger
-		// Pixel Shader
-		// Rasterizer
-
 		Graphics(HWND hwnd);
 		~Graphics() = default;
 
@@ -55,13 +43,17 @@ class Graphics
 
 		void drawTriangle(float x, float y);
 
+		// Getters
+		ID3D11Device* GetDevice() const;
+		ID3D11DeviceContext* GetDeviceContext() const;
+
+	private:
+		HRESULT hResult;
+
 		Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
 		Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
-
-	private:
-		HRESULT hResult;
 
 		//----------
 		// IA Stage
@@ -70,8 +62,9 @@ class Graphics
 		
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
 
-		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+		//Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
 
+		VertexBuffer vertexBuffer;
 		IndexBuffer indexBuffer;
 		
 		VSShader vsShader;

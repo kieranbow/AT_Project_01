@@ -1,7 +1,6 @@
 #include "Graphics.h"
 #include "ErrorChecker.h"
 
-
 Graphics::Graphics(HWND hwnd)
 {
 	// Create Swap Chain Description
@@ -58,7 +57,7 @@ Graphics::Graphics(HWND hwnd)
 
 	// Depth buffer
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
-	depthStencilDesc.DepthEnable = FALSE;
+	depthStencilDesc.DepthEnable = TRUE;
 	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
 
@@ -119,35 +118,10 @@ void Graphics::drawTriangle(float x, float y)
 		{1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 0.0f},
 	};
 
-	// Vertex Buffer
-	D3D11_BUFFER_DESC vertexBufferDesc;
-	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+	hResult = vertexBuffer.CreateVertexBuffer(pDevice.Get(), cubeVertices, 0u);
+	Logging::ThrowIf(hResult, "Device Failed to create vertex buffer");
 
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.CPUAccessFlags = 0; // Stops CPU having access to this buffer
-	vertexBufferDesc.MiscFlags = 0;
-	vertexBufferDesc.ByteWidth = static_cast<UINT>(sizeof(Vertex) * cubeVertices.size());
-	vertexBufferDesc.StructureByteStride = sizeof(Vertex);
-
-	// Vertex Buffer Data
-	D3D11_SUBRESOURCE_DATA vertexBufferData;
-	ZeroMemory(&vertexBufferData, sizeof(vertexBufferData));
-	vertexBufferData.pSysMem = cubeVertices.data();
-
-	// Create Vertex Buffer
-	pDevice->CreateBuffer(&vertexBufferDesc, &vertexBufferData, &pVertexBuffer);
-
-	// Bind Vertex Buffer
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0u;
-	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
-
-	if (pVertexBuffer == NULL)
-	{
-		Logging::LogWarn("Vertex Buffer is NULL");
-	}
-
+	vertexBuffer.BindBuffer(0u, 1u ,pDeviceContext.Get());
 
 	const std::vector<unsigned short> cubeIndices =
 	{
@@ -164,8 +138,7 @@ void Graphics::drawTriangle(float x, float y)
 	Logging::ThrowIf(hResult, "Index Buffer Failed To Create Buffer");
 
 	// Bind Index Buffer to pipeline
-	indexBuffer.BindBuffer(pDeviceContext.Get());
-
+	indexBuffer.BindBuffer(pDeviceContext.Get(), DXGI_FORMAT_R16_UINT, 0u);
 
 
 	// create constant buffer for transformation matrix
@@ -257,6 +230,16 @@ void Graphics::drawTriangle(float x, float y)
 
 	// pDeviceContext->DrawIndexed((UINT)std::size(indices), 0u, 0u);
 	pDeviceContext->DrawIndexed(static_cast<UINT>(cubeIndices.size()), 0u, 0u);
+}
+
+ID3D11Device* Graphics::GetDevice() const
+{
+	return pDevice.Get();
+}
+
+ID3D11DeviceContext* Graphics::GetDeviceContext() const
+{
+	return pDeviceContext.Get();
 }
 
 void Graphics::EndFrame()

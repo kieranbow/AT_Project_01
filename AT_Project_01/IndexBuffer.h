@@ -29,13 +29,13 @@ class IndexBuffer
 			ZeroMemory(&indexBufferSRD, sizeof(indexBufferSRD));
 			indexBufferSRD.pSysMem = indices.data();
 
-			HRESULT hResult = device->CreateBuffer(&indexBufferDesc, &indexBufferSRD, pIndexBuffer.GetAddressOf());
+			HRESULT hResult = device->CreateBuffer(&indexBufferDesc, &indexBufferSRD, &pIndexBuffer); // mem leak fixed here
 			return hResult;
 		}
 
-		void BindBuffer(ID3D11DeviceContext* deviceContext)
+		void BindBuffer(ID3D11DeviceContext* deviceContext, DXGI_FORMAT format, UINT offset)
 		{
-			deviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+			deviceContext->IASetIndexBuffer(pIndexBuffer.Get(), format, offset);
 		}
 
 		// Getter
