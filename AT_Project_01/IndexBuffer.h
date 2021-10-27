@@ -9,11 +9,19 @@
 
 #include "Vertex.h"
 
+// Description
+// A IndexBuffer class that handles the construction and binding of the Index Buffer
 class IndexBuffer
 {
 	public:
 		IndexBuffer() = default;
+		~IndexBuffer() = default;
 
+		IndexBuffer(const IndexBuffer&) = delete;
+		IndexBuffer& operator=(const IndexBuffer&) = delete;
+
+		// Description
+		// Creates the buffer using its buffer and sub-resource description.
 		HRESULT CreateIndexBuffer(ID3D11Device* device, const std::vector<unsigned short>& indices)
 		{
 			// Set buffer Description
@@ -33,12 +41,14 @@ class IndexBuffer
 			return hResult;
 		}
 
+		// Description
+		// Binds the buffer to the pipeline using IASetIndexBuffer
 		void BindBuffer(ID3D11DeviceContext* deviceContext, DXGI_FORMAT format, UINT offset)
 		{
 			deviceContext->IASetIndexBuffer(pIndexBuffer.Get(), format, offset);
 		}
 
-		// Getter
+		
 		ID3D11Buffer* Get() const 
 		{
 			return pIndexBuffer.Get();

@@ -40,6 +40,12 @@
     <Filter Include="Header Files\Graphics\Shader">
       <UniqueIdentifier>{8f90863b-d838-4525-acdc-3ff21ab5048c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Graphics\Geometry">
+      <UniqueIdentifier>{378f6eb3-4605-44d1-96f4-d5c201377b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics\Geometry">
+      <UniqueIdentifier>{a32303ba-0ed1-4c2e-aa89-241d5b5a4a1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -62,6 +68,9 @@
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>Source Files\Graphics\Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DaCube.cpp">
+      <Filter>Source Files\Graphics\Geometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="PSShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="DaCube.h">
+      <Filter>Header Files\Graphics\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

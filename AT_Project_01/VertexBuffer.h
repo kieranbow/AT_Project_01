@@ -9,8 +9,6 @@
 
 #include "Vertex.h"
 
-class Graphics;
-
 class VertexBuffer
 {
 	public:

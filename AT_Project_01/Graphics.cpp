@@ -103,6 +103,13 @@ void Graphics::ClearBuffer(float red, float green, float blue)
 	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
+void Graphics::DrawFrame()
+{
+	theCube = std::make_unique<DaCube>(pDevice.Get(), pDeviceContext.Get());
+	theCube->Draw(pDeviceContext.Get());
+
+}
+
 void Graphics::drawTriangle(float x, float y)
 {
 
@@ -118,9 +125,11 @@ void Graphics::drawTriangle(float x, float y)
 		{1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 0.0f},
 	};
 
+	// Create Vertex Buffer
 	hResult = vertexBuffer.CreateVertexBuffer(pDevice.Get(), cubeVertices, 0u);
 	Logging::ThrowIf(hResult, "Device Failed to create vertex buffer");
 
+	// Bind Vertex Buffer
 	vertexBuffer.BindBuffer(0u, 1u ,pDeviceContext.Get());
 
 	const std::vector<unsigned short> cubeIndices =

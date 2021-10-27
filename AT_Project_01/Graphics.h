@@ -22,6 +22,8 @@
 #include "VSShader.h"
 #include "PSShader.h"
 
+#include "DaCube.h"
+
 class Graphics
 {
 	public:
@@ -50,6 +52,8 @@ class Graphics
 	private:
 		HRESULT hResult;
 
+		std::unique_ptr<DaCube> theCube;
+
 		Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
 		Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
@@ -62,11 +66,11 @@ class Graphics
 		
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
 
-		//Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-
+		// Buffers
 		VertexBuffer vertexBuffer;
 		IndexBuffer indexBuffer;
 		
+		// Shaders
 		VSShader vsShader;
 		PSShader psShader;
 		
