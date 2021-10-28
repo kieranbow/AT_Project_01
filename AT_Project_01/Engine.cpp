@@ -6,19 +6,10 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle());
 }
 
-void Engine::InitScene()
-{
-	
-}
 
 bool Engine::ProcessWndMessages()
 {
 	return window.ProcessMessages();
-}
-
-void Engine::Update()
-{
-
 }
 
 LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -147,6 +138,23 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
+}
+
+
+void Engine::initializeScene()
+{
+	
+}
+
+void Engine::Input()
+{
+
+}
+
+
+void Engine::Update()
+{
+
 }
 
 void Engine::RenderFrame()

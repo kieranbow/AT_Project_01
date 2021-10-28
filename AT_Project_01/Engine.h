@@ -15,14 +15,17 @@
 
 #include "DaCube.h"
 
+// Scene Manager stuff here
+
 class Engine
 {
 public:
 	// Constructor
 	Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos);
+	~Engine() = default;
 
-	void InitViewport();
-	void InitScene();
+
+	void initializeScene();
 	void Input();
 	void Update();
 	void RenderFrame();
@@ -34,8 +37,8 @@ private:
 	Window window;
 	Keyboard keyboard;
 	Mouse mouse;
-	std::unique_ptr<Graphics> pGraphics;
 
+	std::unique_ptr<Graphics> pGraphics;
 	std::unique_ptr<DaCube> cube;
 
 };

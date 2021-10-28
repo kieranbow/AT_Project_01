@@ -79,7 +79,7 @@ class Graphics
 		// Constant Buffers
 		ConstantBuffer vertexConstBuffer;
 		ConstantBuffer pixelConstBuffer;
-		
+
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthView;

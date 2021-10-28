@@ -75,6 +75,9 @@
     <ClCompile Include="Geometry.cpp">
       <Filter>Source Files\Graphics\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -121,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="Geometry.h">
       <Filter>Header Files\Graphics\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
