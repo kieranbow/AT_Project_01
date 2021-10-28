@@ -96,11 +96,25 @@ Graphics::Graphics(HWND hwnd)
 	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 }
 
+void Graphics::SetViewport()
+{
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	ZeroMemory(&vp, sizeof(vp));
+	vp.Width = 800;
+	vp.Height = 600;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	pDeviceContext->RSSetViewports(1u, &vp);
+}
+
 void Graphics::ClearBuffer(float red, float green, float blue)
 {
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
-	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 1u);
 }
 
 void Graphics::DrawFrame()

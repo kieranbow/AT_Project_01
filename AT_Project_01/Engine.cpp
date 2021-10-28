@@ -6,6 +6,11 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle());
 }
 
+void Engine::InitScene()
+{
+	
+}
+
 bool Engine::ProcessWndMessages()
 {
 	return window.ProcessMessages();
@@ -13,39 +18,7 @@ bool Engine::ProcessWndMessages()
 
 void Engine::Update()
 {
-	// Remove this
-	while (!keyboard.IsCharBufferEmpty())
-	{
-		unsigned char ch = keyboard.ReadChar();
-		std::string out_msg = "Char: ";
-		out_msg += ch;
-		out_msg += "\n";
-		OutputDebugStringA(out_msg.c_str());
-	}
 
-	// Remove this
-	while (!keyboard.IsKeyBufferEmpty())
-	{
-		unsigned char keycode = keyboard.ReadKeycode().GetKeyCode();
-		std::string out_msg = "Keycode: ";
-		out_msg += keycode;
-		out_msg += "\n";
-		OutputDebugStringA(out_msg.c_str());
-	}
-
-	// Remove this
-	while (!mouse.EventBufferIsEmpty())
-	{
-		Mouse::MouseEvent msEvent = mouse.ReadEvent();
-		if (msEvent.GetType() == Mouse::MouseEvent::EventType::WheelUp)
-		{
-			OutputDebugStringA("MouseWheel Up\n");
-		}
-		if (msEvent.GetType() == Mouse::MouseEvent::EventType::WheelDown)
-		{
-			OutputDebugStringA("MouseWheel Down\n");
-		}
-	}
 }
 
 LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -179,6 +152,9 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
+
+	//cube = std::make_unique<DaCube>(pGraphics);
+	//cube->Draw(pGraphics->GetDeviceContext());
 
 	//pGraphics->drawTriangle(
 		//mouse.GetPosX() / 400.f - 1.0f,

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="DaCube.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="DaCube.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="ErrorChecker.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Keyboard.h" />

@@ -5,9 +5,12 @@
 #include "VSShader.h"
 #include "PSShader.h"
 
+class Graphics;
+
 class DaCube
 {
 	public:
+		// DaCube(std::unique_ptr<Graphics>& gfx);
 		DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		~DaCube() = default;
 
@@ -27,7 +30,5 @@ class DaCube
 
 		std::unique_ptr<VSShader> pVertexShader;
 		std::unique_ptr<PSShader> pPixelShader;
-
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 };
 

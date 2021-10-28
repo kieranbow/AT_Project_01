@@ -33,6 +33,8 @@ class Graphics
 		Graphics(const Graphics&) = delete;
 		Graphics& operator=(const Graphics&) = delete;
 
+		void SetViewport();
+
 		void InitalizeIAstage();
 
 		void InitalizeRenderData();
