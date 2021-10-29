@@ -36,6 +36,10 @@ void SceneTest::Input(Keyboard& keyboard, Mouse& mouse)
 
 void SceneTest::Update(double dt)
 {
+	std::string time;
+	time.append("Delta Time: ");
+	time.append(std::to_string(dt) + "\n");
+	//OutputDebugStringA(time.c_str());
 }
 
 void SceneTest::Draw(Graphics* gfx)

@@ -157,6 +157,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneSwap.cpp" />
     <ClCompile Include="SceneTest.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneSwap.h" />
     <ClInclude Include="SceneTest.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="VSShader.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />

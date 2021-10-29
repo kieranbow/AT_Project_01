@@ -160,9 +160,9 @@ void Engine::Input()
 	sceneManager.Input(keyboard, mouse);
 }
 
-void Engine::Update()
+void Engine::Update(double dt)
 {
-	sceneManager.Update(1.0);
+	sceneManager.Update(dt);
 }
 
 void Engine::RenderFrame()

@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Timer.h"
 
 // Main entry point for WinAPI
 int CALLBACK WinMain(
@@ -10,11 +11,18 @@ int CALLBACK WinMain(
 	// Creates engine instance
 	Engine bowEngine(L"funny box", L"MyWindow", 800, 600, 200, 200);
 
+	Timer timer;
+
 	// Process window messages
 	while (bowEngine.ProcessWndMessages() == true)
 	{
+		double dt = timer.GetMilisecondsElapse();
+		timer.Restart();
+
 		bowEngine.Input();
-		bowEngine.Update();
+
+		bowEngine.Update(dt);
+
 		bowEngine.RenderFrame();
 	}
 

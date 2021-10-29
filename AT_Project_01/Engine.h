@@ -25,7 +25,7 @@ public:
 	~Engine() = default;
 
 	void Input();
-	void Update();
+	void Update(double dt);
 	void RenderFrame();
 
 	bool ProcessWndMessages();
