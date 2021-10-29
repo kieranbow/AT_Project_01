@@ -21,7 +21,7 @@ class IndexBuffer
 		IndexBuffer& operator=(const IndexBuffer&) = delete;
 
 		// Description
-		// Creates the buffer using its buffer and sub-resource description.
+		// Creates a constant buffer using BUFFER_DESC and SUBRESOURCE_DATA
 		HRESULT CreateIndexBuffer(ID3D11Device* device, const std::vector<unsigned short>& indices)
 		{
 			// Set buffer Description
@@ -58,5 +58,4 @@ class IndexBuffer
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;		// Buffer
 		D3D11_BUFFER_DESC indexBufferDesc = {};					// Buffer Description
 		D3D11_SUBRESOURCE_DATA indexBufferSRD = {};			// Buffer Data
-
 };

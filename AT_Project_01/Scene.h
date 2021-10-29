@@ -5,6 +5,9 @@ class Graphics;
 class Keyboard;
 class Mouse;
 
+// Description
+// Virtual class that all scenes inherit from.
+// It includes all the base functions that scenes need like Update, Input, Draw.
 class Scene
 {
 	public:
@@ -27,6 +30,6 @@ class Scene
 		virtual void Update(double dt) {}
 		virtual void Draw(Graphics* gfx) {}
 
-		std::string name = "Default";
+		bool isActive = false;
 };
 

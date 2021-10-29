@@ -39,6 +39,4 @@ private:
 
 	std::unique_ptr<Graphics> pGraphics;
 	std::unique_ptr<DaCube> cube;
-
 };
-

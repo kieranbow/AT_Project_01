@@ -15,7 +15,6 @@
 
 // Graphic Utility
 #include "Vertex.h"
-
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"

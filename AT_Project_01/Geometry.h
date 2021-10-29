@@ -1,6 +1,8 @@
 #pragma once
 #include <DirectXMath.h>
 
+// Description
+// Virtual class that any geometry class will inherit.
 class Geometry
 {
 	public:

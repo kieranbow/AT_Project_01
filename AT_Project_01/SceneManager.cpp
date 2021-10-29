@@ -6,7 +6,7 @@ SceneManager::SceneManager() : scenes(0), currentScene(NULL)
 
 void SceneManager::Input(Keyboard& keyboard, Mouse& mouse)
 {
-	if (currentScene)
+	if (currentScene->isActive)
 	{
 		currentScene->Input(keyboard, mouse);
 	}
@@ -14,7 +14,7 @@ void SceneManager::Input(Keyboard& keyboard, Mouse& mouse)
 
 void SceneManager::Update(double dt)
 {
-	if (currentScene)
+	if (currentScene->isActive)
 	{
 		currentScene->Update(dt);
 	}
@@ -22,18 +22,20 @@ void SceneManager::Update(double dt)
 
 void SceneManager::Draw(Graphics* gfx)
 {
-	if (currentScene)
+	if (currentScene->isActive)
 	{
 		currentScene->Draw(gfx);
 	}
 }
 
-scene_ID SceneManager::Add(const std::shared_ptr<Scene>& scene, Graphics* gfx)
+scene_ID SceneManager::AddScene(const std::shared_ptr<Scene>& scene, Graphics* gfx)
 {
+	// Inserts new scene into unordered map
 	auto insert = scenes.insert(std::make_pair(addSceneID, scene));
 
 	addSceneID++;
 
+	// Call onCreate to create all the scene data like meshes
 	insert.first->second->onCreate(gfx);
 
 	return addSceneID - 1;

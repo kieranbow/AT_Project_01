@@ -15,6 +15,7 @@ void SceneTest::OnDestroy()
 
 void SceneTest::OnActivate()
 {
+	isActive = true;
 }
 
 void SceneTest::OnDeactivate()

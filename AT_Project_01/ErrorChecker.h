@@ -3,6 +3,8 @@
 #include <string>
 #include <comdef.h>
 
+// Description
+// Contains functions for checking and calling errors found inside the program
 class Logging
 {
 	public:
@@ -41,12 +43,9 @@ class Logging
 		}
 
 	private:
-		
 		static std::wstring StringToWideString(std::string input_str)
 		{
 			std::wstring w_string(input_str.begin(), input_str.end());
 			return w_string;
 		}
-
 };
-
