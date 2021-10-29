@@ -51,7 +51,11 @@ class SceneManager
 
 		struct IDList
 		{
-			scene_ID Testing = 0;
+			scene_ID Testing	= 0;
+			scene_ID splash	= 0;
+			scene_ID ingame	= 0;
+			scene_ID swap	= 0;
+
 		}IDList;
 
 	private:

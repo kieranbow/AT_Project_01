@@ -28,6 +28,10 @@ void SceneTest::Input(Keyboard& keyboard, Mouse& mouse)
 	{
 		OutputDebugStringA("Hello");
 	}
+	if (keyboard.IsKeyPressed('W'))
+	{
+		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
+	}
 }
 
 void SceneTest::Update(double dt)

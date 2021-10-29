@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "SceneTest.h"
+#include "SceneSwap.h"
 
 Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos) : window(wnd_title, wnd_class, width, height, x_pos, y_pos)
 {
@@ -11,14 +12,15 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 
 	// Declare Scenes
 	std::shared_ptr<SceneTest> sceneTest = std::make_shared<SceneTest>(sceneManager);
-	
+	std::shared_ptr<SceneSwap> sceneSwap = std::make_shared<SceneSwap>(sceneManager);
+
 	// Update IDList and create scenes
 	sceneManager.IDList.Testing = sceneManager.AddScene(sceneTest, pGraphics.get());
+	sceneManager.IDList.swap = sceneManager.AddScene(sceneSwap, pGraphics.get());
 
 	// Switch Scene
 	sceneManager.SwitchScene(sceneManager.IDList.Testing);
 }
-
 
 bool Engine::ProcessWndMessages()
 {

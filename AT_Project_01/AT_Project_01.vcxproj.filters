@@ -96,6 +96,9 @@
     <ClCompile Include="SceneManager.cpp">
       <Filter>Source Files\Scenes\Base</Filter>
     </ClCompile>
+    <ClCompile Include="SceneSwap.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files\Scenes\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSwap.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
