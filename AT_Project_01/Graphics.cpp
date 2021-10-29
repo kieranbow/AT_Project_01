@@ -122,6 +122,8 @@ void Graphics::DrawFrame()
 	theCube = std::make_unique<DaCube>(pDevice.Get(), pDeviceContext.Get());
 	theCube->Draw(pDeviceContext.Get());
 
+	cube20 = std::make_unique<DaCube>(pDevice.Get(), pDeviceContext.Get());
+	cube20->Draw(pDeviceContext.Get());
 }
 
 void Graphics::drawTriangle(float x, float y)

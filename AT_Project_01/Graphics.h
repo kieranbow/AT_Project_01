@@ -55,6 +55,7 @@ class Graphics
 		HRESULT hResult;
 
 		std::unique_ptr<DaCube> theCube;
+		std::unique_ptr<DaCube> cube20;
 
 		Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 		Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;

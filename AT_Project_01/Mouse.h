@@ -50,8 +50,8 @@ class Mouse
 		~Mouse() = default;
 
 		// Copy/Copy-Assign Operator
-		Mouse(const Mouse&) = delete;
-		Mouse& operator=(const Mouse&) = delete;
+		//Mouse(const Mouse&) = delete;
+		//Mouse& operator=(const Mouse&) = delete;
 
 		void OnLeftBtnPressed(int x, int y);
 		void OnLeftBtnReleased(int x, int y);

@@ -1,9 +1,22 @@
 #include "Engine.h"
+#include "SceneTest.h"
 
 Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos) : window(wnd_title, wnd_class, width, height, x_pos, y_pos)
 {
+	// Render Window
 	window.Render(SW_SHOWDEFAULT);
+
+	// Pass window handler to graphics
 	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle());
+
+	// Declare Scenes
+	std::shared_ptr<SceneTest> sceneTest = std::make_shared<SceneTest>(sceneManager);
+	
+	// Update IDList and create scenes
+	sceneManager.IDList.Testing = sceneManager.Add(sceneTest, pGraphics.get());
+
+	// Switch Scene
+	sceneManager.SwitchScene(sceneManager.IDList.Testing);
 }
 
 
@@ -140,27 +153,21 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 }
 
-
-void Engine::initializeScene()
-{
-	
-}
-
 void Engine::Input()
 {
-
+	sceneManager.Input(keyboard, mouse);
 }
-
 
 void Engine::Update()
 {
-
+	sceneManager.Update(1.0);
 }
 
 void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
 
+	sceneManager.Draw(pGraphics.get());
 	//cube = std::make_unique<DaCube>(pGraphics);
 	//cube->Draw(pGraphics->GetDeviceContext());
 
@@ -168,7 +175,7 @@ void Engine::RenderFrame()
 		//mouse.GetPosX() / 400.f - 1.0f,
 		//-mouse.GetPosY() / 300.f + 1.0f);
 
-	pGraphics->DrawFrame();
+	// pGraphics->DrawFrame();
 
 	pGraphics->EndFrame();
 }

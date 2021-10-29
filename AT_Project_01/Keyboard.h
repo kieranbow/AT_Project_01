@@ -42,8 +42,8 @@ public:
 	~Keyboard() = default;
 
 	// Copy/Copy-Assign Operator
-	Keyboard(const Keyboard&) = delete;
-	Keyboard& operator=(const Keyboard&) = delete;
+	//Keyboard(const Keyboard&) = delete;
+	//Keyboard& operator=(const Keyboard&) = delete;
 
 	bool IsKeyPressed(const unsigned char keycode);
 	bool IsKeyBufferEmpty();

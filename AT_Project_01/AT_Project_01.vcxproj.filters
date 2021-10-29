@@ -46,6 +46,18 @@
     <Filter Include="Source Files\Graphics\Geometry">
       <UniqueIdentifier>{a32303ba-0ed1-4c2e-aa89-241d5b5a4a1c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{6c7d56bb-b9c7-478a-adf0-5b8e556a2b31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{769dd108-c90a-4b79-8e99-b39d7b41ba63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes\Base">
+      <UniqueIdentifier>{9525f889-cf46-4a8e-a21a-ff16b72b5734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes\Base">
+      <UniqueIdentifier>{b4931aac-2c8d-426d-89e3-35c9323989d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -77,6 +89,12 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTest.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Scenes\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +145,15 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTest.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Header Files\Scenes\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\Scenes\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
