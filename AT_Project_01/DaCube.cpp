@@ -75,18 +75,6 @@ DaCube::DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 
 	deviceContext->IASetInputLayout(pInputLayout.Get());
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// configure viewport
-	D3D11_VIEWPORT vp;
-	ZeroMemory(&vp, sizeof(vp));
-	vp.Width = 800;
-	vp.Height = 600;
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0;
-	vp.TopLeftY = 0;
-	deviceContext->RSSetViewports(1u, &vp);
-
 }
 
 void DaCube::Update(float dt)
@@ -101,7 +89,7 @@ void DaCube::Update(float dt)
 	m_scale = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
 	DirectX::XMVECTOR rotaxis = DirectX::XMVectorSet(rotation.x, rotation.y, rotation.z, 0.0f);
 	m_rotation = DirectX::XMMatrixRotationAxis(rotaxis, rot);
-	m_translation = DirectX::XMMatrixTranslation(position.x, position.y, position.x);
+	m_translation = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 
 	world =  m_scale * m_rotation * m_translation;
 }
@@ -121,18 +109,18 @@ void DaCube::SetRotation(float x, float y, float z)
 	rotation = { x, y, z };
 }
 
-void DaCube::Draw(ID3D11DeviceContext* deviceContext)
+void DaCube::Draw(Graphics* gfx)
 {
 	HRESULT hr;
 
-	static DirectX::XMVECTOR eyePos = DirectX::XMVectorSet(0.0f, -4.0f, -2.0f, 0.0f);
+	static DirectX::XMVECTOR eyePos = DirectX::XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
 	static DirectX::XMVECTOR lookAtPos = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	static DirectX::XMVECTOR upVector = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	DirectX::XMMATRIX view = DirectX::XMMatrixLookAtLH(eyePos, lookAtPos, upVector);
 
 	float fovDegrees = 90.0f;
 	float fovRadians = (fovDegrees / 360.0f) * DirectX::XM_2PI;
-	float aspectRatio = 800.0f / 600.0f;
+	float aspectRatio = gfx->GetWindowSize().first / gfx->GetWindowSize().second;
 	float nearZ = 0.1f;
 	float farZ = 1000.0f;
 	DirectX::XMMATRIX projection = DirectX::XMMatrixPerspectiveFovLH(fovRadians, aspectRatio, nearZ, farZ);
@@ -140,12 +128,12 @@ void DaCube::Draw(ID3D11DeviceContext* deviceContext)
 	pVertConstBuffer->data.matrix = world * view * projection;
 	pVertConstBuffer->data.matrix = DirectX::XMMatrixTranspose(pVertConstBuffer->data.matrix);
 
-	hr = pVertConstBuffer->UpdateBuffer(deviceContext);
+	hr = pVertConstBuffer->UpdateBuffer(gfx->GetDeviceContext());
 	Logging::ThrowIf(hr, "Constant buffer failed to update");
-	pVertConstBuffer->SetVSConstBuffer(deviceContext, 0u, 1u);
+	pVertConstBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
 
-	pVertexShader->SetVSShader(deviceContext, 0u);
-	pPixelShader->SetPSShader(deviceContext, 0u);
+	pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
+	pPixelShader->SetPSShader(gfx->GetDeviceContext(), 0u);
 
-	deviceContext->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
+	gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
 }

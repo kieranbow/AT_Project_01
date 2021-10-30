@@ -60,6 +60,8 @@ void SceneTest::Input(Keyboard& keyboard, Mouse& mouse)
 
 void SceneTest::Update(double dt)
 {
+	static_cast<float>(dt);
+
 	solidCube->Update(dt);
 	liquidCube->Update(dt);
 
@@ -71,11 +73,11 @@ void SceneTest::Update(double dt)
 
 void SceneTest::Draw(Graphics* gfx)
 {
-	solidCube->Draw(gfx->GetDeviceContext());
-	liquidCube->Draw(gfx->GetDeviceContext());
+	solidCube->Draw(gfx);
+	liquidCube->Draw(gfx);
 
 	for (auto& cubes : cubepolsion)
 	{
-		cubes->Draw(gfx->GetDeviceContext());
+		cubes->Draw(gfx);
 	}
 }

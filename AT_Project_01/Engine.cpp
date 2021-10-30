@@ -8,7 +8,7 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	window.Render(SW_SHOWDEFAULT);
 
 	// Pass window handler to graphics
-	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle());
+	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle(), width, height);
 
 	// Declare Scenes
 	std::shared_ptr<SceneTest> sceneTest = std::make_shared<SceneTest>(sceneManager);

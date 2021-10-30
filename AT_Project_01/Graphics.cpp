@@ -1,8 +1,11 @@
 #include "Graphics.h"
 #include "ErrorChecker.h"
 
-Graphics::Graphics(HWND hwnd)
+Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 {
+	windowSize.first = static_cast<float>(window_width);
+	windowSize.second = static_cast<float>(window_height);
+
 	// Create Swap Chain Description
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
@@ -19,13 +22,11 @@ Graphics::Graphics(HWND hwnd)
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 
-	// Specify usage of buffer for outputing
+	// Specify usage of buffer for outputting
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapChainDesc.BufferCount = 1;
-
 	swapChainDesc.OutputWindow = hwnd;
 	swapChainDesc.Windowed = TRUE;
-
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	swapChainDesc.Flags = 0;
 
@@ -48,7 +49,6 @@ Graphics::Graphics(HWND hwnd)
 
 	// Back Buffer
 	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
-
 	hResult = pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
 	Logging::ThrowIf(hResult, "Swap Chain failed to get buffer");
 
@@ -63,13 +63,13 @@ Graphics::Graphics(HWND hwnd)
 
 	// Create Depth State
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
-
 	hResult = pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState);
 	Logging::ThrowIf(hResult, "Device Failed to create Depth Stencil State");
 
 	// Bind Depth state
 	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
 
+	// Depth Stencil
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC depthDesc = {};
 	depthDesc.Width = 800u;
@@ -93,21 +93,28 @@ Graphics::Graphics(HWND hwnd)
 	pDevice->CreateDepthStencilView(pDepthStencil.Get(), &descDSV, &pDepthView);
 	Logging::ThrowIf(hResult, "Device Failed To Create Depth Stencil View");
 
-	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
-}
+	// Rasterizer State
+	D3D11_RASTERIZER_DESC rasterizerDesc;
+	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_BACK;
+	hResult = pDevice->CreateRasterizerState(&rasterizerDesc, &pRasterizerState);
+	Logging::ThrowIf(hResult, "Device failed to create rasterizer state");
 
-void Graphics::SetViewport()
-{
 	// configure viewport
 	D3D11_VIEWPORT vp;
 	ZeroMemory(&vp, sizeof(vp));
-	vp.Width = 800;
-	vp.Height = 600;
+	vp.Width = windowSize.first;
+	vp.Height = windowSize.second;
 	vp.MinDepth = 0;
 	vp.MaxDepth = 1;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
 	pDeviceContext->RSSetViewports(1u, &vp);
+
+	// Output merger
+	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
+
 }
 
 void Graphics::ClearBuffer(float red, float green, float blue)
@@ -115,15 +122,6 @@ void Graphics::ClearBuffer(float red, float green, float blue)
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
 	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 1u);
-}
-
-void Graphics::DrawFrame()
-{
-	theCube = std::make_unique<DaCube>(pDevice.Get(), pDeviceContext.Get());
-	theCube->Draw(pDeviceContext.Get());
-
-	cube20 = std::make_unique<DaCube>(pDevice.Get(), pDeviceContext.Get());
-	cube20->Draw(pDeviceContext.Get());
 }
 
 ID3D11Device* Graphics::GetDevice() const
@@ -134,6 +132,11 @@ ID3D11Device* Graphics::GetDevice() const
 ID3D11DeviceContext* Graphics::GetDeviceContext() const
 {
 	return pDeviceContext.Get();
+}
+
+std::pair<float, float> Graphics::GetWindowSize() const
+{
+	return windowSize;
 }
 
 void Graphics::EndFrame()

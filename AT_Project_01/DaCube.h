@@ -23,7 +23,7 @@ class DaCube
 		void SetPosition(float x, float y, float z);
 		void SetRotation(float x, float y, float z);
 
-		void Draw(ID3D11DeviceContext* deviceContext);
+		void Draw(Graphics* gfx);
 
 	private:
 		std::vector<Vertex> vertices;

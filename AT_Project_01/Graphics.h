@@ -13,58 +13,32 @@
 // C++
 #include <memory>
 
-// Graphic Utility
-#include "Vertex.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "ConstantBuffer.h"
-#include "VSShader.h"
-#include "PSShader.h"
-
-#include "DaCube.h"
-
 class Graphics
 {
 	public:
-		Graphics(HWND hwnd);
+		Graphics(HWND hwnd, int window_width, int window_height);
 		~Graphics() = default;
 
 		Graphics(const Graphics&) = delete;
 		Graphics& operator=(const Graphics&) = delete;
 
-		void SetViewport();
-
 		void ClearBuffer(float red, float green, float blue);
-		void DrawFrame();
 		void EndFrame();
 
 		// Getters
 		ID3D11Device* GetDevice() const;
 		ID3D11DeviceContext* GetDeviceContext() const;
+		std::pair<float, float> GetWindowSize() const;
 
 	private:
 		HRESULT hResult;
+		Microsoft::WRL::ComPtr<ID3D11Device>					pDevice;
+		Microsoft::WRL::ComPtr<ID3D11DeviceContext>		pDeviceContext;
+		Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView>	pRenderTargetView;
+		Microsoft::WRL::ComPtr<ID3D11InputLayout>			pInputLayout;
+		Microsoft::WRL::ComPtr<ID3D11RasterizerState>		pRasterizerState;
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>	pDepthView;
 
-		std::unique_ptr<DaCube> theCube;
-		std::unique_ptr<DaCube> cube20;
-
-		Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
-		Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
-		Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
-		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
-
-		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
-
-		// Buffers
-		VertexBuffer vertexBuffer;
-		IndexBuffer indexBuffer;
-		
-		// Shaders
-		VSShader vsShader;
-		PSShader psShader;
-
-		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
-
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthView;
-
+		std::pair<float, float> windowSize;
 };
