@@ -25,6 +25,8 @@ class SceneTest : public Scene
 	private:
 		SceneManager& currentSceneManager;
 
+		Camera camera;
+
 		std::unique_ptr<DaCube> solidCube;
 		std::unique_ptr<DaCube> liquidCube;
 

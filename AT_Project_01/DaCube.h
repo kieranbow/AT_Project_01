@@ -47,4 +47,3 @@ class DaCube
 		DirectX::XMMATRIX m_translation;
 		float rot = 0.01f;
 };
-

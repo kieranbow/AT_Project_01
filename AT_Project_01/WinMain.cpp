@@ -20,9 +20,7 @@ int CALLBACK WinMain(
 		timer.Restart();
 
 		bowEngine.Input();
-
 		bowEngine.Update(dt);
-
 		bowEngine.RenderFrame();
 	}
 
