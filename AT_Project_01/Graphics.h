@@ -34,17 +34,9 @@ class Graphics
 
 		void SetViewport();
 
-		void InitalizeIAstage();
-
-		void InitalizeRenderData();
-
 		void ClearBuffer(float red, float green, float blue);
 		void DrawFrame();
 		void EndFrame();
-
-
-
-		void drawTriangle(float x, float y);
 
 		// Getters
 		ID3D11Device* GetDevice() const;
@@ -61,11 +53,6 @@ class Graphics
 		Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
 
-		//----------
-		// IA Stage
-		//----------
-
-		
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout; // Input Layout
 
 		// Buffers
@@ -75,10 +62,6 @@ class Graphics
 		// Shaders
 		VSShader vsShader;
 		PSShader psShader;
-		
-		// Constant Buffers
-		ConstantBuffer vertexConstBuffer;
-		ConstantBuffer pixelConstBuffer;
 
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizerState;
 

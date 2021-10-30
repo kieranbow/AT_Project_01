@@ -9,9 +9,21 @@
 #include <memory>
 #include <vector>
 
+
+struct VertexConstBuffer
+{
+	DirectX::XMMATRIX matrix;
+};
+
+struct PixelConstBuffer
+{
+	float color = 0; // placeholder
+};
+
 // Description
 // Constant Buffer class that handles behaviour of a constant buffer
 // like Creation, Update, Bind.
+template <typename type>
 class ConstantBuffer
 {
 	public:
@@ -23,31 +35,33 @@ class ConstantBuffer
 
 		// Description
 		// Creates a constant buffer using BUFFER_DESC and SUBRESOURCE_DATA
-		template <typename type>
-		HRESULT CreateConstantBuffer(ID3D11Device* device, type& constBufferType)
+		HRESULT CreateConstantBuffer(ID3D11Device* device)
 		{
 			// Buffer Description
 			ZeroMemory(&constantBufferDesc, sizeof(constantBufferDesc));
 			constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 			constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 			constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			constantBufferDesc.ByteWidth = sizeof(constBufferType);
+			constantBufferDesc.ByteWidth = sizeof(type);
 			constantBufferDesc.MiscFlags = 0u;
 			constantBufferDesc.StructureByteStride = 0u;
 
-			// Buffer Sub-Resource Data
-			constantBufferSRD.pSysMem = &constBufferType;
-
 			// Create Constant Buffer
-			HRESULT hResult = device->CreateBuffer(&constantBufferDesc, &constantBufferSRD, &pConstantBuffer);
+			HRESULT hResult = device->CreateBuffer(&constantBufferDesc, NULL, &pConstantBuffer);
 			return hResult;
 		}
 
 		// Description
 		// Updates buffer using map
-		void UpdateBuffer()
+		HRESULT UpdateBuffer(ID3D11DeviceContext* deviceContext)
 		{
-			
+			HRESULT hr;
+			D3D11_MAPPED_SUBRESOURCE mappedResource;
+
+			hr = deviceContext->Map(pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+			CopyMemory(mappedResource.pData, &data, sizeof(type));
+			deviceContext->Unmap(pConstantBuffer.Get(), 0);
+			return hr;
 		}
 
 		// Description
@@ -69,8 +83,9 @@ class ConstantBuffer
 			return pConstantBuffer.Get();
 		}
 
+		type data;
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;	// Buffer
 		D3D11_BUFFER_DESC constantBufferDesc = {};					// Buffer Description
-		D3D11_SUBRESOURCE_DATA constantBufferSRD = {};			// Buffer Data
 };

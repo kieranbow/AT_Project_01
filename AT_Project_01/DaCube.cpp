@@ -7,7 +7,7 @@ DaCube::DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	HRESULT hr;
 	pVertexBuffer = std::make_unique<VertexBuffer>();
 	pIndexBuffer = std::make_unique<IndexBuffer>();
-	pVertConstBuffer = std::make_unique<ConstantBuffer>();
+	pVertConstBuffer = std::make_unique<ConstantBuffer<VertexConstBuffer>>();
 	pVertexShader = std::make_unique<VSShader>();
 	pPixelShader = std::make_unique<PSShader>();
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
@@ -43,39 +43,8 @@ DaCube::DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	Logging::ThrowIf(hr, "Index failed to build");
 	pIndexBuffer->BindBuffer(deviceContext, DXGI_FORMAT_R16_UINT, 0u);
 
-	// Constant buffer
-	struct ConstantBuffer
-	{
-		DirectX::XMMATRIX transform;
-	};
-
-	DirectX::XMMATRIX xmm_world = DirectX::XMMatrixIdentity();
-	static DirectX::XMVECTOR xmv_eyePos = DirectX::XMVectorSet(0.0f, -10.0f, -2.0f, 0.0f);
-	static DirectX::XMVECTOR xmv_lookAtPos = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	static DirectX::XMVECTOR xmv_upVector = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-
-	DirectX::XMFLOAT3 eyePosFloat3;
-	DirectX::XMStoreFloat3(&eyePosFloat3, xmv_eyePos);
-	eyePosFloat3.y += 0.05f;
-	xmv_eyePos = DirectX::XMLoadFloat3(&eyePosFloat3);
-
-	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixLookAtLH(xmv_eyePos, xmv_lookAtPos, xmv_upVector);
-
-	float fovDeg = 90.0f;
-	float fovRad = (fovDeg / 360.0f) * DirectX::XM_2PI;
-	float aspectRatio = 800.0f / 600.0f;
-	float nearZ = 0.1f;
-	float farZ = 1000.0f;
-
-	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fovRad, aspectRatio, nearZ, farZ);
-
-	const ConstantBuffer cb =
-	{
-		{
-			DirectX::XMMatrixTranspose(xmm_world* viewMatrix* projectionMatrix),
-		}
-	};
-	hr = pVertConstBuffer->CreateConstantBuffer(device, cb);
+	// Constant Buffer
+	hr = pVertConstBuffer->CreateConstantBuffer(device);
 	Logging::ThrowIf(hr, "const failed to build");
 
 	// Vertex Shader
@@ -120,9 +89,61 @@ DaCube::DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 
 }
 
+void DaCube::Update(float dt)
+{
+	rot += 0.05f;
+	if (rot > 6.28f)
+	{
+		rot = 0.0f;
+	}
+	world = DirectX::XMMatrixIdentity();
+
+	m_scale = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
+	DirectX::XMVECTOR rotaxis = DirectX::XMVectorSet(rotation.x, rotation.y, rotation.z, 0.0f);
+	m_rotation = DirectX::XMMatrixRotationAxis(rotaxis, rot);
+	m_translation = DirectX::XMMatrixTranslation(position.x, position.y, position.x);
+
+	world =  m_scale * m_rotation * m_translation;
+}
+
+void DaCube::SetScale(float x, float y, float z)
+{
+	scale = { x, y, z };
+}
+
+void DaCube::SetPosition(float x, float y, float z)
+{
+	position = {x, y, z};
+}
+
+void DaCube::SetRotation(float x, float y, float z)
+{
+	rotation = { x, y, z };
+}
+
 void DaCube::Draw(ID3D11DeviceContext* deviceContext)
 {
+	HRESULT hr;
+
+	static DirectX::XMVECTOR eyePos = DirectX::XMVectorSet(0.0f, -4.0f, -2.0f, 0.0f);
+	static DirectX::XMVECTOR lookAtPos = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	static DirectX::XMVECTOR upVector = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	DirectX::XMMATRIX view = DirectX::XMMatrixLookAtLH(eyePos, lookAtPos, upVector);
+
+	float fovDegrees = 90.0f;
+	float fovRadians = (fovDegrees / 360.0f) * DirectX::XM_2PI;
+	float aspectRatio = 800.0f / 600.0f;
+	float nearZ = 0.1f;
+	float farZ = 1000.0f;
+	DirectX::XMMATRIX projection = DirectX::XMMatrixPerspectiveFovLH(fovRadians, aspectRatio, nearZ, farZ);
+
+	pVertConstBuffer->data.matrix = world * view * projection;
+	pVertConstBuffer->data.matrix = DirectX::XMMatrixTranspose(pVertConstBuffer->data.matrix);
+
+	hr = pVertConstBuffer->UpdateBuffer(deviceContext);
+	Logging::ThrowIf(hr, "Constant buffer failed to update");
 	pVertConstBuffer->SetVSConstBuffer(deviceContext, 0u, 1u);
+
 	pVertexShader->SetVSShader(deviceContext, 0u);
 	pPixelShader->SetPSShader(deviceContext, 0u);
 

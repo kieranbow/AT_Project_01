@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "SceneManager.h"
+#include <random>
 
 #include "DaCube.h"
 #include "Camera.h"
@@ -24,5 +25,8 @@ class SceneTest : public Scene
 	private:
 		SceneManager& currentSceneManager;
 
-		std::unique_ptr<DaCube> cube;
+		std::unique_ptr<DaCube> solidCube;
+		std::unique_ptr<DaCube> liquidCube;
+
+		std::vector<std::unique_ptr<DaCube>> cubepolsion;
 };

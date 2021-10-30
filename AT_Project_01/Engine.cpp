@@ -168,16 +168,6 @@ void Engine::Update(double dt)
 void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
-
 	sceneManager.Draw(pGraphics.get());
-	//cube = std::make_unique<DaCube>(pGraphics);
-	//cube->Draw(pGraphics->GetDeviceContext());
-
-	//pGraphics->drawTriangle(
-		//mouse.GetPosX() / 400.f - 1.0f,
-		//-mouse.GetPosY() / 300.f + 1.0f);
-
-	// pGraphics->DrawFrame();
-
 	pGraphics->EndFrame();
 }
