@@ -69,9 +69,6 @@ class Window
 		// to a WndProc function inside another class like engine.
 		static LRESULT CALLBACK RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-		// Remove this later
-		LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 		int wnd_width	 = 0;
 		int wnd_height	 = 0;
 		int wnd_posX	 = 0;

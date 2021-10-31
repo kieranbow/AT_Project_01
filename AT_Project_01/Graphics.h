@@ -25,10 +25,16 @@ class Graphics
 		void ClearBuffer(float red, float green, float blue);
 		void EndFrame();
 
+		void SetViewMatrix(DirectX::XMMATRIX view);
+		void SetProjectionMatrix(DirectX::XMMATRIX projection);
+
 		// Getters
 		ID3D11Device* GetDevice() const;
 		ID3D11DeviceContext* GetDeviceContext() const;
 		std::pair<float, float> GetWindowSize() const;
+
+		DirectX::XMMATRIX GetViewMatrix() const;
+		DirectX::XMMATRIX GetProjectionMatrix() const;
 
 	private:
 		HRESULT hResult;
@@ -39,6 +45,9 @@ class Graphics
 		Microsoft::WRL::ComPtr<ID3D11InputLayout>			pInputLayout;
 		Microsoft::WRL::ComPtr<ID3D11RasterizerState>		pRasterizerState;
 		Microsoft::WRL::ComPtr<ID3D11DepthStencilView>	pDepthView;
+
+		DirectX::XMMATRIX m_view;
+		DirectX::XMMATRIX m_projection;
 
 		std::pair<float, float> windowSize;
 };

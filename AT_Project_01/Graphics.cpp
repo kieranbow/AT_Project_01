@@ -139,8 +139,28 @@ std::pair<float, float> Graphics::GetWindowSize() const
 	return windowSize;
 }
 
+DirectX::XMMATRIX Graphics::GetViewMatrix() const
+{
+	return m_view;
+}
+
+DirectX::XMMATRIX Graphics::GetProjectionMatrix() const
+{
+	return m_projection;
+}
+
 void Graphics::EndFrame()
 {
 	hResult = pSwapChain->Present(1u, 0u);
 	Logging::ThrowIf(hResult, "Swapchain failed to present");
+}
+
+void Graphics::SetViewMatrix(DirectX::XMMATRIX view)
+{
+	m_view = view;
+}
+
+void Graphics::SetProjectionMatrix(DirectX::XMMATRIX projection)
+{
+	m_projection = projection;
 }

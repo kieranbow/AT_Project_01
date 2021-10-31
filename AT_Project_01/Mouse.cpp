@@ -90,6 +90,11 @@ void Mouse::OnMouseMove(int _x, int _y)
 	eventBuffer.push(MouseEvent(MouseEvent::EventType::Move, x, y));
 }
 
+void Mouse::OnMouseMoveRaw(int _x, int _y)
+{
+	eventBuffer.push(MouseEvent(MouseEvent::EventType::RAW_MOVE, _x, _y));
+}
+
 bool Mouse::IsLeftBtnDown()
 {
 	return leftBtnDown;

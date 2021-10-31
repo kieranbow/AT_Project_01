@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "ErrorChecker.h"
 #include "SceneTest.h"
 #include "SceneSwap.h"
 
@@ -148,7 +149,28 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		}
 
-
+		//case WM_INPUT:
+		//{
+			//UINT datasize;
+			//GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &datasize, sizeof(RAWINPUTHEADER));
+			
+			//if (datasize > 0)
+			//{
+				//std::unique_ptr<BYTE[]> rawData = std::make_unique<BYTE[]>(datasize);
+				//if (GetRawInputData(
+					//reinterpret_cast<HRAWINPUT>(lParam), 
+					//RID_INPUT, rawData.get(), &datasize, sizeof(RAWINPUTHEADER)) == datasize)
+				//{
+					//RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(rawData.get());
+					//if (raw->header.dwType == RIM_TYPEMOUSE)
+					//{
+						//mouse.OnMouseMoveRaw(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
+					//}
+				//}
+			//}
+			
+			//return DefWindowProc(hwnd, msg, wParam, lParam);
+		//}
 
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
@@ -157,6 +179,19 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Engine::Input()
 {
+	Mouse::MouseEvent event = mouse.ReadEvent();
+
+	if (event.GetType() == Mouse::MouseEvent::EventType::RAW_MOVE)
+	{
+		std::string msg = "X: ";
+		msg += std::to_string(event.GetPosX());
+		msg += ", ";
+		msg += "Y: ";
+		msg += std::to_string(event.GetPosY());
+		msg += "\n";
+		OutputDebugStringA(msg.c_str());
+	}
+
 	sceneManager.Input(keyboard, mouse);
 }
 

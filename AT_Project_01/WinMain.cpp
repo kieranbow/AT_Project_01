@@ -9,7 +9,7 @@ int CALLBACK WinMain(
 	_In_ int nCmdShow)
 {
 	// Creates engine instance
-	Engine bowEngine(L"funny box", L"MyWindow", 800, 600, 200, 200);
+	Engine bowEngine(L"funny box", L"MyWindow", 800, 600, 50, 50);
 
 	Timer timer;
 

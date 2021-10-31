@@ -66,6 +66,7 @@ class Mouse
 		void OnWheelDown(int x, int y);
 		
 		void OnMouseMove(int _x, int _y);
+		void OnMouseMoveRaw(int _x, int _y);
 
 		bool IsLeftBtnDown();
 		bool IsMiddleBtnDown();

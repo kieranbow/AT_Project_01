@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "Engine.h"
+#include "ErrorChecker.h"
 
 Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int pos_x, int pos_y)
 {
@@ -18,16 +19,18 @@ Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	wndRect.right = width + wndRect.left;
 	wndRect.top = 100;
 	wndRect.bottom = height + wndRect.top;
-	AdjustWindowRect(&wndRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+	AdjustWindowRect(&wndRect, WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
 
 	RegisterWindowClass();
+
+	// WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU WS_POPUP
 
 	// Create window
 	handle = CreateWindowEx(
 		0,
 		window_class_name,
 		window_title,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+		WS_MINIMIZEBOX | WS_SYSMENU,
 		pos_x,
 		pos_y,
 		wndRect.right - wndRect.left,
@@ -42,6 +45,24 @@ Window::Window(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 		int nResult = GetLastError();
 		MessageBox(NULL, TEXT("Window creation failed"), TEXT("Window Failed"), MB_ICONERROR);
 	}
+
+	//static bool raw_input_init = false;
+	//if (raw_input_init == false)
+	//{
+		//RAWINPUTDEVICE rawInput;
+		//rawInput.usUsagePage = 0x01;
+		//rawInput.usUsage = 0x02;
+		//rawInput.dwFlags = 0;
+		//rawInput.hwndTarget = NULL;
+
+		//if (RegisterRawInputDevices(&rawInput, 1, sizeof(rawInput)) == FALSE)
+		//{
+			//Logging::LogError("Failed to register raw input device");
+			//exit(-1);
+		//}
+		//raw_input_init = true;
+	//}
+
 
 }
 
@@ -130,7 +151,6 @@ LRESULT CALLBACK Window::SetUpMsgHandle(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWindow));
 		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Window::RedirectMsg));
 		
-		// return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
 		return pWindow->WndProc(hWnd, msg, wParam, lParam);
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -148,32 +168,4 @@ LRESULT CALLBACK Window::RedirectMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 	// Gets the long pointer from the window and passes msg info to HandleMsg function
 	Engine* const pWindow = reinterpret_cast<Engine*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	return pWindow->WndProc(hWnd, msg, wParam, lParam);
-	
-	// return pWindow->HandleMsg(hWnd, msg, wParam, lParam);
-}
-
-LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	switch (msg)
-	{
-	case WM_CLOSE:
-		PostQuitMessage(0);
-		break;
-
-	case WM_KEYDOWN:
-		if (wParam == 'D')
-		{
-			SetWindowText(hWnd, L"New Text");
-		}
-		break;
-
-	case WM_KEYUP:
-		if (wParam == 'F')
-		{
-			SetWindowText(hWnd, L"More Text");
-		}
-		break;
-
-	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
