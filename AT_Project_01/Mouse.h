@@ -7,45 +7,45 @@ struct MousePoint
 	int y;
 };
 
+class MouseEvent
+{
+public:
+	enum class EventType
+	{
+		LBtnPress,
+		LBtnRelease,
+		RBtnPress,
+		RBtnRelease,
+		MBtnPress,
+		MBtnRelase,
+		WheelUp,
+		WheelDown,
+		Move,
+		RAW_MOVE,
+		Invalid,
+	};
+
+	MouseEvent();
+	MouseEvent(const EventType _type, const int _x, const int _y);
+	~MouseEvent() = default;
+
+	bool IsValid() const;
+
+	// Getters
+	EventType GetType() const;
+	MousePoint GetPosition() const;
+	int GetPosX() const;
+	int GetPosY() const;
+
+private:
+	EventType type;
+	int x;
+	int y;
+};
+
+
 class Mouse
 {
-	public:
-		class MouseEvent
-		{
-			public:
-				enum class EventType
-				{
-					LBtnPress,
-					LBtnRelease,
-					RBtnPress,
-					RBtnRelease,
-					MBtnPress,
-					MBtnRelase,
-					WheelUp,
-					WheelDown,
-					Move,
-					RAW_MOVE,
-					Invalid,
-				};
-
-				MouseEvent();
-				MouseEvent(const EventType _type, const int _x, const int _y);
-				~MouseEvent() = default;
-
-				bool IsValid() const;
-				
-				// Getters
-				EventType GetType() const;
-				MousePoint GetPosition() const;
-				int GetPosX() const;
-				int GetPosY() const;
-
-			private:
-				EventType type;
-				int x;
-				int y;
-		};
-
 	public:
 		Mouse() = default;
 		~Mouse() = default;
@@ -80,6 +80,8 @@ class Mouse
 
 		bool EventBufferIsEmpty();
 		MouseEvent ReadEvent();
+
+		
 
 	private:
 		std::queue<MouseEvent> eventBuffer;

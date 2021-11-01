@@ -63,20 +63,24 @@ void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse
 
 	const float speed = 0.5f;
 
+	if (mouse->IsLeftBtnDown())
+	{
+		OutputDebugStringA("Left button down\n");
+	}
+
 	if (mouse->IsRightBtnDown())
 	{
-		Mouse::MouseEvent event = mouse->ReadEvent();
+		OutputDebugStringA("Right button down\n");
 
-		float newTargetX = static_cast<float>(event.GetPosX());
-		float newTargetY = static_cast<float>(event.GetPosY());
+		//MouseEvent event = mouse->ReadEvent();
+		MouseEvent event = mouse->ReadEvent();
 
-		camera.UpdateRotation({ newTargetX * speed, newTargetY * speed, 0.0f, 0.0f });
-		OutputDebugStringA("Camera moving with mouse\n");
-
-		if (event.GetType() == Mouse::MouseEvent::EventType::Move)
+		if (event.GetType() == MouseEvent::EventType::Move)
 		{
+			float newTargetX = static_cast<float>(event.GetPosX());
+			float newTargetY = static_cast<float>(event.GetPosY());
 
-
+			camera.UpdateRotation({ newTargetX * speed, newTargetY * speed, 0.0f, 0.0f });
 		}
 	}
 
@@ -112,6 +116,12 @@ void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse
 	{
 		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
+
+	if (keyboard->IsKeyPressed('F'))
+	{
+		camera.UpdateRotation({ 0.0f, 0.1f, 0.0f, 0.0f });
+	}
+
 }
 
 void SceneTest::Update(double dt)

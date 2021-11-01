@@ -14,7 +14,7 @@ private:
 	class KeyboardEvent
 	{
 	public:
-		enum class EventType
+		enum EventType
 		{
 			Press,
 			Release,

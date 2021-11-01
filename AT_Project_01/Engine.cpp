@@ -179,9 +179,9 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Engine::Input()
 {
-	Mouse::MouseEvent event = mouse->ReadEvent();
+	MouseEvent event = mouse->ReadEvent();
 
-	if (event.GetType() == Mouse::MouseEvent::EventType::Move)
+	if (event.GetType() == MouseEvent::EventType::Move)
 	{
 		std::string msg = "X: ";
 		msg += std::to_string(event.GetPosX());

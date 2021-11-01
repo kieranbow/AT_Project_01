@@ -76,10 +76,10 @@ void Camera::SetLookAt(XMVECTOR position)
 
 void Camera::Update(double dt)
 {
-	XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], v_rotation.m128_f32[2]);
-	XMVECTOR v_camTarget = XMVector3TransformCoord(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), m_camRotation);
+	XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], 0.0f);
+	XMVECTOR v_camTarget = XMVector3TransformCoord(v_defForward, m_camRotation);
 	v_camTarget += v_eye;
-	XMVECTOR v_upDirection = XMVector3TransformCoord(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), m_camRotation);
+	XMVECTOR v_upDirection = XMVector3TransformCoord(v_defUp, m_camRotation);
 	m_view = XMMatrixLookAtLH(v_eye, v_camTarget, v_upDirection);
 }
 

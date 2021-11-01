@@ -45,4 +45,7 @@ class Camera
 		XMVECTOR v_target = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 		XMVECTOR v_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMVECTOR v_rotation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+
+		XMVECTOR v_defForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		XMVECTOR v_defUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 };
