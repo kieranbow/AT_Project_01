@@ -40,54 +40,63 @@ int Mouse::MouseEvent::GetPosY() const
 void Mouse::OnLeftBtnPressed(int x, int y)
 {
 	leftBtnDown = true;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::LBtnPress, x, y));
+	MouseEvent event(MouseEvent::EventType::LBtnPress, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnLeftBtnReleased(int x, int y)
 {
 	leftBtnDown = false;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::LBtnRelease, x, y));
+	MouseEvent event(MouseEvent::EventType::LBtnRelease, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnRightBtnPressed(int x, int y)
 {
 	rightBtnDown = true;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::RBtnPress, x, y));
+	MouseEvent event(MouseEvent::EventType::RBtnPress, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnRightBtnReleased(int x, int y)
 {
 	rightBtnDown = false;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::RBtnRelease, x, y));
+	MouseEvent event(MouseEvent::EventType::RBtnRelease, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnMiddleBtnPressed(int x, int y)
 {
 	midBtnDown = true;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::MBtnPress, x, y));
+	MouseEvent event(MouseEvent::EventType::MBtnPress, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnMiddleBtnReleased(int x, int y)
 {
 	midBtnDown = false;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::MBtnRelase, x, y));
+	MouseEvent event(MouseEvent::EventType::MBtnRelase, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnWheelUp(int x, int y)
 {
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::WheelUp, x, y));
+	MouseEvent event(MouseEvent::EventType::WheelUp, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnWheelDown(int x, int y)
 {
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::WheelDown, x, y));
+	MouseEvent event(MouseEvent::EventType::WheelDown, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnMouseMove(int _x, int _y)
 {
 	x = _x;
 	y = _y;
-	eventBuffer.push(MouseEvent(MouseEvent::EventType::Move, x, y));
+	MouseEvent event(MouseEvent::EventType::Move, x, y);
+	eventBuffer.push(event);
 }
 
 void Mouse::OnMouseMoveRaw(int _x, int _y)
@@ -132,7 +141,7 @@ bool Mouse::EventBufferIsEmpty()
 
 Mouse::MouseEvent Mouse::ReadEvent()
 {
-	if (EventBufferIsEmpty())
+	if (eventBuffer.empty())
 	{
 		return MouseEvent();
 	}

@@ -37,16 +37,16 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
 
-			if (keyboard.IsAutoRepeatKeyOn())
+			if (keyboard->IsAutoRepeatKeyOn())
 			{
-				keyboard.OnKeyPressed(keycode);
+				keyboard->OnKeyPressed(keycode);
 			}
 			else
 			{
 				const bool wasPressed = lParam & 0x40000000;
 				if (!wasPressed)
 				{
-					keyboard.OnKeyPressed(keycode);
+					keyboard->OnKeyPressed(keycode);
 				}
 			}
 			return 0;
@@ -55,7 +55,7 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_KEYUP:
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
-			keyboard.OnKeyReleased(keycode);
+			keyboard->OnKeyReleased(keycode);
 			return 0;
 		}
 
@@ -63,16 +63,16 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			unsigned char ch = static_cast<unsigned char>(wParam);
 
-			if (keyboard.IsAutoRepeatCharOn())
+			if (keyboard->IsAutoRepeatCharOn())
 			{
-				keyboard.OnChar(ch);
+				keyboard->OnChar(ch);
 			}
 			else
 			{
 				const bool wasPressed = lParam & 0x40000000;
 				if (!wasPressed)
 				{
-					keyboard.OnChar(ch);
+					keyboard->OnChar(ch);
 				}
 			}
 			return 0;
@@ -84,7 +84,7 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnMouseMove(x, y);
+			mouse->OnMouseMove(x, y);
 			return 0;
 		}
 		// Left Button
@@ -92,14 +92,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnLeftBtnPressed(x, y);
+			mouse->OnLeftBtnPressed(x, y);
 			return 0;
 		}
 		case WM_LBUTTONUP:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnLeftBtnReleased(x, y);
+			mouse->OnLeftBtnReleased(x, y);
 			return 0;
 		}
 
@@ -108,14 +108,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnRightBtnPressed(x, y);
+			mouse->OnRightBtnPressed(x, y);
 			return 0;
 		}
 		case WM_RBUTTONUP:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnRightBtnReleased(x, y);
+			mouse->OnRightBtnReleased(x, y);
 			return 0;
 		}
 
@@ -124,14 +124,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnMiddleBtnPressed(x, y);
+			mouse->OnMiddleBtnPressed(x, y);
 			return 0;
 		}
 		case WM_MBUTTONUP:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse.OnMiddleBtnReleased(x, y);
+			mouse->OnMiddleBtnReleased(x, y);
 			return 0;
 		}
 		case WM_MOUSEWHEEL:
@@ -140,11 +140,11 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			int y = HIWORD(lParam);
 			if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
 			{
-				mouse.OnWheelUp(x, y);
+				mouse->OnWheelUp(x, y);
 			}
 			if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
 			{
-				mouse.OnWheelDown(x, y);
+				mouse->OnWheelDown(x, y);
 			}
 			return 0;
 		}
@@ -179,9 +179,9 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Engine::Input()
 {
-	Mouse::MouseEvent event = mouse.ReadEvent();
+	Mouse::MouseEvent event = mouse->ReadEvent();
 
-	if (event.GetType() == Mouse::MouseEvent::EventType::RAW_MOVE)
+	if (event.GetType() == Mouse::MouseEvent::EventType::Move)
 	{
 		std::string msg = "X: ";
 		msg += std::to_string(event.GetPosX());

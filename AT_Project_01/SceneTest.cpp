@@ -9,7 +9,6 @@ void SceneTest::onCreate(Graphics* gfx)
 	std::mt19937 random_engine(
 		static_cast<float>(std::random_device{}()));
 
-	camera.SetPosition(0.0f, 0.0f, 0.0f);
 
 	gfx->SetViewMatrix(camera.GetViewMatrix());
 	gfx->SetProjectionMatrix(camera.GetViewMatrix());
@@ -55,60 +54,63 @@ void SceneTest::OnDeactivate()
 {
 }
 
-void SceneTest::Input(Keyboard& keyboard, Mouse& mouse)
+void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse)
 {
-	if (keyboard.IsKeyPressed('Q'))
+	if (keyboard->IsKeyPressed('Q'))
 	{
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
 	}
 
-	if (mouse.IsRightBtnDown())
+	const float speed = 0.5f;
+
+	if (mouse->IsRightBtnDown())
 	{
-		Mouse::MouseEvent event = mouse.ReadEvent();
+		Mouse::MouseEvent event = mouse->ReadEvent();
+
+		float newTargetX = static_cast<float>(event.GetPosX());
+		float newTargetY = static_cast<float>(event.GetPosY());
+
+		camera.UpdateRotation({ newTargetX * speed, newTargetY * speed, 0.0f, 0.0f });
+		OutputDebugStringA("Camera moving with mouse\n");
 
 		if (event.GetType() == Mouse::MouseEvent::EventType::Move)
 		{
-			camera.UpdateRotation(
-				static_cast<float>(event.GetPosX()) * 0.01f,
-				static_cast<float>(event.GetPosY()) * 0.01f,
-				0.0f);
+
+
 		}
-		OutputDebugStringA("Camera moving with mouse\n");
 	}
 
-	const float cameraSpeed = 0.02f;
-
-	if (keyboard.IsKeyPressed('W'))
+	if (keyboard->IsKeyPressed('W'))
 	{
-		//camera.UpdatePosition(camera.GetFowardVector() * cameraSpeed);
-		camera.backforward += cameraSpeed;
+		camera.UpdatePosition({ 0.0f, 0.0f, 1.0f * speed, 0.0f });
+		
 		OutputDebugStringA("Camera moving up\n");
 	}
-	if (keyboard.IsKeyPressed('S'))
+	if (keyboard->IsKeyPressed('S'))
 	{
-		//camera.UpdatePosition(camera.GetBackwardVector() * cameraSpeed);
-		camera.backforward -= cameraSpeed;
+		camera.UpdatePosition({ 0.0f, 0.0f, -1.0f * speed, 0.0f });
+		
 		OutputDebugStringA("Camera moving down\n");
 	}
-	if (keyboard.IsKeyPressed('A'))
+	if (keyboard->IsKeyPressed('A'))
 	{
-		//camera.UpdatePosition(camera.GetLeftVector() * cameraSpeed);
-		camera.strife -= cameraSpeed;
+		camera.UpdatePosition({ -1.0f * speed, 0.0f, 0.0f, 0.0f });
+		
 		OutputDebugStringA("Camera moving left\n");
 	}
-	if (keyboard.IsKeyPressed('D'))
+	if (keyboard->IsKeyPressed('D'))
 	{
-		//camera.UpdatePosition(camera.GetRightVector() * cameraSpeed);
-		camera.strife += cameraSpeed;
+		camera.UpdatePosition({ 1.0f * speed, 0.0f, 0.0f, 0.0f });
+		
 		OutputDebugStringA("Camera moving right\n");
 	}
-	if (keyboard.IsKeyPressed(VK_SPACE))
+	if (keyboard->IsKeyPressed(VK_SPACE))
 	{
-		//camera.UpdatePosition(DirectX::XMVectorSet(0.0f, cameraSpeed, 0.0f, 0.0f));
+		camera.UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
 	}
-	if (keyboard.IsKeyPressed('Z'))
+	if (keyboard->IsKeyPressed('Z'))
 	{
-		//camera.UpdatePosition(DirectX::XMVectorSet(0.0f, -cameraSpeed, 0.0f, 0.0f));
+		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
 }
 
@@ -118,9 +120,11 @@ void SceneTest::Update(double dt)
 
 	camera.Update(dt);
 
+
+
+
 	solidCube->Update(dt);
 	liquidCube->Update(dt);
-
 
 	for (auto& cubes : cubepolsion)
 	{
@@ -131,7 +135,7 @@ void SceneTest::Update(double dt)
 void SceneTest::Draw(Graphics* gfx)
 {
 	gfx->SetViewMatrix(camera.GetViewMatrix());
-	gfx->SetProjectionMatrix(camera.GetViewMatrix());
+	gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
 
 
 	solidCube->Draw(gfx);

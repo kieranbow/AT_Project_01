@@ -14,7 +14,7 @@ public:
 	void OnDeactivate() final;
 
 	// Base game scene functions
-	void Input(Keyboard & keyboard, Mouse & mouse) final;
+	void Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse) final;
 	void Update(double dt) final;
 	void Draw(Graphics * gfx) final;
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 
 class Graphics;
 class Keyboard;
@@ -26,7 +27,7 @@ class Scene
 		virtual void OnDeactivate() {}
 
 		// Base game scene functions
-		virtual void Input(Keyboard& keyboard, Mouse& mouse) {}
+		virtual void Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse) {}
 		virtual void Update(double dt) {}
 		virtual void Draw(Graphics* gfx) {}
 

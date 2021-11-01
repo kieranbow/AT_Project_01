@@ -25,11 +25,12 @@ class Mouse
 					WheelDown,
 					Move,
 					RAW_MOVE,
-					Invalid
+					Invalid,
 				};
 
 				MouseEvent();
 				MouseEvent(const EventType _type, const int _x, const int _y);
+				~MouseEvent() = default;
 
 				bool IsValid() const;
 				

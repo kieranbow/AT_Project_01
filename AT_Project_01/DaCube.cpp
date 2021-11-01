@@ -125,7 +125,7 @@ void DaCube::Draw(Graphics* gfx)
 	float farZ = 1000.0f;
 	DirectX::XMMATRIX projection = DirectX::XMMatrixPerspectiveFovLH(fovRadians, aspectRatio, nearZ, farZ);
 
-	pVertConstBuffer->data.matrix = world * view * projection;
+	pVertConstBuffer->data.matrix = world * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
 	pVertConstBuffer->data.matrix = DirectX::XMMatrixTranspose(pVertConstBuffer->data.matrix);
 
 	hr = pVertConstBuffer->UpdateBuffer(gfx->GetDeviceContext());

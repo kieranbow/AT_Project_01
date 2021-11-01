@@ -4,7 +4,7 @@ SceneManager::SceneManager() : scenes(0), currentScene(NULL)
 {
 }
 
-void SceneManager::Input(Keyboard& keyboard, Mouse& mouse)
+void SceneManager::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse)
 {
 	if (currentScene->isActive)
 	{

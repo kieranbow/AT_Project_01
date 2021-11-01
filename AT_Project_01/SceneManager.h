@@ -26,7 +26,7 @@ class SceneManager
 
 		// Description
 		// Pass data about keyboard and mouse to current scene.
-		void Input(Keyboard& keyboard, Mouse& mouse);
+		void Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse);
 
 		// Description
 		// Pass delta time to current scene.

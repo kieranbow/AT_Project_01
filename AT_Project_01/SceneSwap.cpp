@@ -21,9 +21,9 @@ void SceneSwap::OnDeactivate()
 {
 }
 
-void SceneSwap::Input(Keyboard& keyboard, Mouse& mouse)
+void SceneSwap::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse)
 {
-	if (keyboard.IsKeyPressed('S'))
+	if (keyboard->IsKeyPressed('S'))
 	{
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.Testing);
 	}

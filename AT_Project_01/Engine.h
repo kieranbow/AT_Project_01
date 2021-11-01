@@ -33,8 +33,8 @@ public:
 
 private:
 	Window window;
-	Keyboard keyboard;
-	Mouse mouse;
+	std::unique_ptr<Keyboard> keyboard = std::make_unique<Keyboard>();
+	std::unique_ptr<Mouse> mouse = std::make_unique<Mouse>();
 	SceneManager sceneManager;
 
 	std::unique_ptr<Graphics> pGraphics;
