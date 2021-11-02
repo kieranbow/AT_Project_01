@@ -179,17 +179,29 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Engine::Input()
 {
-	MouseEvent event = mouse->ReadEvent();
-
-	if (event.GetType() == MouseEvent::EventType::Move)
+	while (!keyboard->IsCharBufferEmpty())
 	{
-		std::string msg = "X: ";
-		msg += std::to_string(event.GetPosX());
-		msg += ", ";
-		msg += "Y: ";
-		msg += std::to_string(event.GetPosY());
-		msg += "\n";
-		OutputDebugStringA(msg.c_str());
+		unsigned char ch = keyboard->ReadChar();
+	}
+	while (!keyboard->IsKeyBufferEmpty())
+	{
+		auto kbe = keyboard->ReadKeycode();
+		unsigned char keycode = kbe.GetKeyCode();
+	}
+
+	while (!mouse->EventBufferIsEmpty())
+	{
+		MouseEvent me = mouse->ReadEvent();
+		
+		if (me.GetType() == MouseEvent::EventType::WheelDown)
+		{
+			OutputDebugStringA("wheel down\n");
+		}
+		if (me.GetType() == MouseEvent::EventType::WheelUp)
+		{
+			OutputDebugStringA("wheel up\n");
+		}
+
 	}
 
 	sceneManager.Input(keyboard, mouse);
