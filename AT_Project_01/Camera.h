@@ -1,7 +1,16 @@
 #pragma once
 #include <DirectXMath.h>
+#include <memory>
 
 using namespace DirectX;
+
+struct Direction
+{
+	XMVECTOR v_forward = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR v_backward = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR v_left = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR v_right = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+};
 
 class Camera
 {
@@ -20,12 +29,14 @@ class Camera
 
 		void SetTarget(XMVECTOR target);
 
-		void SetLookAt(XMVECTOR position);
+		void SetLookAt(XMFLOAT3 position);
 
 		void Update(double dt);
 
 		DirectX::XMMATRIX GetViewMatrix() const;
 		DirectX::XMMATRIX GetProjectionMatrix() const;
+
+		Direction GetDirection() const;
 
 	private:
 		// Camera Propertices
@@ -46,6 +57,13 @@ class Camera
 		XMVECTOR v_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMVECTOR v_rotation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 
-		XMVECTOR v_defForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-		XMVECTOR v_defUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		const XMVECTOR v_defForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		const XMVECTOR v_defUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		const XMVECTOR v_defBackward = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
+		const XMVECTOR v_defLeft = XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);
+		const XMVECTOR v_defRight = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+
+
+		Direction direction;
+
 };

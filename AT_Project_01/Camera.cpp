@@ -41,32 +41,33 @@ void Camera::SetTarget(XMVECTOR target)
 	v_target += target;
 }
 
-void Camera::SetLookAt(XMVECTOR position)
+void Camera::SetLookAt(XMFLOAT3 position)
 {
-	if (position.m128_f32[0] == v_eye.m128_f32[0] 
-		&& position.m128_f32[1] == v_eye.m128_f32[1] 
-		&& position.m128_f32[2] == v_eye.m128_f32[2])
+	if (position.x == v_eye.m128_f32[0] 
+		&& position.y == v_eye.m128_f32[1] 
+		&& position.z == v_eye.m128_f32[2])
 	{
 		return;
 	}
-	position.m128_f32[0] = v_eye.m128_f32[0] - position.m128_f32[0];
-	position.m128_f32[1] = v_eye.m128_f32[1] - position.m128_f32[1];
-	position.m128_f32[2] = v_eye.m128_f32[2] - position.m128_f32[2];
+
+	position.x = v_eye.m128_f32[0] - position.x;
+	position.y = v_eye.m128_f32[1] - position.y;
+	position.z = v_eye.m128_f32[2] - position.z;
 
 	float pitch = 0.0f;
-	if (position.m128_f32[1] != 0.0f)
+	if (position.y != 0.0f)
 	{
-		const float distance = sqrt(position.m128_f32[0] * position.m128_f32[0] + position.m128_f32[2] * position.m128_f32[2]);
-		pitch = atan(position.m128_f32[1] / distance);
+		const float distance = sqrt(position.x * position.x + position.z * position.z);
+		pitch = atan(position.y / distance);
 	}
 
 	float yaw = 0.0f;
-	if (position.m128_f32[0] != 0.0f)
+	if (position.x != 0.0f)
 	{
-		yaw = atan(position.m128_f32[0] / position.m128_f32[2]);
+		yaw = atan(position.x / position.z);
 	}
 
-	if (position.m128_f32[2] > 0)
+	if (position.z > 0)
 	{
 		yaw += DirectX::XM_PI;
 	}
@@ -76,11 +77,17 @@ void Camera::SetLookAt(XMVECTOR position)
 
 void Camera::Update(double dt)
 {
-	XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], 0.0f);
+	XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], v_rotation.m128_f32[2]);
 	XMVECTOR v_camTarget = XMVector3TransformCoord(v_defForward, m_camRotation);
 	v_camTarget += v_eye;
 	XMVECTOR v_upDirection = XMVector3TransformCoord(v_defUp, m_camRotation);
 	m_view = XMMatrixLookAtLH(v_eye, v_camTarget, v_upDirection);
+
+	XMMATRIX m_rotationMatrix = XMMatrixRotationRollPitchYaw(0.0f, v_rotation.m128_f32[1], 0.0f);
+	direction.v_forward = XMVector3TransformCoord(v_defForward, m_rotationMatrix);
+	direction.v_backward = XMVector3TransformCoord(v_defBackward, m_rotationMatrix);
+	direction.v_left = XMVector3TransformCoord(v_defLeft, m_rotationMatrix);
+	direction.v_right = XMVector3TransformCoord(v_defRight, m_rotationMatrix);
 }
 
 DirectX::XMMATRIX Camera::GetViewMatrix() const
@@ -91,4 +98,9 @@ DirectX::XMMATRIX Camera::GetViewMatrix() const
 DirectX::XMMATRIX Camera::GetProjectionMatrix() const
 {
 	return m_projection;
+}
+
+Direction Camera::GetDirection() const
+{
+	return direction;
 }

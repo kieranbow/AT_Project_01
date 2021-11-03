@@ -97,27 +97,19 @@ void SceneTest::Input(SceneData& sceneData)
 
 	if (sceneData.keyboard->IsKeyPressed('W'))
 	{
-		camera.UpdatePosition({ 0.0f, 0.0f, 1.0f * speed, 0.0f });
-		
-		OutputDebugStringA("Camera moving up\n");
+		camera.UpdatePosition(camera.GetDirection().v_forward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('S'))
 	{
-		camera.UpdatePosition({ 0.0f, 0.0f, -1.0f * speed, 0.0f });
-		
-		OutputDebugStringA("Camera moving down\n");
+		camera.UpdatePosition(camera.GetDirection().v_backward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('A'))
 	{
-		camera.UpdatePosition({ -1.0f * speed, 0.0f, 0.0f, 0.0f });
-		
-		OutputDebugStringA("Camera moving left\n");
+		camera.UpdatePosition(camera.GetDirection().v_left * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('D'))
 	{
-		camera.UpdatePosition({ 1.0f * speed, 0.0f, 0.0f, 0.0f });
-		
-		OutputDebugStringA("Camera moving right\n");
+		camera.UpdatePosition(camera.GetDirection().v_right * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed(VK_SPACE))
 	{
@@ -126,6 +118,15 @@ void SceneTest::Input(SceneData& sceneData)
 	if (sceneData.keyboard->IsKeyPressed('Z'))
 	{
 		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
+	}
+
+	if (sceneData.keyboard->IsKeyPressed('Q'))
+	{
+		camera.UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
+	}
+	if (sceneData.keyboard->IsKeyPressed('E'))
+	{
+		camera.UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
 	}
 
 }
