@@ -28,7 +28,6 @@ class Camera
 		void UpdateRotation(XMVECTOR rotation);
 
 		void SetTarget(XMVECTOR target);
-
 		void SetLookAt(XMFLOAT3 position);
 
 		void Update(double dt);
@@ -49,14 +48,17 @@ class Camera
 		float farZ = 1000.0f;
 		bool enableOrthographic = false;
 
+		// Projection/View Matrix
 		XMMATRIX m_view;
 		XMMATRIX m_projection;
 
+		// Camera Vectors
 		XMVECTOR v_eye = XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
 		XMVECTOR v_target = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 		XMVECTOR v_up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMVECTOR v_rotation = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 
+		// Default movement Vectors
 		const XMVECTOR v_defForward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
 		const XMVECTOR v_defUp = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		const XMVECTOR v_defBackward = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);

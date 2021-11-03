@@ -80,7 +80,7 @@ void DaCube::Update(float dt)
 		rot = 0.0f;
 	}
 
-	//transform.SetRotationAxis(rot);
+	transform.SetRotationAxis(rot);
 	// transform.SetScale(1.0f, 1.0f, 1.0f);
 	// transform.SetPosition(0.0f, 0.0f, rot);
 	transform.Update();
@@ -89,22 +89,21 @@ void DaCube::Update(float dt)
 void DaCube::Draw(Graphics* gfx)
 {
 	HRESULT hr;
-
-	std::list<int> type;
-
-	pVertConstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
-
 	// SetIAVertex buffer
 
-	// pVertConstBuffer->data.matrix = world * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
+	// Assign constant buffer new data
+	pVertConstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
 	pVertConstBuffer->data.matrix = DirectX::XMMatrixTranspose(pVertConstBuffer->data.matrix);
 
+	// Update and set constant buffer
 	hr = pVertConstBuffer->UpdateBuffer(gfx->GetDeviceContext());
 	Logging::ThrowIf(hr, "Constant buffer failed to update");
 	pVertConstBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
 
+	// Set Shaders
 	pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
 	pPixelShader->SetPSShader(gfx->GetDeviceContext(), 0u);
 
+	// Draw
 	gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
 }

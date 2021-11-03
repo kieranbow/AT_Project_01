@@ -21,7 +21,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float width = 10.0f;
 	float height = 10.0f;
 
-	float distance = 10.0f;
+	float distance = 100.0f;
 
 	int amount = 1000;
 
@@ -33,8 +33,8 @@ void SceneTest::onCreate(SceneData& sceneData)
 	{
 
 		cubepolsion.push_back(std::make_unique<DaCube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext()));
-		cubepolsion.at(i)->transform.SetScale(1.5f, 1.5f, 1.5f);
-		cubepolsion.at(i)->transform.SetPosition(positionX, positionY, positionZ);
+		cubepolsion.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+		cubepolsion.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
 		positionX += distance;
 
@@ -72,17 +72,17 @@ void SceneTest::Input(SceneData& sceneData)
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
 	}
 
-	const float speed = 0.5f;
+	const float speed = 1.0f;
 
 	if (sceneData.mouse->IsLeftBtnDown())
 	{
-		OutputDebugStringA("Left button down\n");
+		lookat = true;
 	}
 
 	if (sceneData.mouse->IsRightBtnDown())
 	{
-		OutputDebugStringA("Right button down\n");
-
+		
+		lookat = false;
 		//MouseEvent event = mouse->ReadEvent();
 		MouseEvent event = sceneData.mouse->ReadEvent();
 
@@ -93,6 +93,11 @@ void SceneTest::Input(SceneData& sceneData)
 
 			camera.UpdateRotation({ newTargetX * speed, newTargetY * speed, 0.0f, 0.0f });
 		}
+	}
+
+	if (!sceneData.mouse->IsRightBtnDown())
+	{
+		
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('W'))
@@ -135,6 +140,13 @@ void SceneTest::Update(double dt)
 {
 	static_cast<float>(dt);
 
+	rot += 0.5f;
+
+	if (lookat)
+	{
+		camera.SetLookAt({ 0.0f, 0.0f, 0.0f });
+	}
+
 	camera.Update(dt);
 
 	solidCube->Update(dt);
@@ -142,15 +154,17 @@ void SceneTest::Update(double dt)
 
 	for (auto& cubes : cubepolsion)
 	{
+		cubes->transform.SetRotation(3.14 * rot , 2.0 * rot , 10.0 * rot);
 		cubes->Update(dt);
 	}
 }
 
 void SceneTest::Draw(SceneData& sceneData)
 {
+	sceneData.gfx->ClearBuffer(0.1f, 0.1f, 0.1f);
+
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
-
 
 	solidCube->Draw(sceneData.gfx);
 	liquidCube->Draw(sceneData.gfx);

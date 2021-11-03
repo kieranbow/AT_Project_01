@@ -13,6 +13,8 @@
 // C++
 #include <memory>
 
+// Set rasterizer inside draw RSSetState
+
 class Graphics
 {
 	public:

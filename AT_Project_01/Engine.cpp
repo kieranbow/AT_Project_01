@@ -194,21 +194,6 @@ void Engine::Input()
 		unsigned char keycode = kbe.GetKeyCode();
 	}
 
-	while (!pMouse->EventBufferIsEmpty())
-	{
-		MouseEvent me = pMouse->ReadEvent();
-		
-		if (me.GetType() == MouseEvent::EventType::WheelDown)
-		{
-			OutputDebugStringA("wheel down\n");
-		}
-		if (me.GetType() == MouseEvent::EventType::WheelUp)
-		{
-			OutputDebugStringA("wheel up\n");
-		}
-
-	}
-
 	sceneManager.Input(sceneData);
 }
 

@@ -24,8 +24,10 @@ class SceneTest : public Scene
 	private:
 		SceneManager& currentSceneManager;
 
-		Camera camera;
+		bool lookat = false;
 
+		Camera camera;
+		float rot = 0.0f;
 		std::unique_ptr<DaCube> solidCube;
 		std::unique_ptr<DaCube> liquidCube;
 
