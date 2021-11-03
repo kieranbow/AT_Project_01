@@ -6,39 +6,50 @@ SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneMana
 
 void SceneTest::onCreate(Graphics* gfx)
 {
-	std::mt19937 random_engine(
-		static_cast<float>(std::random_device{}()));
-
-
 	gfx->SetViewMatrix(camera.GetViewMatrix());
 	gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
 	solidCube = std::make_unique<DaCube>(gfx->GetDevice(), gfx->GetDeviceContext());
 	liquidCube = std::make_unique<DaCube>(gfx->GetDevice(), gfx->GetDeviceContext());
 
-	solidCube->SetPosition(1.0f, 1.0f, 1.0f);
-	solidCube->SetRotation(5.0f, 10.0f, 0.0f);
-	solidCube->SetScale(0.5f, 0.5f, 0.5f);
+	solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
+	solidCube->transform.SetRotation(5.0f, 10.0f, 0.0f);
 
-	liquidCube->SetPosition(0.0f, 3.0f, 3.0f);
-	liquidCube->SetRotation(34.0f, 10.0f, 70.0f);
+	liquidCube->transform.SetPosition(0.0f, 3.0f, 3.0f);
+	liquidCube->transform.SetRotation(34.0f, 10.0f, 70.0f);
 
-	for (int i = 0; i < 10; i++)
+	float width = 10.0f;
+	float height = 10.0f;
+
+	float distance = 10.0f;
+
+	int amount = 1000;
+
+	float positionX = 0;
+	float positionY = 0;
+	float positionZ = 0;
+
+	for (int i = 0; i < amount; i++)
 	{
-		float rand_x = random_engine() % 10;
-		float rand_y = random_engine() % 5;
-		float rand_z = random_engine() % 2;
-
-		float rot_x = random_engine() % 2;
-		float rot_y = random_engine() % 5;
-		float rot_z = random_engine() % 10;
 
 		cubepolsion.push_back(std::make_unique<DaCube>(gfx->GetDevice(), gfx->GetDeviceContext()));
-		cubepolsion.at(i)->SetPosition(rand_x, rand_y, rand_z);
-		cubepolsion.at(i)->SetRotation(rot_x, rot_y, rot_z);
-		cubepolsion.at(i)->SetScale(rand_z, rand_z, rand_z);
+		cubepolsion.at(i)->transform.SetScale(1.5f, 1.5f, 1.5f);
+		cubepolsion.at(i)->transform.SetPosition(positionX, positionY, positionZ);
+
+		positionX += distance;
+
+		if (positionX >= (distance * width))
+		{
+			positionX = 0.0f;
+			positionY += distance;
+
+			if (positionY >= (distance * height))
+			{
+				positionY = 0.0f;
+				positionZ += distance;
+			}
+		}
 	}
-	
 }
 
 void SceneTest::OnDestroy()
@@ -56,7 +67,7 @@ void SceneTest::OnDeactivate()
 
 void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse)
 {
-	if (keyboard->IsKeyPressed('Q'))
+	if (keyboard->IsKeyPressed('F'))
 	{
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
 	}
@@ -117,11 +128,6 @@ void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse
 		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
 
-	if (keyboard->IsKeyPressed('F'))
-	{
-		camera.UpdateRotation({ 0.0f, 0.1f, 0.0f, 0.0f });
-	}
-
 }
 
 void SceneTest::Update(double dt)
@@ -129,9 +135,6 @@ void SceneTest::Update(double dt)
 	static_cast<float>(dt);
 
 	camera.Update(dt);
-
-
-
 
 	solidCube->Update(dt);
 	liquidCube->Update(dt);

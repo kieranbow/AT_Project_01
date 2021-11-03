@@ -6,6 +6,13 @@ class Graphics;
 class Keyboard;
 class Mouse;
 
+struct SceneData
+{
+	Keyboard keyboard;
+	Mouse mouse;
+	Graphics gfx;
+};
+
 // Description
 // Virtual class that all scenes inherit from.
 // It includes all the base functions that scenes need like Update, Input, Draw.
@@ -21,7 +28,7 @@ class Scene
 		virtual void OnDestroy() = 0;
 
 		// Called when changing into a scenes
-		virtual void OnActivate() {}
+		virtual void OnActivate(SceneData& sceneData) {}
 
 		// Called when changing out of a scene
 		virtual void OnDeactivate() {}

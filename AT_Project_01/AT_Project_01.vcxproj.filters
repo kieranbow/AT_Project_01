@@ -58,6 +58,15 @@
     <Filter Include="Source Files\Scenes\Base">
       <UniqueIdentifier>{b4931aac-2c8d-426d-89e3-35c9323989d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{e0c3092a-0083-40ce-92bd-b54cfd01ca7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{f5358038-26a1-4f06-a860-c3792eaf1f6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{5d5b9b7a-8c73-4bc5-853c-b0c11f3ef9c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -87,9 +96,6 @@
     <ClCompile Include="Geometry.cpp">
       <Filter>Source Files\Graphics\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SceneTest.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
@@ -100,7 +106,13 @@
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +161,6 @@
     <ClInclude Include="Geometry.h">
       <Filter>Header Files\Graphics\Geometry</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SceneTest.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -165,7 +174,13 @@
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

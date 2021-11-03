@@ -2,6 +2,9 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
+#include "DaCube.h"
+#include "Camera.h"
+
 class SceneSwap : public Scene
 {
 public:
@@ -21,5 +24,8 @@ public:
 private:
 	SceneManager& currentSceneManager;
 
+	Camera camera;
+
+	std::unique_ptr<DaCube> cube;
 };
 

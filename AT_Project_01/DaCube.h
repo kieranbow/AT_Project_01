@@ -5,6 +5,8 @@
 #include "VSShader.h"
 #include "PSShader.h"
 
+#include "TransformComponent.h"
+
 class Graphics;
 
 class DaCube
@@ -18,32 +20,21 @@ class DaCube
 		DaCube& operator=(const DaCube&) = delete;
 
 		void Update(float dt);
-
-		void SetScale(float x, float y, float z);
-		void SetPosition(float x, float y, float z);
-		void SetRotation(float x, float y, float z);
-
 		void Draw(Graphics* gfx);
+
+		TransformComponent transform;
 
 	private:
 		std::vector<Vertex> vertices;
 		std::vector<unsigned short> indices;
 
-		std::unique_ptr<VertexBuffer>		pVertexBuffer;
-		std::unique_ptr<IndexBuffer>			pIndexBuffer;
-		std::unique_ptr<ConstantBuffer<VertexConstBuffer>>	pVertConstBuffer;
+		std::unique_ptr<VertexBuffer> pVertexBuffer = std::make_unique<VertexBuffer>();
+		std::unique_ptr<IndexBuffer>	pIndexBuffer = std::make_unique<IndexBuffer>();
+		std::unique_ptr<ConstantBuffer<VertexConstBuffer>>	pVertConstBuffer = std::make_unique<ConstantBuffer<VertexConstBuffer>>();
+		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
+		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();
 
-		std::unique_ptr<VSShader> pVertexShader;
-		std::unique_ptr<PSShader> pPixelShader;
+		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 
-		DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
-
-		DirectX::XMFLOAT3 scale = {1.0f, 1.0f, 1.0f};
-		DirectX::XMFLOAT3 rotation = { 1.0f, 1.0f, 1.0f };
-		DirectX::XMFLOAT3 position = { 0.0f, 0.0f, 0.0f };
-
-		DirectX::XMMATRIX m_rotation;
-		DirectX::XMMATRIX m_scale;
-		DirectX::XMMATRIX m_translation;
 		float rot = 0.01f;
 };
