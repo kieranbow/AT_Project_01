@@ -6,11 +6,14 @@ class Graphics;
 class Keyboard;
 class Mouse;
 
+// Description
+// Data struct that contrains pointers to each class which includes:
+// Keyboard, Mouse & Graphics.
 struct SceneData
 {
-	Keyboard keyboard;
-	Mouse mouse;
-	Graphics gfx;
+	Keyboard* keyboard;
+	Mouse* mouse;
+	Graphics* gfx;
 };
 
 // Description
@@ -22,22 +25,21 @@ class Scene
 		Scene() = default;
 		virtual ~Scene() = default;
 
-		virtual void onCreate(Graphics* gfx) {}
+		virtual void onCreate(SceneData& sceneData) {}
 
 		// Destroys the scene
 		virtual void OnDestroy() = 0;
 
 		// Called when changing into a scenes
-		virtual void OnActivate(SceneData& sceneData) {}
+		virtual void OnActivate() {}
 
 		// Called when changing out of a scene
 		virtual void OnDeactivate() {}
 
 		// Base game scene functions
-		virtual void Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse) {}
+		virtual void Input(SceneData& sceneData) {}
 		virtual void Update(double dt) {}
-		virtual void Draw(Graphics* gfx) {}
+		virtual void Draw(SceneData& sceneData) {}
 
 		bool isActive = false;
 };
-

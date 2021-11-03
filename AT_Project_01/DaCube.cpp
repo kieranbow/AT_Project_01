@@ -94,6 +94,8 @@ void DaCube::Draw(Graphics* gfx)
 
 	pVertConstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
 
+	// SetIAVertex buffer
+
 	// pVertConstBuffer->data.matrix = world * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
 	pVertConstBuffer->data.matrix = DirectX::XMMatrixTranspose(pVertConstBuffer->data.matrix);
 

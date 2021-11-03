@@ -4,13 +4,13 @@ SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneMana
 {
 }
 
-void SceneTest::onCreate(Graphics* gfx)
+void SceneTest::onCreate(SceneData& sceneData)
 {
-	gfx->SetViewMatrix(camera.GetViewMatrix());
-	gfx->SetProjectionMatrix(camera.GetViewMatrix());
+	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
+	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
-	solidCube = std::make_unique<DaCube>(gfx->GetDevice(), gfx->GetDeviceContext());
-	liquidCube = std::make_unique<DaCube>(gfx->GetDevice(), gfx->GetDeviceContext());
+	solidCube = std::make_unique<DaCube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
+	liquidCube = std::make_unique<DaCube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
 
 	solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
 	solidCube->transform.SetRotation(5.0f, 10.0f, 0.0f);
@@ -32,7 +32,7 @@ void SceneTest::onCreate(Graphics* gfx)
 	for (int i = 0; i < amount; i++)
 	{
 
-		cubepolsion.push_back(std::make_unique<DaCube>(gfx->GetDevice(), gfx->GetDeviceContext()));
+		cubepolsion.push_back(std::make_unique<DaCube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext()));
 		cubepolsion.at(i)->transform.SetScale(1.5f, 1.5f, 1.5f);
 		cubepolsion.at(i)->transform.SetPosition(positionX, positionY, positionZ);
 
@@ -65,26 +65,26 @@ void SceneTest::OnDeactivate()
 {
 }
 
-void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse)
+void SceneTest::Input(SceneData& sceneData)
 {
-	if (keyboard->IsKeyPressed('F'))
+	if (sceneData.keyboard->IsKeyPressed('F'))
 	{
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
 	}
 
 	const float speed = 0.5f;
 
-	if (mouse->IsLeftBtnDown())
+	if (sceneData.mouse->IsLeftBtnDown())
 	{
 		OutputDebugStringA("Left button down\n");
 	}
 
-	if (mouse->IsRightBtnDown())
+	if (sceneData.mouse->IsRightBtnDown())
 	{
 		OutputDebugStringA("Right button down\n");
 
 		//MouseEvent event = mouse->ReadEvent();
-		MouseEvent event = mouse->ReadEvent();
+		MouseEvent event = sceneData.mouse->ReadEvent();
 
 		if (event.GetType() == MouseEvent::EventType::Move)
 		{
@@ -95,35 +95,35 @@ void SceneTest::Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse
 		}
 	}
 
-	if (keyboard->IsKeyPressed('W'))
+	if (sceneData.keyboard->IsKeyPressed('W'))
 	{
 		camera.UpdatePosition({ 0.0f, 0.0f, 1.0f * speed, 0.0f });
 		
 		OutputDebugStringA("Camera moving up\n");
 	}
-	if (keyboard->IsKeyPressed('S'))
+	if (sceneData.keyboard->IsKeyPressed('S'))
 	{
 		camera.UpdatePosition({ 0.0f, 0.0f, -1.0f * speed, 0.0f });
 		
 		OutputDebugStringA("Camera moving down\n");
 	}
-	if (keyboard->IsKeyPressed('A'))
+	if (sceneData.keyboard->IsKeyPressed('A'))
 	{
 		camera.UpdatePosition({ -1.0f * speed, 0.0f, 0.0f, 0.0f });
 		
 		OutputDebugStringA("Camera moving left\n");
 	}
-	if (keyboard->IsKeyPressed('D'))
+	if (sceneData.keyboard->IsKeyPressed('D'))
 	{
 		camera.UpdatePosition({ 1.0f * speed, 0.0f, 0.0f, 0.0f });
 		
 		OutputDebugStringA("Camera moving right\n");
 	}
-	if (keyboard->IsKeyPressed(VK_SPACE))
+	if (sceneData.keyboard->IsKeyPressed(VK_SPACE))
 	{
 		camera.UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed('Z'))
+	if (sceneData.keyboard->IsKeyPressed('Z'))
 	{
 		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
@@ -145,17 +145,17 @@ void SceneTest::Update(double dt)
 	}
 }
 
-void SceneTest::Draw(Graphics* gfx)
+void SceneTest::Draw(SceneData& sceneData)
 {
-	gfx->SetViewMatrix(camera.GetViewMatrix());
-	gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
+	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
+	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
 
 
-	solidCube->Draw(gfx);
-	liquidCube->Draw(gfx);
+	solidCube->Draw(sceneData.gfx);
+	liquidCube->Draw(sceneData.gfx);
 
 	for (auto& cubes : cubepolsion)
 	{
-		cubes->Draw(gfx);
+		cubes->Draw(sceneData.gfx);
 	}
 }

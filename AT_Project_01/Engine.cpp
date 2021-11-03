@@ -11,13 +11,18 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	// Pass window handler to graphics
 	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle(), width, height);
 
+	// Create scene Data struct
+	sceneData.gfx = pGraphics.get();
+	sceneData.keyboard = pKeyboard.get();
+	sceneData.mouse = pMouse.get();
+
 	// Declare Scenes
 	std::shared_ptr<SceneTest> sceneTest = std::make_shared<SceneTest>(sceneManager);
 	std::shared_ptr<SceneSwap> sceneSwap = std::make_shared<SceneSwap>(sceneManager);
 
 	// Update IDList and create scenes
-	sceneManager.IDList.Testing = sceneManager.AddScene(sceneTest, pGraphics.get());
-	sceneManager.IDList.swap = sceneManager.AddScene(sceneSwap, pGraphics.get());
+	sceneManager.IDList.Testing = sceneManager.AddScene(sceneTest, sceneData);
+	sceneManager.IDList.swap = sceneManager.AddScene(sceneSwap, sceneData);
 
 	// Switch Scene
 	sceneManager.SwitchScene(sceneManager.IDList.Testing);
@@ -37,16 +42,16 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
 
-			if (keyboard->IsAutoRepeatKeyOn())
+			if (pKeyboard->IsAutoRepeatKeyOn())
 			{
-				keyboard->OnKeyPressed(keycode);
+				pKeyboard->OnKeyPressed(keycode);
 			}
 			else
 			{
 				const bool wasPressed = lParam & 0x40000000;
 				if (!wasPressed)
 				{
-					keyboard->OnKeyPressed(keycode);
+					pKeyboard->OnKeyPressed(keycode);
 				}
 			}
 			return 0;
@@ -55,7 +60,7 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_KEYUP:
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
-			keyboard->OnKeyReleased(keycode);
+			pKeyboard->OnKeyReleased(keycode);
 			return 0;
 		}
 
@@ -63,16 +68,16 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			unsigned char ch = static_cast<unsigned char>(wParam);
 
-			if (keyboard->IsAutoRepeatCharOn())
+			if (pKeyboard->IsAutoRepeatCharOn())
 			{
-				keyboard->OnChar(ch);
+				pKeyboard->OnChar(ch);
 			}
 			else
 			{
 				const bool wasPressed = lParam & 0x40000000;
 				if (!wasPressed)
 				{
-					keyboard->OnChar(ch);
+					pKeyboard->OnChar(ch);
 				}
 			}
 			return 0;
@@ -84,7 +89,7 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnMouseMove(x, y);
+			pMouse->OnMouseMove(x, y);
 			return 0;
 		}
 		// Left Button
@@ -92,14 +97,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnLeftBtnPressed(x, y);
+			pMouse->OnLeftBtnPressed(x, y);
 			return 0;
 		}
 		case WM_LBUTTONUP:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnLeftBtnReleased(x, y);
+			pMouse->OnLeftBtnReleased(x, y);
 			return 0;
 		}
 
@@ -108,14 +113,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnRightBtnPressed(x, y);
+			pMouse->OnRightBtnPressed(x, y);
 			return 0;
 		}
 		case WM_RBUTTONUP:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnRightBtnReleased(x, y);
+			pMouse->OnRightBtnReleased(x, y);
 			return 0;
 		}
 
@@ -124,14 +129,14 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnMiddleBtnPressed(x, y);
+			pMouse->OnMiddleBtnPressed(x, y);
 			return 0;
 		}
 		case WM_MBUTTONUP:
 		{
 			int x = LOWORD(lParam);
 			int y = HIWORD(lParam);
-			mouse->OnMiddleBtnReleased(x, y);
+			pMouse->OnMiddleBtnReleased(x, y);
 			return 0;
 		}
 		case WM_MOUSEWHEEL:
@@ -140,11 +145,11 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			int y = HIWORD(lParam);
 			if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
 			{
-				mouse->OnWheelUp(x, y);
+				pMouse->OnWheelUp(x, y);
 			}
 			if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
 			{
-				mouse->OnWheelDown(x, y);
+				pMouse->OnWheelDown(x, y);
 			}
 			return 0;
 		}
@@ -179,19 +184,19 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 void Engine::Input()
 {
-	while (!keyboard->IsCharBufferEmpty())
+	while (!pKeyboard->IsCharBufferEmpty())
 	{
-		unsigned char ch = keyboard->ReadChar();
+		unsigned char ch = pKeyboard->ReadChar();
 	}
-	while (!keyboard->IsKeyBufferEmpty())
+	while (!pKeyboard->IsKeyBufferEmpty())
 	{
-		auto kbe = keyboard->ReadKeycode();
+		auto kbe = pKeyboard->ReadKeycode();
 		unsigned char keycode = kbe.GetKeyCode();
 	}
 
-	while (!mouse->EventBufferIsEmpty())
+	while (!pMouse->EventBufferIsEmpty())
 	{
-		MouseEvent me = mouse->ReadEvent();
+		MouseEvent me = pMouse->ReadEvent();
 		
 		if (me.GetType() == MouseEvent::EventType::WheelDown)
 		{
@@ -204,7 +209,7 @@ void Engine::Input()
 
 	}
 
-	sceneManager.Input(keyboard, mouse);
+	sceneManager.Input(sceneData);
 }
 
 void Engine::Update(double dt)
@@ -215,6 +220,6 @@ void Engine::Update(double dt)
 void Engine::RenderFrame()
 {
 	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
-	sceneManager.Draw(pGraphics.get());
+	sceneManager.Draw(sceneData);
 	pGraphics->EndFrame();
 }

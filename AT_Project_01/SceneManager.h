@@ -26,7 +26,7 @@ class SceneManager
 
 		// Description
 		// Pass data about keyboard and mouse to current scene.
-		void Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse);
+		void Input(SceneData& sceneData);
 
 		// Description
 		// Pass delta time to current scene.
@@ -34,12 +34,12 @@ class SceneManager
 
 		// Description
 		// Pass data about graphics to current scene.
-		void Draw(Graphics* gfx);
+		void Draw(SceneData& sceneData);
 
 		// Description
 		// Inserts new scene into the unordered map and calls scene OnCreate function
 		// to create the scene data.
-		scene_ID AddScene(const std::shared_ptr<Scene>& scene, Graphics* gfx);
+		scene_ID AddScene(const std::shared_ptr<Scene>& scene, SceneData& sceneData);
 
 		// Description
 		// Switches to a new scene using the param id.

@@ -11,15 +11,15 @@ class SceneTest : public Scene
 	SceneTest(SceneManager& sceneManager);
 	~SceneTest() override = default;
 
-	void onCreate(Graphics* gfx) final;
+	void onCreate(SceneData& sceneData) final;
 	void OnDestroy() final;
 	void OnActivate() final;
 	void OnDeactivate() final;
 
 	// Base game scene functions
-	void Input(std::unique_ptr<Keyboard>& keyboard, std::unique_ptr<Mouse>& mouse) final;
+	void Input(SceneData& sceneData) final;
 	void Update(double dt) final;
-	void Draw(Graphics* gfx) final;
+	void Draw(SceneData& sceneData) final;
 
 	private:
 		SceneManager& currentSceneManager;

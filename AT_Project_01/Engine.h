@@ -33,9 +33,11 @@ public:
 
 private:
 	Window window;
-	std::unique_ptr<Keyboard> keyboard = std::make_unique<Keyboard>();
-	std::unique_ptr<Mouse> mouse = std::make_unique<Mouse>();
+	std::unique_ptr<Keyboard> pKeyboard = std::make_unique<Keyboard>();
+	std::unique_ptr<Mouse> pMouse = std::make_unique<Mouse>();
 	SceneManager sceneManager;
+
+	SceneData sceneData;
 
 	std::unique_ptr<Graphics> pGraphics;
 	std::unique_ptr<DaCube> cube;
