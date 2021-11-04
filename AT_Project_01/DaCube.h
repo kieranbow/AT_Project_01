@@ -9,15 +9,14 @@
 
 class Graphics;
 
-class DaCube
+class Cube
 {
 	public:
-		// DaCube(std::unique_ptr<Graphics>& gfx);
-		DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
-		~DaCube() = default;
+		Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+		~Cube() = default;
 
-		DaCube(const DaCube&) = delete;
-		DaCube& operator=(const DaCube&) = delete;
+		Cube(const Cube&) = delete;
+		Cube& operator=(const Cube&) = delete;
 
 		void Update(float dt);
 		void Draw(Graphics* gfx);

@@ -16,6 +16,23 @@ Camera::Camera()
 	}
 }
 
+Camera::Camera(float _width, float _height, float _fov, float _nearZ, float _farZ, bool _enableOrthoView) : 
+	width(_width), height(_height), fovDeg(_fov), nearZ(_nearZ), farZ(_farZ), enableOrthographic(_enableOrthoView)
+{
+	m_view = XMMatrixLookAtLH(v_eye, v_target, v_up);
+
+	if (enableOrthographic)
+	{
+		m_projection = XMMatrixOrthographicLH(width, height, nearZ, farZ);
+	}
+	else
+	{
+		aspectRatio = width / height;
+		fovRad = (fovDeg / 360.0f) * XM_2PI;
+		m_projection = XMMatrixPerspectiveFovLH(fovRad, aspectRatio, nearZ, farZ);
+	}
+}
+
 void Camera::SetPosition(XMVECTOR position)
 {
 	v_eye = position;
@@ -77,12 +94,14 @@ void Camera::SetLookAt(XMFLOAT3 position)
 
 void Camera::Update(double dt)
 {
+	// Translation
 	XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], v_rotation.m128_f32[2]);
 	XMVECTOR v_camTarget = XMVector3TransformCoord(v_defForward, m_camRotation);
 	v_camTarget += v_eye;
 	XMVECTOR v_upDirection = XMVector3TransformCoord(v_defUp, m_camRotation);
 	m_view = XMMatrixLookAtLH(v_eye, v_camTarget, v_upDirection);
 
+	// Rotation
 	XMMATRIX m_rotationMatrix = XMMatrixRotationRollPitchYaw(0.0f, v_rotation.m128_f32[1], 0.0f);
 	direction.v_forward = XMVector3TransformCoord(v_defForward, m_rotationMatrix);
 	direction.v_backward = XMVector3TransformCoord(v_defBackward, m_rotationMatrix);

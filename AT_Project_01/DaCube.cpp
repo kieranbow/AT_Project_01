@@ -3,7 +3,7 @@
 #include "Graphics.h"
 #include <list>
 
-DaCube::DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+Cube::Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 {
 	HRESULT hr;
 
@@ -72,7 +72,7 @@ DaCube::DaCube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void DaCube::Update(float dt)
+void Cube::Update(float dt)
 {
 	rot += 0.05f;
 	if (rot > 6.28f)
@@ -86,7 +86,7 @@ void DaCube::Update(float dt)
 	transform.Update();
 }
 
-void DaCube::Draw(Graphics* gfx)
+void Cube::Draw(Graphics* gfx)
 {
 	HRESULT hr;
 	// SetIAVertex buffer

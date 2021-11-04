@@ -26,6 +26,6 @@ private:
 
 	Camera camera;
 
-	std::unique_ptr<DaCube> cube;
+	std::unique_ptr<Cube> cube;
 };
 

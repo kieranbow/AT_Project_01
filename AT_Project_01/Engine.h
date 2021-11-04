@@ -40,5 +40,5 @@ private:
 	SceneData sceneData;
 
 	std::unique_ptr<Graphics> pGraphics;
-	std::unique_ptr<DaCube> cube;
+	std::unique_ptr<Cube> cube;
 };

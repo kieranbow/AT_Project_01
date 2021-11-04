@@ -9,7 +9,7 @@ void SceneSwap::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
 
-	cube = std::make_unique<DaCube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
+	cube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
 
 }
 

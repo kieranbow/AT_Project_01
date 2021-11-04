@@ -1,6 +1,9 @@
 #pragma once
 #include <DirectXMath.h>
 
+// Description
+// The Transformation class contrains world matrix and vector allowing any object
+// that has this component to Scale, Rotate and Translate.
 class TransformComponent
 {
 	public:
@@ -8,6 +11,8 @@ class TransformComponent
 		TransformComponent(DirectX::XMFLOAT3 rotate, DirectX::XMFLOAT3 scale, DirectX::XMFLOAT3 position);
 		~TransformComponent() = default;
 
+		TransformComponent(const TransformComponent&) = delete;
+		TransformComponent& operator=(const TransformComponent&) = delete;
 
 		void Update();
 		void SetRotation(float pitch, float yaw, float roll);
@@ -18,13 +23,12 @@ class TransformComponent
 		DirectX::XMFLOAT3 GetRotation() const;
 		DirectX::XMFLOAT3 GetScale() const;
 		DirectX::XMFLOAT3 GetPosition() const;
-
 		DirectX::XMMATRIX GetWorldMatrix() const;
 
 	private:
-		DirectX::XMFLOAT3 f_scale = { 1.0f, 1.0f, 1.0f };
-		DirectX::XMFLOAT3 f_rotation = { 1.0f, 1.0f, 1.0f };
-		DirectX::XMFLOAT3 f_position = { 1.0f, 1.0f, 1.0f };
+		DirectX::XMFLOAT3 f_scale		= { 1.0f, 1.0f, 1.0f };
+		DirectX::XMFLOAT3 f_rotation	= { 1.0f, 1.0f, 1.0f };
+		DirectX::XMFLOAT3 f_position		= { 1.0f, 1.0f, 1.0f };
 
 		DirectX::XMVECTOR rotaxis = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 		
@@ -33,4 +37,3 @@ class TransformComponent
 		DirectX::XMMATRIX m_scale;
 		DirectX::XMMATRIX m_translation;
 };
-

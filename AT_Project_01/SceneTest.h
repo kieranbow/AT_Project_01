@@ -28,8 +28,8 @@ class SceneTest : public Scene
 
 		Camera camera;
 		float rot = 0.0f;
-		std::unique_ptr<DaCube> solidCube;
-		std::unique_ptr<DaCube> liquidCube;
+		std::unique_ptr<Cube> solidCube;
+		std::unique_ptr<Cube> liquidCube;
 
-		std::vector<std::unique_ptr<DaCube>> cubepolsion;
+		std::vector<std::unique_ptr<Cube>> cubepolsion;
 };

@@ -28,9 +28,6 @@ TransformComponent::TransformComponent(DirectX::XMFLOAT3 rotate, DirectX::XMFLOA
 
 void TransformComponent::Update()
 {
-	// Reset m_world
-	//m_world = DirectX::XMMatrixIdentity(); 
-
 	m_world = m_scale * m_rotation * m_translation;
 }
 
@@ -48,7 +45,7 @@ void TransformComponent::SetRotationAxis(float angle)
 
 void TransformComponent::SetScale(float x, float y, float z)
 {
-	f_scale = { x, y, z }; // Remove this later
+	f_scale = { x, y, z };
 	m_scale = DirectX::XMMatrixScaling(f_scale.x, f_scale.y, f_scale.z);
 }
 
