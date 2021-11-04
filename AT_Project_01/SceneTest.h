@@ -27,6 +27,7 @@ class SceneTest : public Scene
 		bool lookat = false;
 
 		Camera camera;
+		Camera camera2;
 		float rot = 0.0f;
 		std::unique_ptr<Cube> solidCube;
 		std::unique_ptr<Cube> liquidCube;

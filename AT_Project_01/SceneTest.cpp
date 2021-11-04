@@ -9,6 +9,9 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
+	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
+	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
+
 	solidCube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
 	liquidCube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
 
@@ -59,6 +62,7 @@ void SceneTest::OnDestroy()
 void SceneTest::OnActivate()
 {
 	isActive = true;
+	camera.EnableCamera(true);
 }
 
 void SceneTest::OnDeactivate()
@@ -134,6 +138,18 @@ void SceneTest::Input(SceneData& sceneData)
 		camera.UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
 	}
 
+	if (sceneData.keyboard->IsKeyPressed('R'))
+	{
+		camera2.EnableCamera(true);
+		camera.EnableCamera(false);
+	}
+
+	if (sceneData.keyboard->IsKeyPressed('T'))
+	{
+		camera2.EnableCamera(false);
+		camera.EnableCamera(true);
+	}
+
 }
 
 void SceneTest::Update(double dt)
@@ -148,6 +164,7 @@ void SceneTest::Update(double dt)
 	}
 
 	camera.Update(dt);
+	camera2.Update(dt);
 
 	solidCube->Update(dt);
 	liquidCube->Update(dt);
@@ -163,8 +180,18 @@ void SceneTest::Draw(SceneData& sceneData)
 {
 	sceneData.gfx->ClearBuffer(0.1f, 0.1f, 0.1f);
 
-	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
-	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
+	if (camera.IsActive())
+	{
+		sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
+		sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
+	}
+
+	if (camera2.IsActive())
+	{
+		sceneData.gfx->SetViewMatrix(camera2.GetViewMatrix());
+		sceneData.gfx->SetProjectionMatrix(camera2.GetProjectionMatrix());
+	}
+
 
 	solidCube->Draw(sceneData.gfx);
 	liquidCube->Draw(sceneData.gfx);

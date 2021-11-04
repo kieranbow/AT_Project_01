@@ -31,6 +31,9 @@ class Camera
 		void SetTarget(XMVECTOR target);
 		void SetLookAt(XMFLOAT3 position);
 
+		void EnableCamera(bool _enable);
+		bool IsActive();
+
 		void Update(double dt);
 
 		DirectX::XMMATRIX GetViewMatrix() const;
@@ -48,6 +51,7 @@ class Camera
 		float nearZ			= 0.01f;
 		float farZ			= 1000.0f;
 		bool enableOrthographic = false;
+		bool enable			= false;
 
 		Direction direction;
 

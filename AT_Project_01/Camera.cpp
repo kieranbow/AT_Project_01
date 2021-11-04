@@ -92,21 +92,35 @@ void Camera::SetLookAt(XMFLOAT3 position)
 	SetRotation({ pitch, yaw, 0.0f, 0.0f });
 }
 
+void Camera::EnableCamera(bool _enable)
+{
+	enable = _enable;
+}
+
+bool Camera::IsActive()
+{
+	return enable;
+}
+
 void Camera::Update(double dt)
 {
-	// Translation
-	XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], v_rotation.m128_f32[2]);
-	XMVECTOR v_camTarget = XMVector3TransformCoord(v_defForward, m_camRotation);
-	v_camTarget += v_eye;
-	XMVECTOR v_upDirection = XMVector3TransformCoord(v_defUp, m_camRotation);
-	m_view = XMMatrixLookAtLH(v_eye, v_camTarget, v_upDirection);
+	if (enable)
+	{
+		// Translation
+		XMMATRIX m_camRotation = XMMatrixRotationRollPitchYaw(v_rotation.m128_f32[0], v_rotation.m128_f32[1], v_rotation.m128_f32[2]);
+		XMVECTOR v_camTarget = XMVector3TransformCoord(v_defForward, m_camRotation);
+		v_camTarget += v_eye;
+		XMVECTOR v_upDirection = XMVector3TransformCoord(v_defUp, m_camRotation);
+		m_view = XMMatrixLookAtLH(v_eye, v_camTarget, v_upDirection);
 
-	// Rotation
-	XMMATRIX m_rotationMatrix = XMMatrixRotationRollPitchYaw(0.0f, v_rotation.m128_f32[1], 0.0f);
-	direction.v_forward = XMVector3TransformCoord(v_defForward, m_rotationMatrix);
-	direction.v_backward = XMVector3TransformCoord(v_defBackward, m_rotationMatrix);
-	direction.v_left = XMVector3TransformCoord(v_defLeft, m_rotationMatrix);
-	direction.v_right = XMVector3TransformCoord(v_defRight, m_rotationMatrix);
+		// Rotation
+		XMMATRIX m_rotationMatrix = XMMatrixRotationRollPitchYaw(0.0f, v_rotation.m128_f32[1], 0.0f);
+		direction.v_forward = XMVector3TransformCoord(v_defForward, m_rotationMatrix);
+		direction.v_backward = XMVector3TransformCoord(v_defBackward, m_rotationMatrix);
+		direction.v_left = XMVector3TransformCoord(v_defLeft, m_rotationMatrix);
+		direction.v_right = XMVector3TransformCoord(v_defRight, m_rotationMatrix);
+	}
+
 }
 
 DirectX::XMMATRIX Camera::GetViewMatrix() const

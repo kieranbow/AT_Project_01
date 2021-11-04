@@ -9,6 +9,8 @@ void SceneSwap::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
 
+	camera.EnableCamera(true);
+
 	cube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
 
 }
@@ -29,56 +31,27 @@ void SceneSwap::OnDeactivate()
 
 void SceneSwap::Input(SceneData& sceneData)
 {
-	if (sceneData.keyboard->IsKeyPressed('S'))
+	if (sceneData.keyboard->IsKeyPressed('G'))
 	{
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.Testing);
 	}
 	const float speed = 0.5f;
 
-	if (sceneData.mouse->IsLeftBtnDown())
-	{
-		OutputDebugStringA("Left button down\n");
-	}
-
-	if (sceneData.mouse->IsRightBtnDown())
-	{
-		OutputDebugStringA("Right button down\n");
-
-		//MouseEvent event = mouse->ReadEvent();
-		MouseEvent event = sceneData.mouse->ReadEvent();
-
-		if (event.GetType() == MouseEvent::EventType::Move)
-		{
-			float newTargetX = static_cast<float>(event.GetPosX());
-			float newTargetY = static_cast<float>(event.GetPosY());
-
-			camera.UpdateRotation({ newTargetX * speed, newTargetY * speed, 0.0f, 0.0f });
-		}
-	}
-
 	if (sceneData.keyboard->IsKeyPressed('W'))
 	{
-		camera.UpdatePosition({ 0.0f, 0.0f, 1.0f * speed, 0.0f });
-
-		OutputDebugStringA("Camera moving up\n");
+		camera.UpdatePosition(camera.GetDirection().v_forward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('S'))
 	{
-		camera.UpdatePosition({ 0.0f, 0.0f, -1.0f * speed, 0.0f });
-
-		OutputDebugStringA("Camera moving down\n");
+		camera.UpdatePosition(camera.GetDirection().v_backward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('A'))
 	{
-		camera.UpdatePosition({ -1.0f * speed, 0.0f, 0.0f, 0.0f });
-
-		OutputDebugStringA("Camera moving left\n");
+		camera.UpdatePosition(camera.GetDirection().v_left * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('D'))
 	{
-		camera.UpdatePosition({ 1.0f * speed, 0.0f, 0.0f, 0.0f });
-
-		OutputDebugStringA("Camera moving right\n");
+		camera.UpdatePosition(camera.GetDirection().v_right * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed(VK_SPACE))
 	{
@@ -89,6 +62,14 @@ void SceneSwap::Input(SceneData& sceneData)
 		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
 
+	if (sceneData.keyboard->IsKeyPressed('Q'))
+	{
+		camera.UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
+	}
+	if (sceneData.keyboard->IsKeyPressed('E'))
+	{
+		camera.UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
+	}
 }
 
 void SceneSwap::Update(double dt)
@@ -102,8 +83,7 @@ void SceneSwap::Update(double dt)
 		rot = 0.0f;
 	}
 
-
-	camera.SetPosition({ 0.0f, 0.0f - 10.0f });
+	camera.Update(dt);
 
 	cube->transform.SetRotation(rot, rot, 0.0f);
 	cube->transform.SetPosition(0.0f, 0.0f, 0.0f);
