@@ -36,7 +36,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	{
 
 		cubepolsion.push_back(std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext()));
-		cubepolsion.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+		cubepolsion.at(i)->transform.SetScale(5.0f, 1.0f, 5.0f);
 		cubepolsion.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
 		positionX += distance;
@@ -171,7 +171,7 @@ void SceneTest::Update(double dt)
 
 	for (auto& cubes : cubepolsion)
 	{
-		cubes->transform.SetRotation(3.14 * rot , 2.0 * rot , 10.0 * rot);
+		cubes->transform.SetRotation(3.14 * rot , 2.0f * rot , 10.0f * rot);
 		cubes->Update(dt);
 	}
 }

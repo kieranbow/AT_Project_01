@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#include "DaCube.h"
+#include "Cube.h"
 #include "Camera.h"
 
 class SceneSwap : public Scene

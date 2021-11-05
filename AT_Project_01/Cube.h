@@ -18,6 +18,12 @@ class Cube
 		Cube(const Cube&) = delete;
 		Cube& operator=(const Cube&) = delete;
 
+		void CreateCube();
+		void CreateSphere(float radius, int sliceCount, int stackCount);
+		void CreateCylinder();
+		void CreatePyramid();
+		void CreatePlane();
+
 		void Update(float dt);
 		void Draw(Graphics* gfx);
 
