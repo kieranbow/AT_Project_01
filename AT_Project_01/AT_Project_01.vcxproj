@@ -180,6 +180,7 @@
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VSShader.h" />
     <ClInclude Include="Vertex.h" />

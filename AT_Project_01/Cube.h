@@ -30,6 +30,9 @@ class Cube
 		TransformComponent transform;
 
 	private:
+
+		void loadModel();
+
 		std::vector<Vertex> vertices;
 		std::vector<unsigned short> indices;
 

@@ -12,5 +12,7 @@ SamplerState state : SAMPLER : register(s0);
 float4 main(PS_INPUT input) : SV_TARGET
 {
     float3 tex = frog.Sample(state, input.texcoord);
+    float3 output = lerp(tex, input.color, 0.5);
+    
     return float4(tex, 1.0f);
 }

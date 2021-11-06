@@ -5,63 +5,15 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+
+
 Cube::Cube(Graphics* gfx)
 {
 	HRESULT hr;
 
-	float width = 1.0f;
-	float height = 1.0f;
-	float depth = 1.0f;
-
-	// Vertex buffer
-	vertices =
-	{
-		//{-1.0f, -1.0f, -1.0f,	1.0f, 0.0f, 0.0f},
-		//{1.0f, -1.0f, -1.0f,	0.0f, 1.0f, 0.0f},
-		//{-1.0f, 1.0f, -1.0f,	0.0f, 0.0f, 1.0f},
-		//{1.0f, 1.0f, -1.0f,		1.0f, 0.0f, 0.0f},
-		//{-1.0f, -1.0f, 1.0f,	0.0f, 1.0f, 0.0f},
-		//{1.0f, -1.0f, 1.0f,		0.0f, 0.0f, 1.0f},
-		//{-1.0f, 1.0f, 1.0f,		1.0f, 0.0f, 0.0f},
-		//{1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 0.0f},
-
-		// Front
-		Vertex(-width, -height, -depth,	0.0f, 0.0f, -1.0f,		1.0f, 0.0f, 0.0f,	2.0f / 3.0f, 0.0f / 4.0f), // Bottom left
-		Vertex(-width, height, -depth,	0.0f, 0.0f, -1.0f,		0.0f, 1.0f, 0.0f,	2.0f / 3.0f, 1.0f / 4.0f), // Top left
-		Vertex(width, height, -depth,		0.0f, 0.0f, -1.0f,		0.0f, 0.0f, 1.0f,	1.0f / 3.0f, 1.0f / 4.0f), // Top right
-		Vertex(width, -height, -depth,	0.0f, 0.0f, -1.0f,		1.0f, 0.0f, 0.0f,	1.0f / 3.0f, 0.0f / 4.0f), // Bottom right
-
-		// Back
-		Vertex(-width, -height, depth,	0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f), // Bottom left
-		Vertex(width, -height, depth,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f), // Bottom right
-		Vertex(width, height, depth,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f), // Top right
-		Vertex(-width, height, depth,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f), // Top right
-
-		// Top
-		Vertex(-width, height, -depth,	0.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f), // Top front left
-		Vertex(-width, height, depth,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f), // Top back left
-		Vertex(width, height, depth,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f), // Top back right
-		Vertex(width, height, -depth,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f), // Top front left
-
-		// Bottom
-		Vertex(-width, -height, -depth,	0.0f, -1.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f), // Bottom front left
-		Vertex(width, -height, -depth,	0.0f, -1.0f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f), // Bottom front right
-		Vertex(width, -height, depth,		0.0f, -1.0f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f), // Bottom back right
-		Vertex(-width, -height, depth,	0.0f, -1.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f), // Bottom back left
-
-		// left
-		Vertex(-width, -height, depth,	-1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f),
-		Vertex(-width, height, depth,		-1.0f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f),
-		Vertex(-width, height, -depth,	-1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f),
-		Vertex(-width, -height, -depth,	-1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f),
-
-		// Right
-		Vertex(width, -height, -depth,	1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 1.0f),
-		Vertex(width, height, -depth,		1.0f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f,	0.0f, 1.0f),
-		Vertex(width, height, depth,		1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f,	0.0f, 0.0f),
-		Vertex(width, -height, depth,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f,	1.0f, 0.0f),
-	};
-
+	loadModel();
 	hr = pVertexBuffer->CreateVertexBuffer(gfx->GetDevice(), vertices, 0u);
 	Logging::ThrowIf(hr, "Vertex Failed to build");
 	pVertexBuffer->BindBuffer(0u, 1u, gfx->GetDeviceContext());
@@ -123,9 +75,11 @@ Cube::Cube(Graphics* gfx)
 	Logging::ThrowIf(hr, "pixel failed to create");
 
 
-	int img_w, img_h, num_channel;
+	int img_w = 0;
+	int img_h = 0;
+	int num_channel = 0;
 
-	stbi_uc* texture = stbi_load("Assets\\Texture\\icon.png", &img_w, &img_h, &num_channel, STBI_rgb_alpha);
+	stbi_uc* texture = stbi_load("Assets\\Texture\\icon.png", &img_w, &img_h, &num_channel, STBI_rgb);
 
 	if (stbi_failure_reason())
 	{
@@ -136,8 +90,8 @@ Cube::Cube(Graphics* gfx)
 	img_desc.Width = img_w;
 	img_desc.Height = img_h;
 	img_desc.MipLevels = 1u;
-	img_desc.ArraySize = 1;
-	img_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	img_desc.ArraySize = 1u;
+	img_desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	img_desc.SampleDesc.Count = 1u;
 	img_desc.SampleDesc.Quality = 0u;
 	img_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -147,10 +101,10 @@ Cube::Cube(Graphics* gfx)
 
 	D3D11_SUBRESOURCE_DATA img_data = {};
 	img_data.pSysMem = texture;
-	img_data.SysMemSlicePitch = width * height * num_channel;
-	img_data.SysMemPitch = width * height * num_channel;
+	img_data.SysMemPitch = img_w * num_channel;
 
-	gfx->GetDevice()->CreateTexture2D(&img_desc, &img_data, &pTexture);
+	hr = gfx->GetDevice()->CreateTexture2D(&img_desc, &img_data, &pTexture);
+	Logging::ThrowIf(hr, "Failed to create 2D texture");
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
 	srvd.Format = img_desc.Format;
@@ -189,7 +143,7 @@ void Cube::Update(float dt)
 		rot = 0.0f;
 	}
 
-	transform.SetRotationAxis(rot);
+	// transform.SetRotationAxis(rot);
 	// transform.SetScale(1.0f, 1.0f, 1.0f);
 	// transform.SetPosition(0.0f, 0.0f, rot);
 	transform.Update();
@@ -218,5 +172,52 @@ void Cube::Draw(Graphics* gfx)
 	gfx->GetDeviceContext()->PSSetShaderResources(0, 1, pShaderResourceView.GetAddressOf());
 
 	// Draw
-	gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
+	// gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
+	gfx->GetDeviceContext()->Draw(static_cast<UINT>(vertices.size()), 0u);
+}
+
+void Cube::loadModel()
+{
+	const std::string model_path = "Assets\\Model\\cube.obj";
+
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::string warn, error;
+
+	if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &error, model_path.c_str()))
+	{
+		Logging::LogError(error);
+	}
+
+	for (const auto& shape : shapes)
+	{
+		for (const auto& index : shape.mesh.indices)
+		{
+			Vertex vertex;
+
+			vertex.position = 
+			{ 
+				attrib.vertices[3 * size_t(index.vertex_index) + 0],
+				attrib.vertices[3 * size_t(index.vertex_index) + 1],
+				attrib.vertices[3 * size_t(index.vertex_index) + 2]
+			};
+
+			vertex.normal =
+			{
+				attrib.normals[3 * size_t(index.normal_index) + 0],
+				attrib.normals[3 * size_t(index.normal_index) + 1],
+				attrib.normals[3 * size_t(index.normal_index) + 2]
+			};
+
+			vertex.texcoord =
+			{
+				attrib.texcoords[2 * size_t(index.texcoord_index) + 0],
+				attrib.texcoords[2 * size_t(index.texcoord_index) + 1]
+			};
+
+			vertices.push_back(vertex);
+		}
+	}
+
 }

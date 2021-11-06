@@ -348,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/AT_Project_01/Assets/Model/cube.mtl
+/AT_Project_01/Assets/Model/pyramid.mtl
+/AT_Project_01/Assets/Model/sphere.mtl
