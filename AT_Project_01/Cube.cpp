@@ -172,7 +172,7 @@ void Cube::Draw(Graphics* gfx)
 	gfx->GetDeviceContext()->PSSetShaderResources(0, 1, pShaderResourceView.GetAddressOf());
 
 	// Draw
-	// gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
+	//gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
 	gfx->GetDeviceContext()->Draw(static_cast<UINT>(vertices.size()), 0u);
 }
 

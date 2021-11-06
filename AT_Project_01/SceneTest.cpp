@@ -17,13 +17,13 @@ void SceneTest::onCreate(SceneData& sceneData)
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
 	solidCube = std::make_unique<Cube>(sceneData.gfx);
-	liquidCube = std::make_unique<Cube>(sceneData.gfx);
+	// liquidCube = std::make_unique<Cube>(sceneData.gfx);
 
 	solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
 	solidCube->transform.SetRotation(5.0f, 10.0f, 0.0f);
 
-	liquidCube->transform.SetPosition(0.0f, 3.0f, 3.0f);
-	liquidCube->transform.SetRotation(34.0f, 10.0f, 70.0f);
+	//liquidCube->transform.SetPosition(0.0f, 3.0f, 3.0f);
+	//liquidCube->transform.SetRotation(34.0f, 10.0f, 70.0f);
 
 	float width = 10.0f;
 	float height = 10.0f;
@@ -171,7 +171,7 @@ void SceneTest::Update(double dt)
 	camera2.Update(dt);
 
 	solidCube->Update(dt);
-	liquidCube->Update(dt);
+	// liquidCube->Update(dt);
 
 	//for (auto& cubes : cubepolsion)
 	//{
@@ -198,7 +198,7 @@ void SceneTest::Draw(SceneData& sceneData)
 
 
 	solidCube->Draw(sceneData.gfx);
-	liquidCube->Draw(sceneData.gfx);
+	// liquidCube->Draw(sceneData.gfx);
 
 	//for (auto& cubes : cubepolsion)
 	//{
