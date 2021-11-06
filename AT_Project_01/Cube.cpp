@@ -8,33 +8,17 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
-
 Cube::Cube(Graphics* gfx)
 {
 	HRESULT hr;
 
-	loadModel();
+	// loadModel();
+	loadmodelAss();
 	hr = pVertexBuffer->CreateVertexBuffer(gfx->GetDevice(), vertices, 0u);
 	Logging::ThrowIf(hr, "Vertex Failed to build");
 	pVertexBuffer->BindBuffer(0u, 1u, gfx->GetDeviceContext());
 
-	// Index buffer
-	indices =
-	{
-		//0,2,1, 2,3,1,
-		//1,3,5, 3,7,5,
-		//2,6,3, 3,6,7,
-		//4,5,7, 4,7,6,
-		//0,4,2, 2,4,6,
-		//0,1,4, 1,5,4,
 
-		0,1,2,0,2,3,
-		4,5,6,4,6,7,
-		8,9,10,8,10,11,
-		12,13,14,12,14,15,
-		16,17,18,16,18,19,
-		20,21,22,20,22,23
-	};
 	hr = pIndexBuffer->CreateIndexBuffer(gfx->GetDevice(), indices);
 	Logging::ThrowIf(hr, "Index failed to build");
 	pIndexBuffer->BindBuffer(gfx->GetDeviceContext(), DXGI_FORMAT_R16_UINT, 0u);
@@ -143,7 +127,7 @@ void Cube::Update(float dt)
 		rot = 0.0f;
 	}
 
-	// transform.SetRotationAxis(rot);
+	transform.SetRotationAxis(rot);
 	// transform.SetScale(1.0f, 1.0f, 1.0f);
 	// transform.SetPosition(0.0f, 0.0f, rot);
 	transform.Update();
@@ -172,8 +156,8 @@ void Cube::Draw(Graphics* gfx)
 	gfx->GetDeviceContext()->PSSetShaderResources(0, 1, pShaderResourceView.GetAddressOf());
 
 	// Draw
-	//gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
-	gfx->GetDeviceContext()->Draw(static_cast<UINT>(vertices.size()), 0u);
+	gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
+	// gfx->GetDeviceContext()->Draw(static_cast<UINT>(vertices.size()), 0u);
 }
 
 void Cube::loadModel()
@@ -220,4 +204,61 @@ void Cube::loadModel()
 		}
 	}
 
+}
+
+void Cube::loadmodelAss()
+{
+
+	const std::string model_path = "Assets\\Model\\cube.obj";
+
+	pScene = importer.ReadFile(
+		model_path,
+		aiProcess_FlipUVs
+		| aiProcess_JoinIdenticalVertices
+		| aiProcess_Triangulate);
+
+	if (pScene == NULL)
+	{
+		Logging::LogError("scene node is null");
+	}
+
+	
+	for (UINT m = 0; m < pScene->mNumMeshes; m++)
+	{
+		pMesh = pScene->mMeshes[m];
+
+		for (UINT vrtIdx = 0; vrtIdx < pMesh->mNumVertices; vrtIdx++)
+		{
+			Vertex vertex;
+
+			vertex.position.x = pMesh->mVertices[vrtIdx].x;
+			vertex.position.y = pMesh->mVertices[vrtIdx].y;
+			vertex.position.z = pMesh->mVertices[vrtIdx].z;
+
+			vertex.normal.x = pMesh->mNormals[vrtIdx].x;
+			vertex.normal.y = pMesh->mNormals[vrtIdx].y;
+			vertex.normal.z = pMesh->mNormals[vrtIdx].z;
+
+			if (pMesh->HasTextureCoords(0))
+			{
+				vertex.texcoord.x = pMesh->mTextureCoords[0][vrtIdx].x;
+				vertex.texcoord.y = pMesh->mTextureCoords[0][vrtIdx].y;
+			}
+
+			vertices.push_back(vertex);
+		}
+
+		for (UINT i = 0; i < pMesh->mNumFaces; i++)
+		{
+			aiFace* face = &pMesh->mFaces[i];
+
+			if (face->mNumIndices == 3)
+			{
+				indices.push_back(face->mIndices[0]);
+				indices.push_back(face->mIndices[1]);
+				indices.push_back(face->mIndices[2]);
+			}
+
+		}
+	}
 }

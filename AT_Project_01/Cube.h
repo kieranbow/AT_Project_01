@@ -7,6 +7,14 @@
 
 #include "TransformComponent.h"
 
+
+#include <assimp\Importer.hpp>
+#include <assimp\scene.h>
+#include <assimp\postprocess.h>
+#include <assimp\matrix4x4.h>
+#include <assimp\cimport.h>
+
+
 class Graphics;
 
 class Cube
@@ -32,6 +40,7 @@ class Cube
 	private:
 
 		void loadModel();
+		void loadmodelAss();
 
 		std::vector<Vertex> vertices;
 		std::vector<unsigned short> indices;
@@ -50,4 +59,9 @@ class Cube
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
 
 		float rot = 0.01f;
+
+		Assimp::Importer importer;
+		const aiScene* pScene;
+		const aiMesh* pMesh;
+
 };
