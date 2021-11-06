@@ -54,7 +54,6 @@ Cube::Cube(Graphics* gfx)
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
@@ -79,7 +78,7 @@ Cube::Cube(Graphics* gfx)
 	int img_h = 0;
 	int num_channel = 0;
 
-	stbi_uc* texture = stbi_load("Assets\\Texture\\icon.png", &img_w, &img_h, &num_channel, STBI_rgb);
+	stbi_uc* texture = stbi_load("Assets\\Texture\\icon.png", &img_w, &img_h, &num_channel, STBI_rgb_alpha);
 
 	if (stbi_failure_reason())
 	{
@@ -91,7 +90,7 @@ Cube::Cube(Graphics* gfx)
 	img_desc.Height = img_h;
 	img_desc.MipLevels = 1u;
 	img_desc.ArraySize = 1u;
-	img_desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	img_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	img_desc.SampleDesc.Count = 1u;
 	img_desc.SampleDesc.Quality = 0u;
 	img_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -99,9 +98,10 @@ Cube::Cube(Graphics* gfx)
 	img_desc.CPUAccessFlags = 0u;
 	img_desc.MiscFlags = 0u;
 
+	// https://gamedev.net/forums/topic/673814-d3d11-texture-image-data-from-memory/5266103/
 	D3D11_SUBRESOURCE_DATA img_data = {};
 	img_data.pSysMem = texture;
-	img_data.SysMemPitch = img_w * num_channel;
+	img_data.SysMemPitch = img_w * 4;
 
 	hr = gfx->GetDevice()->CreateTexture2D(&img_desc, &img_data, &pTexture);
 	Logging::ThrowIf(hr, "Failed to create 2D texture");
@@ -178,7 +178,7 @@ void Cube::Draw(Graphics* gfx)
 
 void Cube::loadModel()
 {
-	const std::string model_path = "Assets\\Model\\cube.obj";
+	const std::string model_path = "Assets\\Model\\cube_proj.obj";
 
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
