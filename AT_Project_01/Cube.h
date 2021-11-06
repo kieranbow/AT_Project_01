@@ -12,7 +12,7 @@ class Graphics;
 class Cube
 {
 	public:
-		Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+		Cube(Graphics* gfx);
 		~Cube() = default;
 
 		Cube(const Cube&) = delete;
@@ -35,7 +35,8 @@ class Cube
 
 		std::unique_ptr<VertexBuffer> pVertexBuffer = std::make_unique<VertexBuffer>();
 		std::unique_ptr<IndexBuffer>	pIndexBuffer = std::make_unique<IndexBuffer>();
-		std::unique_ptr<ConstantBuffer<VertexConstBuffer>>	pVertConstBuffer = std::make_unique<ConstantBuffer<VertexConstBuffer>>();
+		std::unique_ptr<ConstantBuffer<VertexConstBuffer>>	pWVPconstBuffer = std::make_unique<ConstantBuffer<VertexConstBuffer>>();
+		std::unique_ptr<ConstantBuffer<PerObject>>	pPerObjectBuffer = std::make_unique<ConstantBuffer<PerObject>>();
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();
 

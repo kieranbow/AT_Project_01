@@ -9,11 +9,15 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
+	light.direction = { 0.25f, 0.5f, -1.0f };
+	light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
+	light.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
-	solidCube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
-	liquidCube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
+	solidCube = std::make_unique<Cube>(sceneData.gfx);
+	liquidCube = std::make_unique<Cube>(sceneData.gfx);
 
 	solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
 	solidCube->transform.SetRotation(5.0f, 10.0f, 0.0f);
@@ -35,8 +39,8 @@ void SceneTest::onCreate(SceneData& sceneData)
 	for (int i = 0; i < amount; i++)
 	{
 
-		cubepolsion.push_back(std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext()));
-		cubepolsion.at(i)->transform.SetScale(5.0f, 1.0f, 5.0f);
+		cubepolsion.push_back(std::make_unique<Cube>(sceneData.gfx));
+		cubepolsion.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
 		cubepolsion.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
 		positionX += distance;

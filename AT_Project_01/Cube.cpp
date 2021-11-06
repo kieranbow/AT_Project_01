@@ -2,7 +2,7 @@
 #include "ErrorChecker.h"
 #include "Graphics.h"
 
-Cube::Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
+Cube::Cube(Graphics* gfx)
 {
 	HRESULT hr;
 
@@ -23,45 +23,45 @@ Cube::Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 		//{1.0f, 1.0f, 1.0f,		0.0f, 1.0f, 0.0f},
 
 		// Front
-		{-width, -height, -depth, 1.0f, 0.0f, 0.0f},
-		{-width, height, -depth, 0.0f, 1.0f, 0.0f},
-		{width, height, -depth, 0.0f, 0.0f, 1.0f},
-		{width, -height, -depth, 1.0f, 0.0f, 0.0f},
+		Vertex(-width, -height, -depth,	0.0f, 0.0f, -1.0f,		1.0f, 0.0f, 0.0f), // Bottom left
+		Vertex(-width, height, -depth,	0.0f, 0.0f, -1.0f,		0.0f, 1.0f, 0.0f), // Top left
+		Vertex(width, height, -depth,		0.0f, 0.0f, -1.0f,		0.0f, 0.0f, 1.0f), // Top right
+		Vertex(width, -height, -depth,	0.0f, 0.0f, -1.0f,		1.0f, 0.0f, 0.0f), // Bottom right
 
 		// Back
-		{-width, -height, depth, 1.0f, 0.0f, 0.0f},
-		{width, -height, depth, 0.0f, 1.0f, 0.0f},
-		{width, height, depth, 0.0f, 0.0f, 1.0f},
-		{-width, height, depth, 1.0f, 0.0f, 0.0f},
+		Vertex(-width, -height, depth,	0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 0.0f), // Bottom left
+		Vertex(width, -height, depth,		0.0f, 0.0f, 1.0f,		0.0f, 1.0f, 0.0f), // Bottom right
+		Vertex(width, height, depth,		0.0f, 0.0f, 1.0f,		0.0f, 0.0f, 1.0f), // Top right
+		Vertex(-width, height, depth,		0.0f, 0.0f, 1.0f,		1.0f, 0.0f, 0.0f), // Top right
 
 		// Top
-		{-width, height, -depth, 1.0f, 0.0f, 0.0f},
-		{-width, height, depth, 0.0f, 1.0f, 0.0f},
-		{width, height, depth, 0.0f, 0.0f, 1.0f},
-		{width, height, -depth, 1.0f, 0.0f, 0.0f},
+		Vertex(-width, height, -depth,	0.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f), // Top front left
+		Vertex(-width, height, depth,		0.0f, 1.0f, 0.0f,		0.0f, 1.0f, 0.0f), // Top back left
+		Vertex(width, height, depth,		0.0f, 1.0f, 0.0f,		0.0f, 0.0f, 1.0f), // Top back right
+		Vertex(width, height, -depth,		0.0f, 1.0f, 0.0f,		1.0f, 0.0f, 0.0f), // Top front left
 
 		// Bottom
-		{-width, -height, -depth, 1.0f, 0.0f, 0.0f},
-		{width, -height, -depth, 0.0f, 1.0f, 0.0f},
-		{width, -height, depth, 0.0f, 0.0f, 1.0f},
-		{-width, -height, depth, 1.0f, 0.0f, 0.0f},
+		Vertex(-width, -height, -depth,	0.0f, -1.0f, 0.0f,		1.0f, 0.0f, 0.0f), // Bottom front left
+		Vertex(width, -height, -depth,	0.0f, -1.0f, 0.0f,		0.0f, 1.0f, 0.0f), // Bottom front right
+		Vertex(width, -height, depth,		0.0f, -1.0f, 0.0f,		0.0f, 0.0f, 1.0f), // Bottom back right
+		Vertex(-width, -height, depth,	0.0f, -1.0f, 0.0f,		1.0f, 0.0f, 0.0f), // Bottom back left
 
 		// left
-		{-width, -height, depth, 1.0f, 0.0f, 0.0f},
-		{-width, height, depth, 0.0f, 1.0f, 0.0f},
-		{-width, height, -depth, 0.0f, 0.0f, 1.0f},
-		{-width, -height, -depth, 1.0f, 0.0f, 0.0f},
+		Vertex(-width, -height, depth,	-1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f),
+		Vertex(-width, height, depth,		-1.0f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f),
+		Vertex(-width, height, -depth,	-1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f),
+		Vertex(-width, -height, -depth,	-1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f),
 
 		// Right
-		{width, -height, -depth, 1.0f, 0.0f, 0.0f},
-		{width, height, -depth, 0.0f, 1.0f, 0.0f},
-		{width, height, depth, 0.0f, 0.0f, 1.0f},
-		{width, -height, depth, 1.0f, 0.0f, 0.0f},
+		Vertex(width, -height, -depth,	1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f),
+		Vertex(width, height, -depth,		1.0f, 0.0f, 0.0f,		0.0f, 1.0f, 0.0f),
+		Vertex(width, height, depth,		1.0f, 0.0f, 0.0f,		0.0f, 0.0f, 1.0f),
+		Vertex(width, -height, depth,		1.0f, 0.0f, 0.0f,		1.0f, 0.0f, 0.0f),
 	};
 
-	hr = pVertexBuffer->CreateVertexBuffer(device, vertices, 0u);
+	hr = pVertexBuffer->CreateVertexBuffer(gfx->GetDevice(), vertices, 0u);
 	Logging::ThrowIf(hr, "Vertex Failed to build");
-	pVertexBuffer->BindBuffer(0u, 1u, deviceContext);
+	pVertexBuffer->BindBuffer(0u, 1u, gfx->GetDeviceContext());
 
 	// Index buffer
 	indices =
@@ -80,25 +80,30 @@ Cube::Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 		16,17,18,16,18,19,
 		20,21,22,20,22,23
 	};
-	hr = pIndexBuffer->CreateIndexBuffer(device, indices);
+	hr = pIndexBuffer->CreateIndexBuffer(gfx->GetDevice(), indices);
 	Logging::ThrowIf(hr, "Index failed to build");
-	pIndexBuffer->BindBuffer(deviceContext, DXGI_FORMAT_R16_UINT, 0u);
+	pIndexBuffer->BindBuffer(gfx->GetDeviceContext(), DXGI_FORMAT_R16_UINT, 0u);
 
 	// Constant Buffer
-	hr = pVertConstBuffer->CreateConstantBuffer(device);
+	hr = pWVPconstBuffer->CreateStaticConstantBuffer(gfx->GetDevice());
 	Logging::ThrowIf(hr, "const failed to build");
+
+	hr = pPerObjectBuffer->CreateStaticConstantBuffer(gfx->GetDevice());
+	Logging::ThrowIf(hr, "Cube's per object buffer failed to build");
+
 
 	// Vertex Shader
 	pVertexShader->ReadVSShaderToBlob(L"..\\x64\\Debug\\VertexShader.cso");
-	pVertexShader->CreateVSShader(device);
+	pVertexShader->CreateVSShader(gfx->GetDevice());
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	device->CreateInputLayout(
+	gfx->GetDevice()->CreateInputLayout(
 		ied,
 		(UINT)std::size(ied),
 		pVertexShader->GetVSBlob()->GetBufferPointer(),
@@ -110,12 +115,12 @@ Cube::Cube(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 	hr = pPixelShader->ReadPSShaderToBlob(L"..\\x64\\Debug\\PixelShader.cso");
 	Logging::ThrowIf(hr, "Pixel failed to read");
 
-	hr = pPixelShader->CreatePSShader(device);
+	hr = pPixelShader->CreatePSShader(gfx->GetDevice());
 	Logging::ThrowIf(hr, "pixel failed to create");
 
 
-	deviceContext->IASetInputLayout(pInputLayout.Get());
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	gfx->GetDeviceContext()->IASetInputLayout(pInputLayout.Get());
+	gfx->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
 void Cube::Update(float dt)
@@ -138,13 +143,17 @@ void Cube::Draw(Graphics* gfx)
 	// SetIAVertex buffer
 
 	// Assign constant buffer new data
-	pVertConstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
-	pVertConstBuffer->data.matrix = DirectX::XMMatrixTranspose(pVertConstBuffer->data.matrix);
+	pWVPconstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
+	pWVPconstBuffer->data.matrix = DirectX::XMMatrixTranspose(pWVPconstBuffer->data.matrix);
 
 	// Update and set constant buffer
-	hr = pVertConstBuffer->UpdateBuffer(gfx->GetDeviceContext());
-	Logging::ThrowIf(hr, "Constant buffer failed to update");
-	pVertConstBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
+	pWVPconstBuffer->UpdateSubResource(gfx->GetDeviceContext());
+	//hr = pVertConstBuffer->UpdateBuffer(gfx->GetDeviceContext());
+	//Logging::ThrowIf(hr, "Constant buffer failed to update");
+	
+	pWVPconstBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
+
+
 
 	// Set Shaders
 	pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
@@ -152,45 +161,4 @@ void Cube::Draw(Graphics* gfx)
 
 	// Draw
 	gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
-}
-
-void Cube::CreateSphere(float radius, int sliceCount, int stackCount)
-{
-	// http://www.richardssoftware.net/2013/07/shapes-demo-with-direct3d11-and-slimdx.html
-
-	radius = 5.0f;
-	sliceCount = 10;
-	stackCount = 10;
-
-	vertices =
-	{
-		{0, radius, 0, 1.0f, 0.0f, 1.0f},
-	};
-
-	auto phiStep = DirectX::XM_PI / stackCount;
-	auto thetaStep = 2.0f * DirectX::XM_PI / sliceCount;
-
-
-	for (int i = 0; i < stackCount - 1; i++)
-	{
-		auto phi = i * phiStep;
-
-		for (int j = 0; j < sliceCount; j++)
-		{
-			auto theta = j * thetaStep;
-
-			auto p = DirectX::XMFLOAT3(
-				radius * sin(phi) * cos(theta),
-				radius * cos(phi),
-				radius * sin(phi) * sin(theta));
-
-			auto t = DirectX::XMFLOAT3(
-				-radius * sin(phi) * sin(theta),
-				0,
-				radius * sin(phi) * cos(theta));
-
-			
-		}
-	}
-
 }

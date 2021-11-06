@@ -18,11 +18,11 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 
 	// Declare Scenes
 	std::shared_ptr<SceneTest> sceneTest = std::make_shared<SceneTest>(sceneManager);
-	std::shared_ptr<SceneSwap> sceneSwap = std::make_shared<SceneSwap>(sceneManager);
+	// std::shared_ptr<SceneSwap> sceneSwap = std::make_shared<SceneSwap>(sceneManager);
 
 	// Update IDList and create scenes
 	sceneManager.IDList.Testing = sceneManager.AddScene(sceneTest, sceneData);
-	sceneManager.IDList.swap = sceneManager.AddScene(sceneSwap, sceneData);
+	// sceneManager.IDList.swap = sceneManager.AddScene(sceneSwap, sceneData);
 
 	// Switch Scene
 	sceneManager.SwitchScene(sceneManager.IDList.Testing);

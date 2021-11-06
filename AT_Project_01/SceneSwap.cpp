@@ -11,7 +11,7 @@ void SceneSwap::onCreate(SceneData& sceneData)
 
 	camera.EnableCamera(true);
 
-	cube = std::make_unique<Cube>(sceneData.gfx->GetDevice(), sceneData.gfx->GetDeviceContext());
+	cube = std::make_unique<Cube>(sceneData.gfx);
 
 }
 

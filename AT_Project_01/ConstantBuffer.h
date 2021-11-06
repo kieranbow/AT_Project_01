@@ -15,9 +15,10 @@ struct VertexConstBuffer
 	DirectX::XMMATRIX matrix;
 };
 
-struct PixelConstBuffer
+struct PerObject
 {
-	float color = 0; // placeholder
+	DirectX::XMMATRIX wvp;
+	DirectX::XMMATRIX world;
 };
 
 // Description
@@ -35,12 +36,34 @@ class ConstantBuffer
 
 		// Description
 		// Creates a constant buffer using BUFFER_DESC and SUBRESOURCE_DATA
-		HRESULT CreateConstantBuffer(ID3D11Device* device)
+		// Usage flags: D3D11_USAGE_DYNAMIC
+		// CPUAccessFlags: D3D11_CPU_ACCESS_WRITE
+		HRESULT CreateDynamicConstantBuffer(ID3D11Device* device)
 		{
 			// Buffer Description
 			ZeroMemory(&constantBufferDesc, sizeof(constantBufferDesc));
 			constantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 			constantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			constantBufferDesc.ByteWidth = sizeof(type);
+			constantBufferDesc.MiscFlags = 0u;
+			constantBufferDesc.StructureByteStride = 0u;
+
+			// Create Constant Buffer
+			HRESULT hResult = device->CreateBuffer(&constantBufferDesc, NULL, &pConstantBuffer);
+			return hResult;
+		}
+
+		// Description
+		// Creates a constant buffer using BUFFER_DESC and SUBRESOURCE_DATA
+		// Usage flags: D3D11_USAGE_DEFAULT
+		// CPUAccessFlags: 0u
+		HRESULT CreateStaticConstantBuffer(ID3D11Device* device)
+		{
+			// Buffer Description
+			ZeroMemory(&constantBufferDesc, sizeof(constantBufferDesc));
+			constantBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+			constantBufferDesc.CPUAccessFlags = 0u;
 			constantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			constantBufferDesc.ByteWidth = sizeof(type);
 			constantBufferDesc.MiscFlags = 0u;
@@ -62,6 +85,11 @@ class ConstantBuffer
 			CopyMemory(mappedResource.pData, &data, sizeof(type));
 			deviceContext->Unmap(pConstantBuffer.Get(), 0);
 			return hr;
+		}
+
+		void UpdateSubResource(ID3D11DeviceContext* deviceContext)
+		{
+			deviceContext->UpdateSubresource(pConstantBuffer.Get(), 0, NULL, &data, 0, 0);
 		}
 
 		// Description

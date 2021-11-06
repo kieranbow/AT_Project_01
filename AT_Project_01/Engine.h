@@ -12,7 +12,6 @@
 
 // Graphics
 #include "Graphics.h"
-#include "DaCube.h"
 
 // Scene
 #include "SceneManager.h"
@@ -40,5 +39,4 @@ private:
 	SceneData sceneData;
 
 	std::unique_ptr<Graphics> pGraphics;
-	std::unique_ptr<Cube> cube;
 };
