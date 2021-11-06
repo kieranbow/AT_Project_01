@@ -36,27 +36,27 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionY = 0;
 	float positionZ = 0;
 
-	for (int i = 0; i < amount; i++)
-	{
+	//for (int i = 0; i < amount; i++)
+	//{
 
-		cubepolsion.push_back(std::make_unique<Cube>(sceneData.gfx));
-		cubepolsion.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
-		cubepolsion.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
+	//	cubepolsion.push_back(std::make_unique<Cube>(sceneData.gfx));
+	//	cubepolsion.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+	//	cubepolsion.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
-		positionX += distance;
+	//	positionX += distance;
 
-		if (positionX >= (distance * width))
-		{
-			positionX = 0.0f;
-			positionY += distance;
+	//	if (positionX >= (distance * width))
+	//	{
+	//		positionX = 0.0f;
+	//		positionY += distance;
 
-			if (positionY >= (distance * height))
-			{
-				positionY = 0.0f;
-				positionZ += distance;
-			}
-		}
-	}
+	//		if (positionY >= (distance * height))
+	//		{
+	//			positionY = 0.0f;
+	//			positionZ += distance;
+	//		}
+	//	}
+	//}
 }
 
 void SceneTest::OnDestroy()
@@ -173,11 +173,11 @@ void SceneTest::Update(double dt)
 	solidCube->Update(dt);
 	liquidCube->Update(dt);
 
-	for (auto& cubes : cubepolsion)
-	{
-		cubes->transform.SetRotation(3.14 * rot , 2.0f * rot , 10.0f * rot);
-		cubes->Update(dt);
-	}
+	//for (auto& cubes : cubepolsion)
+	//{
+	//	cubes->transform.SetRotation(3.14 * rot , 2.0f * rot , 10.0f * rot);
+	//	cubes->Update(dt);
+	//}
 }
 
 void SceneTest::Draw(SceneData& sceneData)
@@ -200,8 +200,8 @@ void SceneTest::Draw(SceneData& sceneData)
 	solidCube->Draw(sceneData.gfx);
 	liquidCube->Draw(sceneData.gfx);
 
-	for (auto& cubes : cubepolsion)
-	{
-		cubes->Draw(sceneData.gfx);
-	}
+	//for (auto& cubes : cubepolsion)
+	//{
+	//	cubes->Draw(sceneData.gfx);
+	//}
 }

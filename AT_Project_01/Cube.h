@@ -42,5 +42,9 @@ class Cube
 
 		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 
+		Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampleState;
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
+		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
+
 		float rot = 0.01f;
 };

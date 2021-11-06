@@ -179,6 +179,9 @@
     <ClInclude Include="Cube.h">
       <Filter>Header Files\Graphics\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

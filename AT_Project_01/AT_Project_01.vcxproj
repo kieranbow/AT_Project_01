@@ -178,6 +178,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SceneSwap.h" />
     <ClInclude Include="SceneTest.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="VSShader.h" />
