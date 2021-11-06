@@ -49,7 +49,7 @@ class Camera
 		float fovRad		= 0.0f;
 		float aspectRatio	= 0.0f;
 		float nearZ			= 0.01f;
-		float farZ			= 1000.0f;
+		float farZ			= 10000.0f;
 		bool enableOrthographic = false;
 		bool enable			= false;
 

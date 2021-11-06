@@ -10,15 +10,20 @@
 #include <vector>
 
 
-struct VertexConstBuffer
-{
-	DirectX::XMMATRIX matrix;
-};
+//struct VertexConstBuffer
+//{
+//	DirectX::XMMATRIX matrix;
+//};
 
 struct PerObject
 {
-	DirectX::XMMATRIX wvp;
-	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX m_world;
+};
+
+struct PerFrame
+{
+	DirectX::XMMATRIX m_view;
+	DirectX::XMMATRIX m_projection;
 };
 
 // Description

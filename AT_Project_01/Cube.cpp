@@ -23,12 +23,19 @@ Cube::Cube(Graphics* gfx)
 	Logging::ThrowIf(hr, "Index failed to build");
 	pIndexBuffer->BindBuffer(gfx->GetDeviceContext(), DXGI_FORMAT_R16_UINT, 0u);
 
+
+
+
 	// Constant Buffer
-	hr = pWVPconstBuffer->CreateStaticConstantBuffer(gfx->GetDevice());
+	hr = pWorldBuffer->CreateStaticConstantBuffer(gfx->GetDevice());
 	Logging::ThrowIf(hr, "const failed to build");
 
-	hr = pPerObjectBuffer->CreateStaticConstantBuffer(gfx->GetDevice());
+	hr = pFrameBuffer->CreateStaticConstantBuffer(gfx->GetDevice());
 	Logging::ThrowIf(hr, "Cube's per object buffer failed to build");
+
+
+
+
 
 
 	// Vertex Shader
@@ -62,7 +69,7 @@ Cube::Cube(Graphics* gfx)
 	int img_h = 0;
 	int num_channel = 0;
 
-	stbi_uc* texture = stbi_load("Assets\\Texture\\icon.png", &img_w, &img_h, &num_channel, STBI_rgb_alpha);
+	stbi_uc* texture = stbi_load("Assets\\Texture\\default.png", &img_w, &img_h, &num_channel, STBI_rgb_alpha);
 
 	if (stbi_failure_reason())
 	{
@@ -127,7 +134,7 @@ void Cube::Update(float dt)
 		rot = 0.0f;
 	}
 
-	transform.SetRotationAxis(rot);
+	//transform.SetRotationAxis(rot);
 	// transform.SetScale(1.0f, 1.0f, 1.0f);
 	// transform.SetPosition(0.0f, 0.0f, rot);
 	transform.Update();
@@ -139,15 +146,26 @@ void Cube::Draw(Graphics* gfx)
 	// SetIAVertex buffer
 
 	// Assign constant buffer new data
-	pWVPconstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
-	pWVPconstBuffer->data.matrix = DirectX::XMMatrixTranspose(pWVPconstBuffer->data.matrix);
+	//pWVPconstBuffer->data.matrix = transform.GetWorldMatrix() * gfx->GetViewMatrix() * gfx->GetProjectionMatrix();
+	//pWVPconstBuffer->data.matrix = DirectX::XMMatrixTranspose(pWVPconstBuffer->data.matrix);
+
+	pWorldBuffer->data.m_world = transform.GetWorldMatrix();
+	pFrameBuffer->data.m_view = gfx->GetViewMatrix();
+	pFrameBuffer->data.m_projection = gfx->GetProjectionMatrix();
+
+
+	pWorldBuffer->UpdateSubResource(gfx->GetDeviceContext());
+	pWorldBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1); //b0
+
+	pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
+	pFrameBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 1u, 1); //b2
 
 	// Update and set constant buffer
-	pWVPconstBuffer->UpdateSubResource(gfx->GetDeviceContext());
+	//pWVPconstBuffer->UpdateSubResource(gfx->GetDeviceContext());
 	//hr = pVertConstBuffer->UpdateBuffer(gfx->GetDeviceContext());
 	//Logging::ThrowIf(hr, "Constant buffer failed to update");
 	
-	pWVPconstBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
+	//pWVPconstBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
 
 	// Set Shaders
 	pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
@@ -157,7 +175,6 @@ void Cube::Draw(Graphics* gfx)
 
 	// Draw
 	gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
-	// gfx->GetDeviceContext()->Draw(static_cast<UINT>(vertices.size()), 0u);
 }
 
 void Cube::loadModel()
@@ -209,7 +226,7 @@ void Cube::loadModel()
 void Cube::loadmodelAss()
 {
 
-	const std::string model_path = "Assets\\Model\\cube.obj";
+	const std::string model_path = "Assets\\Model\\Helmet_paintable_v2.obj";
 
 	pScene = importer.ReadFile(
 		model_path,
