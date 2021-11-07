@@ -30,6 +30,12 @@ struct PerPixel
 {
 	DirectX::XMFLOAT3 lightColor; //12
 	float lightStength; //4
+
+	DirectX::XMFLOAT3 dynamicLightColor;
+	float dynamicLightStrength;
+
+	DirectX::XMFLOAT3 dynamicLightPosition;
+	float padding;
 };
 
 // Description

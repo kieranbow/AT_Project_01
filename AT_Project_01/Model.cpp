@@ -103,8 +103,12 @@ void Model::Draw(Graphics* gfx)
 		pFrameBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 1u, 1); //b1
 
 
-		pPixelBuffer->data.lightColor = {0.0f, 1.0f, 0.0f };
-		pPixelBuffer->data.lightStength = 1.0f;
+		pPixelBuffer->data.lightColor = {1.0f, 1.0f, 1.0f };
+		pPixelBuffer->data.lightStength = 0.1f;
+
+		pPixelBuffer->data.dynamicLightPosition = {0.0f, 25.0f, 0.0f};
+		pPixelBuffer->data.dynamicLightColor = {1.0f, 0.0f, 0.0f};
+		pPixelBuffer->data.dynamicLightStrength = 10.0f;
 		pPixelBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pPixelBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
 

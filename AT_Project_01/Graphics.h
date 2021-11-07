@@ -38,6 +38,10 @@ class Graphics
 		DirectX::XMMATRIX GetViewMatrix() const;
 		DirectX::XMMATRIX GetProjectionMatrix() const;
 
+		DirectX::XMFLOAT3 f_lightPosition;
+		DirectX::XMFLOAT3 f_lightColor;
+		float lightStrenght;
+
 	private:
 		HRESULT hResult;
 		Microsoft::WRL::ComPtr<ID3D11Device>					pDevice;
@@ -50,6 +54,8 @@ class Graphics
 
 		DirectX::XMMATRIX m_view;
 		DirectX::XMMATRIX m_projection;
+
+		
 
 		std::pair<float, float> windowSize;
 };
