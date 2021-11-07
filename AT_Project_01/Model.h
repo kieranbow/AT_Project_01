@@ -16,7 +16,8 @@ class Model
 		Model() = default;
 		~Model() = default;
 
-		void LoadMesh(Graphics* pGfx, std::string mesh_file_path);
+		void LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path);
+		void LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices);
 		void LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements);
 		void LoadTextures(Graphics* gfx, std::string texture_file_path);
 		void Update(float dt);
@@ -38,4 +39,3 @@ class Model
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();
 
 };
-

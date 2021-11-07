@@ -2,7 +2,7 @@
 #include "Model_loader.h"
 #include "Graphics.h"
 
-void Model::LoadMesh(Graphics* pGfx, std::string mesh_file_path)
+void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 {
 	// Load mesh using Assimp
 	ModelLoader loader(
@@ -12,6 +12,25 @@ void Model::LoadMesh(Graphics* pGfx, std::string mesh_file_path)
 		aiProcess_FlipUVs
 		| aiProcess_JoinIdenticalVertices
 		| aiProcess_Triangulate);
+
+	// Add mesh to vector of meshes
+	meshes.push_back(Mesh(pGfx, vertices, indices));
+
+	// Create static constant buffers for perObject and perFrame
+	pWorldBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+
+	// Loop through meshes and bind their buffers to the pipeline
+	for (auto& mesh : meshes)
+	{
+		mesh.Bind(pGfx);
+	}
+}
+
+void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices)
+{
+	vertices = _vertices;
+	indices = _indices;
 
 	// Add mesh to vector of meshes
 	meshes.push_back(Mesh(pGfx, vertices, indices));

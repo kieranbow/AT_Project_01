@@ -28,7 +28,7 @@ class TransformComponent
 	private:
 		DirectX::XMFLOAT3 f_scale		= { 1.0f, 1.0f, 1.0f };
 		DirectX::XMFLOAT3 f_rotation	= { 1.0f, 1.0f, 1.0f };
-		DirectX::XMFLOAT3 f_position		= { 1.0f, 1.0f, 1.0f };
+		DirectX::XMFLOAT3 f_position	= { 0.0f, 0.0f, 0.0f };
 
 		DirectX::XMVECTOR rotaxis = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 		

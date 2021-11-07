@@ -1,4 +1,5 @@
 #include "SceneTest.h"
+#include "Model_loader.h"
 
 SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneManager)
 {
@@ -26,10 +27,27 @@ void SceneTest::onCreate(SceneData& sceneData)
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
 
-	model.LoadMesh(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	model.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
-	model.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
+	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
+	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
 
+	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
+	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+	sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
+	sphere.transform.SetPosition(20.0f, 0.0f, -10.0f);
+
+	sky.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
+	sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+	sky.LoadTextures(sceneData.gfx, "Assets\\Texture\\sky.png");
+	sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
+
+	pyramid.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\pyramid.obj");
+	pyramid.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+	pyramid.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
+
+	single_cube.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube.obj");
+	single_cube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+	single_cube.LoadTextures(sceneData.gfx, "Assets\\Texture\\grass.png");
 
 	//solidCube = std::make_unique<Cube>(sceneData.gfx);
 	// liquidCube = std::make_unique<Cube>(sceneData.gfx);
@@ -52,30 +70,34 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionY = 0;
 	float positionZ = 0;
 
-	//for (int i = 0; i < amount; i++)
-	//{
-	//	std::unique_ptr temp = std::make_unique<Model>();
-	//	temp->LoadMesh(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
-	//	temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+	ModelLoader loader("Assets\\Model\\cube_proj.obj");
 
-	//	cube.push_back(std::move(temp));
-	//	cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
-	//	cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
-	//	positionX += distance;
+	for (int i = 0; i < amount; i++)
+	{
+		std::unique_ptr temp = std::make_unique<Model>();
+		temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
+		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
 
-	//	if (positionX >= (distance * width))
-	//	{
-	//		positionX = 0.0f;
-	//		positionY += distance;
+		cube.push_back(std::move(temp));
+		cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+		cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
-	//		if (positionY >= (distance * height))
-	//		{
-	//			positionY = 0.0f;
-	//			positionZ += distance;
-	//		}
-	//	}
-	//}
+		positionX += distance;
+
+		if (positionX >= (distance * width))
+		{
+			positionX = 0.0f;
+			positionY += distance;
+
+			if (positionY >= (distance * height))
+			{
+				positionY = 0.0f;
+				positionZ += distance;
+			}
+		}
+	}
 
 	//for (int i = 0; i < amount; i++)
 	//{
@@ -202,10 +224,7 @@ void SceneTest::Update(double dt)
 	static_cast<float>(dt);
 
 	rot += 0.05f;
-	if (rot > 6.28f)
-	{
-		rot = 0.0f;
-	}
+
 
 	if (lookat)
 	{
@@ -216,13 +235,23 @@ void SceneTest::Update(double dt)
 	camera2.Update(dt);
 
 	//model.transform.SetRotationAxis(2.0f * rot);
-	model.Update(dt);
+	spaceMarineHelmet.Update(dt);
+	sphere.Update(dt);
+	sky.Update(dt);
 
-	//for (auto& cubes : cube)
-	//{
-	//	cubes->transform.SetRotation(3.14 * rot , 2.0f * rot , 10.0f * rot);
-	//	cubes->Update(dt);
-	//}
+	pyramid.transform.SetPosition(15.0f, 15.0f, 0.0f);
+	pyramid.transform.SetRotationAxis(0.5f * rot);
+	pyramid.Update(dt);
+
+	single_cube.transform.SetRotation(0.0f, 0.0f, 0.5f * rot);
+	single_cube.transform.SetPosition(-15.0f, -15.0f, 0.0f);
+	single_cube.Update(dt);
+
+	for (auto& cubes : cube)
+	{
+		cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
+		cubes->Update(dt);
+	}
 
 	//solidCube->Update(dt);
 	// liquidCube->Update(dt);
@@ -251,12 +280,16 @@ void SceneTest::Draw(SceneData& sceneData)
 	}
 
 
-	model.Draw(sceneData.gfx);
+	spaceMarineHelmet.Draw(sceneData.gfx);
+	sphere.Draw(sceneData.gfx);
+	sky.Draw(sceneData.gfx);
+	pyramid.Draw(sceneData.gfx);
+	single_cube.Draw(sceneData.gfx);
 
-	//for (auto& cubes : cube)
-	//{
-	//	cubes->Draw(sceneData.gfx);
-	//}
+	for (auto& cubes : cube)
+	{
+		cubes->Draw(sceneData.gfx);
+	}
 
 	//solidCube->Draw(sceneData.gfx);
 	// liquidCube->Draw(sceneData.gfx);

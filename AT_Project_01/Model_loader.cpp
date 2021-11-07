@@ -17,6 +17,36 @@ ModelLoader::ModelLoader(std::string _file_path, std::vector<Vertex>& vertices, 
 	}
 }
 
+ModelLoader::ModelLoader(std::string _file_path)
+{
+	// Read file
+	pScene = importer.ReadFile(
+		_file_path, 
+		aiProcess_FlipUVs
+		| aiProcess_JoinIdenticalVertices
+		| aiProcess_Triangulate);
+
+	if (pScene == NULL)
+	{
+		Logging::LogError("Assimp failed to read mesh file");
+	}
+
+	if (!LoadMeshData(vertices, indices))
+	{
+		Logging::LogError("Assimp failed to create mesh from file");
+	}
+}
+
+std::vector<Vertex> ModelLoader::GetVertices() const
+{
+	return vertices;
+}
+
+std::vector<unsigned short> ModelLoader::GetIndices() const
+{
+	return indices;
+}
+
 bool ModelLoader::LoadMeshData(std::vector<Vertex>& vertices, std::vector<unsigned short>& indices)
 {
 	for (UINT m = 0; m < pScene->mNumMeshes; m++)

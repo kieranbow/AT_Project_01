@@ -21,5 +21,5 @@ float4 main(PS_INPUT input) : SV_TARGET
     float4 output = lerp(float4(0.0f, 0.0f, 0.0f, 1.0f), blend, mask);
     //float4 output = float4(input.normal, 1.0f);
     
-    return output;
+    return tex;
 }

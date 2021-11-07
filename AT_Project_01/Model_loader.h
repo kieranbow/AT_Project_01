@@ -14,10 +14,11 @@ class ModelLoader
 {
 	public:
 		ModelLoader(std::string _file_path, std::vector<Vertex>& vertices, std::vector<unsigned short>& indices, unsigned int pFlags);
+		ModelLoader(std::string _file_path);
 		~ModelLoader() = default;
 
-		ModelLoader(const ModelLoader&) = delete;
-		ModelLoader& operator=(const ModelLoader&) = delete;
+		std::vector<Vertex> GetVertices() const;
+		std::vector<unsigned short> GetIndices() const;
 
 	private:
 		Assimp::Importer importer;
@@ -25,5 +26,8 @@ class ModelLoader
 		const aiMesh* pMesh;
 
 		bool LoadMeshData(std::vector<Vertex>& vertices, std::vector<unsigned short>& indices);
+
+		std::vector<Vertex> vertices;
+		std::vector<unsigned short> indices;
 
 };

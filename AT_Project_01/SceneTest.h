@@ -49,7 +49,11 @@ class SceneTest : public Scene
 		//std::unique_ptr<Cube> solidCube;
 		//std::unique_ptr<Cube> liquidCube;
 
-		Model model;
+		Model spaceMarineHelmet;
+		Model sphere;
+		Model sky;
+		Model pyramid;
+		Model single_cube;
 		
 		std::vector< std::unique_ptr<Model>> cube;
 
