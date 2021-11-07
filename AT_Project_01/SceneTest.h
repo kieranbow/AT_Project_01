@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#include "Cube.h"
+//#include "Cube.h"
 #include "Camera.h"
 
 #include "Model.h"

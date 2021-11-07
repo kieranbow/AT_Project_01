@@ -111,14 +111,17 @@
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files\Graphics\Geometry</Filter>
     </ClCompile>
-    <ClCompile Include="Model_loader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\Graphics\Geometry</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Graphics\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Model_loader.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,14 +194,17 @@
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Model_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files\Graphics\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Header Files\Graphics\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_loader.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

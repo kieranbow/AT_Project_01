@@ -165,6 +165,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneSwap.cpp" />
     <ClCompile Include="SceneTest.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="SceneSwap.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TransformComponent.h" />

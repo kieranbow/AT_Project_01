@@ -28,7 +28,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 
 	model.LoadMesh(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	model.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
-
+	model.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
 
 
 	//solidCube = std::make_unique<Cube>(sceneData.gfx);
@@ -215,7 +215,7 @@ void SceneTest::Update(double dt)
 	camera.Update(dt);
 	camera2.Update(dt);
 
-	model.transform.SetRotationAxis(2.0f * rot);
+	//model.transform.SetRotationAxis(2.0f * rot);
 	model.Update(dt);
 
 	//for (auto& cubes : cube)

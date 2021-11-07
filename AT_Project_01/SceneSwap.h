@@ -2,7 +2,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-#include "Cube.h"
+// #include "Cube.h"
 #include "Camera.h"
 
 class SceneSwap : public Scene
@@ -26,6 +26,6 @@ private:
 
 	Camera camera;
 
-	std::unique_ptr<Cube> cube;
+	// std::unique_ptr<Cube> cube;
 };
 

@@ -2,8 +2,8 @@
 #include "ErrorChecker.h"
 #include "Graphics.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -69,12 +69,12 @@ Cube::Cube(Graphics* gfx)
 	int img_h = 0;
 	int num_channel = 0;
 
-	stbi_uc* texture = stbi_load("Assets\\Texture\\default.png", &img_w, &img_h, &num_channel, STBI_rgb_alpha);
+	//stbi_uc* texture = stbi_load("Assets\\Texture\\default.png", &img_w, &img_h, &num_channel, STBI_rgb_alpha);
 
-	if (stbi_failure_reason())
-	{
-		Logging::LogError("stbi_load failed to find texture");
-	}
+	//if (stbi_failure_reason())
+	//{
+		//Logging::LogError("stbi_load failed to find texture");
+	//}
 
 	D3D11_TEXTURE2D_DESC img_desc = {};
 	img_desc.Width = img_w;
@@ -91,8 +91,8 @@ Cube::Cube(Graphics* gfx)
 
 	// https://gamedev.net/forums/topic/673814-d3d11-texture-image-data-from-memory/5266103/
 	D3D11_SUBRESOURCE_DATA img_data = {};
-	img_data.pSysMem = texture;
-	img_data.SysMemPitch = img_w * 4;
+	//img_data.pSysMem = texture;
+	//img_data.SysMemPitch = img_w * 4;
 
 	hr = gfx->GetDevice()->CreateTexture2D(&img_desc, &img_data, &pTexture);
 	Logging::ThrowIf(hr, "Failed to create 2D texture");

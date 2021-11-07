@@ -11,7 +11,7 @@ void SceneSwap::onCreate(SceneData& sceneData)
 
 	camera.EnableCamera(true);
 
-	cube = std::make_unique<Cube>(sceneData.gfx);
+	// cube = std::make_unique<Cube>(sceneData.gfx);
 
 }
 
@@ -85,9 +85,9 @@ void SceneSwap::Update(double dt)
 
 	camera.Update(dt);
 
-	cube->transform.SetRotation(rot, rot, 0.0f);
-	cube->transform.SetPosition(0.0f, 0.0f, 0.0f);
-	cube->Update(dt);
+	//cube->transform.SetRotation(rot, rot, 0.0f);
+	//cube->transform.SetPosition(0.0f, 0.0f, 0.0f);
+	//cube->Update(dt);
 }
 
 void SceneSwap::Draw(SceneData& sceneData)
@@ -97,5 +97,5 @@ void SceneSwap::Draw(SceneData& sceneData)
 	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
 
 
-	cube->Draw(sceneData.gfx);
+	//cube->Draw(sceneData.gfx);
 }

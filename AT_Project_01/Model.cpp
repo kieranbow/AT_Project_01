@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "Model_loader.h"
 #include "Graphics.h"
+
 void Model::LoadMesh(Graphics* pGfx, std::string mesh_file_path)
 {
 	// Load mesh using Assimp
@@ -42,6 +43,23 @@ void Model::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_pat
 
 }
 
+void Model::LoadTextures(Graphics* gfx, std::string texture_file_path)
+{
+	Texture loadtex(gfx);
+
+	if(!loadtex.LoadAndCreateTexture(texture_file_path))
+	{
+		OutputDebugStringA("didn load texture");
+	}
+	
+	if(!loadtex.CreateSampleState(0u, 1u))
+	{
+		OutputDebugStringA("didn create sample");
+	}
+
+	textures.push_back(loadtex);
+}
+
 void Model::Update(float dt)
 {
 	transform.Update();
@@ -62,6 +80,8 @@ void Model::Draw(Graphics* gfx)
 		pFrameBuffer->data.m_projection = gfx->GetProjectionMatrix();
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pFrameBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 1u, 1); //b1
+
+		textures.at(0).SetShaderResource(0u, 1u);
 
 		// Set shaders
 		pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
