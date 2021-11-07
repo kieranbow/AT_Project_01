@@ -19,16 +19,6 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
-	//light.direction = { 15.0f, 20.0f, 10.0f };
-	//light.ambient = { 0.0f, 0.0f, 0.0f, 0.0f };
-	//light.diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	//sceneData.gfx->f_lightColor = { 1.0f, 1.0f, 1.0f };
-	//sceneData.gfx->f_lightPosition = { 0.0f, 0.0f, -15.0f };
-	//sceneData.gfx->lightStrenght = 1000.0f;
-
-
-
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
@@ -36,6 +26,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
+	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
 	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
 	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
@@ -207,11 +198,11 @@ void SceneTest::Update(double dt)
 	camera.Update(dt);
 	camera2.Update(dt);
 
-	//model.transform.SetRotationAxis(2.0f * rot);
 	spaceMarineHelmet.Update(dt);
 
-	// sphere.transform.SetScale(5.0f * rot, 5.0f * rot, 5.0f * rot);
 	sphere.Update(dt);
+
+	sky.transform.SetRotation(0.0f, 0.01f * rot, 0.0f);
 	sky.Update(dt);
 
 	pyramid.transform.SetPosition(15.0f, 15.0f, 0.0f);

@@ -150,8 +150,8 @@ void Cube::Draw(Graphics* gfx)
 	//pWVPconstBuffer->data.matrix = DirectX::XMMatrixTranspose(pWVPconstBuffer->data.matrix);
 
 	pWorldBuffer->data.m_world = transform.GetWorldMatrix();
-	pFrameBuffer->data.m_view = gfx->GetViewMatrix();
-	pFrameBuffer->data.m_projection = gfx->GetProjectionMatrix();
+	//pFrameBuffer->data.m_view = gfx->GetViewMatrix();
+	//pFrameBuffer->data.m_projection = gfx->GetProjectionMatrix();
 
 
 	pWorldBuffer->UpdateSubResource(gfx->GetDeviceContext());

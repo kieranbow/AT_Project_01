@@ -18,12 +18,13 @@
 struct PerObject
 {
 	DirectX::XMMATRIX m_world; //16
+	DirectX::XMMATRIX m_view; //16
+	DirectX::XMMATRIX m_projection; //16
 };
 
 struct PerFrame
 {
-	DirectX::XMMATRIX m_view; //16
-	DirectX::XMMATRIX m_projection; //16
+
 };
 
 struct PerPixel
@@ -38,7 +39,31 @@ struct PerPixel
 	float padding;
 };
 
-// Description
+struct Bind
+{
+	struct Buffer
+	{
+		const static UINT b0 = 0u;
+		const static UINT b1 = 1u;
+		const static UINT b2 = 2u;
+		const static UINT b3 = 3u;
+	};
+	struct Texture
+	{
+		const static UINT t0 = 0u;
+		const static UINT t1 = 1u;
+		const static UINT t2 = 2u;
+		const static UINT t3 = 3u;
+	};
+	struct Sampler
+	{
+		const static UINT s0 = 0u;
+		const static UINT s1 = 1u;
+		const static UINT s2 = 2u;
+		const static UINT s3 = 3u;
+	};
+};
+
 // Constant Buffer class that handles behaviour of a constant buffer
 // like Creation, Update, Bind.
 template <typename type>
@@ -51,7 +76,6 @@ class ConstantBuffer
 		ConstantBuffer(const ConstantBuffer&) = delete;
 		ConstantBuffer& operator=(const ConstantBuffer&) = delete;
 
-		// Description
 		// Creates a constant buffer using BUFFER_DESC and SUBRESOURCE_DATA
 		// Usage flags: D3D11_USAGE_DYNAMIC
 		// CPUAccessFlags: D3D11_CPU_ACCESS_WRITE
@@ -71,7 +95,6 @@ class ConstantBuffer
 			return hResult;
 		}
 
-		// Description
 		// Creates a constant buffer using BUFFER_DESC and SUBRESOURCE_DATA
 		// Usage flags: D3D11_USAGE_DEFAULT
 		// CPUAccessFlags: 0u
@@ -91,7 +114,6 @@ class ConstantBuffer
 			return hResult;
 		}
 
-		// Description
 		// Updates buffer using map
 		HRESULT UpdateBuffer(ID3D11DeviceContext* deviceContext)
 		{
@@ -109,7 +131,6 @@ class ConstantBuffer
 			deviceContext->UpdateSubresource(pConstantBuffer.Get(), 0, NULL, &data, 0, 0);
 		}
 
-		// Description
 		// Bind Constant Buffer to Vertex Shader
 		void SetVSConstBuffer(ID3D11DeviceContext* deviceContext, UINT startSlot, UINT numBuffer)
 		{
@@ -132,5 +153,5 @@ class ConstantBuffer
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;	// Buffer
-		D3D11_BUFFER_DESC constantBufferDesc = {};					// Buffer Description
+		D3D11_BUFFER_DESC constantBufferDesc = {};				// Buffer Description
 };

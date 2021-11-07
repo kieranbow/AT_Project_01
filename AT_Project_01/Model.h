@@ -16,11 +16,22 @@ class Model
 		Model() = default;
 		~Model() = default;
 
+		// Using Assimp, it reads and loads the mesh from the file and stores data into buffers
 		void LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path);
+
+		// If data like vertices and indices are already present, this will create the mesh by using Mesh's constuctor
 		void LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices);
-		void LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements);
-		void LoadTextures(Graphics* gfx, std::string texture_file_path);
+
+		// When the vertex and pixel shaders are provided. This will read and create each shader and set the input layout.
+		void LoadShaders(Graphics* pGfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements);
+
+		// Textures are loaded using Texture class functions
+		void LoadTextures(Graphics* pGfx, std::string str_texture_file_path);
+
+		// Update all models components.
 		void Update(float dt);
+
+		// All buffers, constants buffers and shaders are set and then drawn.
 		void Draw(Graphics* gfx);
 
 		TransformComponent transform;
@@ -33,7 +44,7 @@ class Model
 		std::vector<Texture> textures;
 
 		std::unique_ptr<ConstantBuffer<PerObject>> pWorldBuffer = std::make_unique<ConstantBuffer<PerObject>>();
-		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
+		//std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
 		std::unique_ptr<ConstantBuffer<PerPixel>> pPixelBuffer = std::make_unique<ConstantBuffer<PerPixel>>();
 
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();

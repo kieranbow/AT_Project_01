@@ -16,14 +16,9 @@ struct VS_OUTPUT
 cbuffer perObject : register(b0)
 {
     matrix world;
-};
-
-cbuffer perFrame : register(b1)
-{
     matrix view;
     matrix projection;
-}
-
+};
 
 // Main Entry Point for Vertex Shader
 VS_OUTPUT main(VS_INPUT input)
