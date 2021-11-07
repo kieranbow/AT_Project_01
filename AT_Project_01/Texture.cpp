@@ -87,3 +87,8 @@ void Texture::SetShaderResource(UINT startSlot, UINT numViews)
 {
 	l_gfx->GetDeviceContext()->PSSetShaderResources(startSlot, numViews, pShaderResourceView.GetAddressOf());
 }
+
+ID3D11Texture2D* Texture::GetTexture() const
+{
+	return pTexture.Get();
+}

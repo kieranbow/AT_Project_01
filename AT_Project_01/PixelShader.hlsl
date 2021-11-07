@@ -5,6 +5,12 @@ struct PS_INPUT // Same as vertex shader
     float3 normal : NORMAL;
 };
 
+cbuffer lightBuffer : register(b0)
+{
+    float3 lightColor;
+    float lightStength;
+}
+
 Texture2D frog : TEXTURE : register(t0);
 SamplerState state : SAMPLER : register(s0);
 
@@ -13,13 +19,16 @@ float4 main(PS_INPUT input) : SV_TARGET
 {
     float4 tex = frog.Sample(state, input.texcoord);
     
-    tex.xy * 15.0f;
-    
     float mask = tex.r + tex.g + tex.b;
     
     float4 blend = float4(input.normal.r, input.normal.g, input.normal.b, 1.0f);
     float4 output = lerp(float4(0.0f, 0.0f, 0.0f, 1.0f), blend, mask);
     //float4 output = float4(input.normal, 1.0f);
     
-    return tex;
+    
+    float3 ambientLight = lightColor * lightStength;
+    float3 final = tex.rgb * ambientLight;
+    
+    
+    return float4(final, 1.0f);
 }

@@ -26,10 +26,10 @@ void SceneTest::onCreate(SceneData& sceneData)
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
-
 	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
+	spaceMarineHelmet.transform.SetPosition(0.0f, 15.0f, 0.0f);
 
 	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
 	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
@@ -49,16 +49,6 @@ void SceneTest::onCreate(SceneData& sceneData)
 	single_cube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
 	single_cube.LoadTextures(sceneData.gfx, "Assets\\Texture\\grass.png");
 
-	//solidCube = std::make_unique<Cube>(sceneData.gfx);
-	// liquidCube = std::make_unique<Cube>(sceneData.gfx);
-
-	//solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
-	//solidCube->transform.SetRotation(5.0f, 10.0f, 0.0f);
-	// solidCube->transform.SetScale(5000.0f, 5000.f, 5000.0f);
-
-	//liquidCube->transform.SetPosition(0.0f, 3.0f, 3.0f);
-	//liquidCube->transform.SetRotation(34.0f, 10.0f, 70.0f);
-
 	float width = 10.0f;
 	float height = 10.0f;
 
@@ -72,10 +62,10 @@ void SceneTest::onCreate(SceneData& sceneData)
 
 	ModelLoader loader("Assets\\Model\\cube_proj.obj");
 
-
 	for (int i = 0; i < amount; i++)
 	{
 		std::unique_ptr temp = std::make_unique<Model>();
+		//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
 		temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
 		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
 		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
@@ -98,28 +88,6 @@ void SceneTest::onCreate(SceneData& sceneData)
 			}
 		}
 	}
-
-	//for (int i = 0; i < amount; i++)
-	//{
-
-	//	cubepolsion.push_back(std::make_unique<Cube>(sceneData.gfx));
-	//	cubepolsion.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
-	//	cubepolsion.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
-
-	//	positionX += distance;
-
-	//	if (positionX >= (distance * width))
-	//	{
-	//		positionX = 0.0f;
-	//		positionY += distance;
-
-	//		if (positionY >= (distance * height))
-	//		{
-	//			positionY = 0.0f;
-	//			positionZ += distance;
-	//		}
-	//	}
-	//}
 }
 
 void SceneTest::OnDestroy()
@@ -225,7 +193,6 @@ void SceneTest::Update(double dt)
 
 	rot += 0.05f;
 
-
 	if (lookat)
 	{
 		camera.SetLookAt({ 0.0f, 0.0f, 0.0f });
@@ -236,6 +203,8 @@ void SceneTest::Update(double dt)
 
 	//model.transform.SetRotationAxis(2.0f * rot);
 	spaceMarineHelmet.Update(dt);
+
+	// sphere.transform.SetScale(5.0f * rot, 5.0f * rot, 5.0f * rot);
 	sphere.Update(dt);
 	sky.Update(dt);
 
@@ -252,15 +221,6 @@ void SceneTest::Update(double dt)
 		cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
 		cubes->Update(dt);
 	}
-
-	//solidCube->Update(dt);
-	// liquidCube->Update(dt);
-
-	//for (auto& cubes : cubepolsion)
-	//{
-	//	// cubes->transform.SetRotation(3.14 * rot , 2.0f * rot , 10.0f * rot);
-	//	cubes->Update(dt);
-	//}
 }
 
 void SceneTest::Draw(SceneData& sceneData)
@@ -279,7 +239,6 @@ void SceneTest::Draw(SceneData& sceneData)
 		sceneData.gfx->SetProjectionMatrix(camera2.GetProjectionMatrix());
 	}
 
-
 	spaceMarineHelmet.Draw(sceneData.gfx);
 	sphere.Draw(sceneData.gfx);
 	sky.Draw(sceneData.gfx);
@@ -290,12 +249,4 @@ void SceneTest::Draw(SceneData& sceneData)
 	{
 		cubes->Draw(sceneData.gfx);
 	}
-
-	//solidCube->Draw(sceneData.gfx);
-	// liquidCube->Draw(sceneData.gfx);
-
-	//for (auto& cubes : cubepolsion)
-	//{
-	//	cubes->Draw(sceneData.gfx);
-	//}
 }

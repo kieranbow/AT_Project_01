@@ -17,13 +17,19 @@
 
 struct PerObject
 {
-	DirectX::XMMATRIX m_world;
+	DirectX::XMMATRIX m_world; //16
 };
 
 struct PerFrame
 {
-	DirectX::XMMATRIX m_view;
-	DirectX::XMMATRIX m_projection;
+	DirectX::XMMATRIX m_view; //16
+	DirectX::XMMATRIX m_projection; //16
+};
+
+struct PerPixel
+{
+	DirectX::XMFLOAT3 lightColor; //12
+	float lightStength; //4
 };
 
 // Description

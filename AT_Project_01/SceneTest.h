@@ -2,9 +2,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-//#include "Cube.h"
 #include "Camera.h"
-
 #include "Model.h"
 
 struct Light
@@ -46,8 +44,6 @@ class SceneTest : public Scene
 		Camera camera;
 		Camera camera2;
 		float rot = 0.0f;
-		//std::unique_ptr<Cube> solidCube;
-		//std::unique_ptr<Cube> liquidCube;
 
 		Model spaceMarineHelmet;
 		Model sphere;
@@ -56,6 +52,4 @@ class SceneTest : public Scene
 		Model single_cube;
 		
 		std::vector< std::unique_ptr<Model>> cube;
-
-		//std::vector<std::unique_ptr<Cube>> cubepolsion;
 };

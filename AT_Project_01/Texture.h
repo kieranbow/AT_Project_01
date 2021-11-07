@@ -15,6 +15,8 @@ class Texture
 		bool CreateSampleState(UINT startSlot, UINT numSamples);
 		void SetShaderResource(UINT startSlot, UINT numViews);
 
+		ID3D11Texture2D* GetTexture() const;
+
 	private:
 		HRESULT hr;
 

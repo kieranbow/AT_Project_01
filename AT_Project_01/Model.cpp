@@ -19,6 +19,7 @@ void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 	// Create static constant buffers for perObject and perFrame
 	pWorldBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pPixelBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -38,6 +39,7 @@ void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<
 	// Create static constant buffers for perObject and perFrame
 	pWorldBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pPixelBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -99,6 +101,12 @@ void Model::Draw(Graphics* gfx)
 		pFrameBuffer->data.m_projection = gfx->GetProjectionMatrix();
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pFrameBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), 1u, 1); //b1
+
+
+		pPixelBuffer->data.lightColor = {0.0f, 1.0f, 0.0f };
+		pPixelBuffer->data.lightStength = 1.0f;
+		pPixelBuffer->UpdateSubResource(gfx->GetDeviceContext());
+		pPixelBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), 0u, 1u);
 
 		textures.at(0).SetShaderResource(0u, 1u);
 
