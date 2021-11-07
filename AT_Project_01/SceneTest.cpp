@@ -6,6 +6,15 @@ SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneMana
 
 void SceneTest::onCreate(SceneData& sceneData)
 {
+	D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"POSITION",0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	UINT ied_size = static_cast<UINT>(std::size(ied));
+
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
@@ -16,10 +25,16 @@ void SceneTest::onCreate(SceneData& sceneData)
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
-	solidCube = std::make_unique<Cube>(sceneData.gfx);
+
+	model.LoadMesh(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
+	model.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+
+
+
+	//solidCube = std::make_unique<Cube>(sceneData.gfx);
 	// liquidCube = std::make_unique<Cube>(sceneData.gfx);
 
-	solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
+	//solidCube->transform.SetPosition(1.0f, 1.0f, 1.0f);
 	//solidCube->transform.SetRotation(5.0f, 10.0f, 0.0f);
 	// solidCube->transform.SetScale(5000.0f, 5000.f, 5000.0f);
 
@@ -36,6 +51,31 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionX = 0;
 	float positionY = 0;
 	float positionZ = 0;
+
+	//for (int i = 0; i < amount; i++)
+	//{
+	//	std::unique_ptr temp = std::make_unique<Model>();
+	//	temp->LoadMesh(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+	//	temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
+
+	//	cube.push_back(std::move(temp));
+	//	cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+	//	cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
+
+	//	positionX += distance;
+
+	//	if (positionX >= (distance * width))
+	//	{
+	//		positionX = 0.0f;
+	//		positionY += distance;
+
+	//		if (positionY >= (distance * height))
+	//		{
+	//			positionY = 0.0f;
+	//			positionZ += distance;
+	//		}
+	//	}
+	//}
 
 	//for (int i = 0; i < amount; i++)
 	//{
@@ -161,7 +201,11 @@ void SceneTest::Update(double dt)
 {
 	static_cast<float>(dt);
 
-	rot += 0.5f;
+	rot += 0.05f;
+	if (rot > 6.28f)
+	{
+		rot = 0.0f;
+	}
 
 	if (lookat)
 	{
@@ -171,7 +215,16 @@ void SceneTest::Update(double dt)
 	camera.Update(dt);
 	camera2.Update(dt);
 
-	solidCube->Update(dt);
+	model.transform.SetRotationAxis(2.0f * rot);
+	model.Update(dt);
+
+	//for (auto& cubes : cube)
+	//{
+	//	cubes->transform.SetRotation(3.14 * rot , 2.0f * rot , 10.0f * rot);
+	//	cubes->Update(dt);
+	//}
+
+	//solidCube->Update(dt);
 	// liquidCube->Update(dt);
 
 	//for (auto& cubes : cubepolsion)
@@ -198,7 +251,14 @@ void SceneTest::Draw(SceneData& sceneData)
 	}
 
 
-	solidCube->Draw(sceneData.gfx);
+	model.Draw(sceneData.gfx);
+
+	//for (auto& cubes : cube)
+	//{
+	//	cubes->Draw(sceneData.gfx);
+	//}
+
+	//solidCube->Draw(sceneData.gfx);
 	// liquidCube->Draw(sceneData.gfx);
 
 	//for (auto& cubes : cubepolsion)

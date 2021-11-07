@@ -29,20 +29,27 @@ class VSShader
 
 		// Description
 		// Creates the shader using DirectX CreateVertexShader 
-		HRESULT CreateVSShader(ID3D11Device* device)
+		HRESULT CreateVSShader(ID3D11Device* pDevice, D3D11_INPUT_ELEMENT_DESC* pLayoutDesc, UINT numElements)
 		{
-			return device->CreateVertexShader(
+			pDevice->CreateVertexShader(
 				pVertexShaderBlob->GetBufferPointer(), 
 				pVertexShaderBlob->GetBufferSize(), 
 				NULL, 
 				&pVertexShader);
+
+			return pDevice->CreateInputLayout(
+				pLayoutDesc,
+				numElements,
+				GetVSBlob()->GetBufferPointer(),
+				GetVSBlob()->GetBufferSize(),
+				&pInputLayout);
 		}
 
 		// Description
 		// Binds Vertex Shader to pipeline
-		void SetVSShader(ID3D11DeviceContext* deviceContext, UINT NumInstance)
+		void SetVSShader(ID3D11DeviceContext* pDeviceContext, UINT NumInstance)
 		{
-			deviceContext->VSSetShader(pVertexShader.Get(), NULL, NumInstance);
+			pDeviceContext->VSSetShader(pVertexShader.Get(), NULL, NumInstance);
 		}
 
 		ID3D11VertexShader* GetVSShader()const
@@ -55,7 +62,13 @@ class VSShader
 			return pVertexShaderBlob.Get();
 		}
 
+		ID3D11InputLayout* GetInputLayout() const
+		{
+			return pInputLayout.Get();
+		}
+
 	private:
 		Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
 		Microsoft::WRL::ComPtr<ID3D10Blob> pVertexShaderBlob;
+		Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 };

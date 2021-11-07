@@ -111,6 +111,15 @@
     <ClCompile Include="Cube.cpp">
       <Filter>Source Files\Graphics\Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="Model_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Graphics\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\Graphics\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -152,9 +161,6 @@
     <ClInclude Include="PSShader.h">
       <Filter>Header Files\Graphics\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="Geometry.h">
-      <Filter>Header Files\Graphics\Geometry</Filter>
-    </ClInclude>
     <ClInclude Include="SceneTest.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -184,6 +190,15 @@
     </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Model_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Graphics\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Graphics\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

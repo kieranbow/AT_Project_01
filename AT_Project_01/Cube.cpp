@@ -34,20 +34,20 @@ Cube::Cube(Graphics* gfx)
 	Logging::ThrowIf(hr, "Cube's per object buffer failed to build");
 
 
-
-
-
-
-	// Vertex Shader
-	pVertexShader->ReadVSShaderToBlob(L"..\\x64\\Debug\\VertexShader.cso");
-	pVertexShader->CreateVSShader(gfx->GetDevice());
-
-	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
+
+
+
+	// Vertex Shader
+	pVertexShader->ReadVSShaderToBlob(L"..\\x64\\Debug\\VertexShader.cso");
+	pVertexShader->CreateVSShader(gfx->GetDevice(), ied, (UINT)std::size(ied));
+
+
 
 	gfx->GetDevice()->CreateInputLayout(
 		ied,
