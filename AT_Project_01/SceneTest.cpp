@@ -22,9 +22,17 @@ void SceneTest::onCreate(SceneData& sceneData)
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
+	Material Red_plastic;
+	Red_plastic.ambient = { 0.0f, 0.0f, 0.0f, 1.0f };
+	Red_plastic.Diffuse = { 0.5f, 0.0f, 0.0f, 1.0f };
+	Red_plastic.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
+	Red_plastic.Specular = { 0.7f, 0.6f, 0.6f, 1.0f };
+	Red_plastic.SpecularPower = 32.0f;
+
 	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
+	spaceMarineHelmet.SetMaterial(Red_plastic);
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
 	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 

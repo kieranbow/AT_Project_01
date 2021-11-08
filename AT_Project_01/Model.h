@@ -13,7 +13,7 @@ class ModelLoader;
 class Model
 {
 	public:
-		Model() = default;
+		Model();
 		~Model() = default;
 
 		// Using Assimp, it reads and loads the mesh from the file and stores data into buffers
@@ -36,12 +36,17 @@ class Model
 
 		TransformComponent transform;
 
+		void SetMaterial(Material mat);
+
+		Material GetMaterial() const;
+
 	private:
 		std::vector<Vertex> vertices;
 		std::vector<unsigned short> indices;
 
 		std::vector<Mesh> meshes;
 		std::vector<Texture> textures;
+		Material material;
 
 		std::unique_ptr<ConstantBuffer<PerObject>> pObjectBuffer = std::make_unique<ConstantBuffer<PerObject>>();
 		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();

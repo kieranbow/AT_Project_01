@@ -3,6 +3,18 @@
 #include "Graphics.h"
 
 
+Model::Model()
+{
+	Material mat_default;
+	mat_default.ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
+	mat_default.Diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
+	mat_default.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
+	mat_default.Specular = { 0.5f, 0.5f, 0.5f, 1.0f };
+	mat_default.SpecularPower = 1.0f;
+
+	material = mat_default;
+}
+
 void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 {
 	// Load mesh using Assimp
@@ -108,11 +120,7 @@ void Model::Draw(Graphics* gfx)
 		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 
 		// Cyan plastic
-		pMatBuffer->data.mat.Emissive = { 0.0f, 0.0f, 0.0f, 0.0f };
-		pMatBuffer->data.mat.ambient = { 0.0f, 0.1f, 0.06f, 1.0f };
-		pMatBuffer->data.mat.Diffuse = { 0.0f, 0.50980392f, 0.50980392f, 1.0f };
-		pMatBuffer->data.mat.Specular = { 1.0f, 1.0f, 1.0f, 1.0f };
-		pMatBuffer->data.mat.SpecularPower = 32;
+		pMatBuffer->data.mat = material;
 		pMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
 
@@ -126,4 +134,14 @@ void Model::Draw(Graphics* gfx)
 		// Draw
 		gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
 	}
+}
+
+void Model::SetMaterial(Material mat)
+{
+	material = mat;
+}
+
+Material Model::GetMaterial() const
+{
+	return material;
 }
