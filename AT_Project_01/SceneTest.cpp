@@ -62,32 +62,32 @@ void SceneTest::onCreate(SceneData& sceneData)
 
 	ModelLoader loader("Assets\\Model\\cube_proj.obj");
 
-	for (int i = 0; i < amount; i++)
-	{
-		std::unique_ptr temp = std::make_unique<Model>();
-		//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
-		temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
-		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
-		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
+	//for (int i = 0; i < amount; i++)
+	//{
+	//	std::unique_ptr temp = std::make_unique<Model>();
+	//	//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+	//	temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
+	//	temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+	//	temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
 
-		cube.push_back(std::move(temp));
-		cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
-		cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
+	//	cube.push_back(std::move(temp));
+	//	cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+	//	cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 
-		positionX += distance;
+	//	positionX += distance;
 
-		if (positionX >= (distance * width))
-		{
-			positionX = 0.0f;
-			positionY += distance;
+	//	if (positionX >= (distance * width))
+	//	{
+	//		positionX = 0.0f;
+	//		positionY += distance;
 
-			if (positionY >= (distance * height))
-			{
-				positionY = 0.0f;
-				positionZ += distance;
-			}
-		}
-	}
+	//		if (positionY >= (distance * height))
+	//		{
+	//			positionY = 0.0f;
+	//			positionZ += distance;
+	//		}
+	//	}
+	//}
 }
 
 void SceneTest::OnDestroy()
@@ -216,11 +216,11 @@ void SceneTest::Update(double dt)
 	single_cube.transform.SetPosition(-15.0f, -15.0f, 0.0f);
 	single_cube.Update(dt);
 
-	for (auto& cubes : cube)
-	{
-		cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
-		cubes->Update(dt);
-	}
+	//for (auto& cubes : cube)
+	//{
+	//	cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
+	//	cubes->Update(dt);
+	//}
 }
 
 void SceneTest::Draw(SceneData& sceneData)
@@ -245,8 +245,8 @@ void SceneTest::Draw(SceneData& sceneData)
 	pyramid.Draw(sceneData.gfx);
 	single_cube.Draw(sceneData.gfx);
 
-	for (auto& cubes : cube)
-	{
-		cubes->Draw(sceneData.gfx);
-	}
+	//for (auto& cubes : cube)
+	//{
+	//	cubes->Draw(sceneData.gfx);
+	//}
 }

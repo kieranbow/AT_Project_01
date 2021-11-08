@@ -5,7 +5,7 @@
 #include "PSShader.h"
 #include "TransformComponent.h"
 #include "Texture.h"
-
+#include "Material.h"
 #include <string>
 
 class ModelLoader;
@@ -45,6 +45,7 @@ class Model
 
 		std::unique_ptr<ConstantBuffer<PerObject>> pObjectBuffer = std::make_unique<ConstantBuffer<PerObject>>();
 		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
+		std::unique_ptr<ConstantBuffer<MaterialProperties>> pMatBuffer = std::make_unique<ConstantBuffer<MaterialProperties>>();
 
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();

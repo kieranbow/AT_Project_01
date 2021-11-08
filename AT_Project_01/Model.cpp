@@ -2,6 +2,7 @@
 #include "Model_loader.h"
 #include "Graphics.h"
 
+
 void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 {
 	// Load mesh using Assimp
@@ -19,6 +20,7 @@ void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 	// Create static constant buffers
 	pObjectBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -38,6 +40,7 @@ void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<
 	// Create static constant buffers for perObject and perFrame
 	pObjectBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -97,11 +100,21 @@ void Model::Draw(Graphics* gfx)
 		pObjectBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pObjectBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
 
+		// 1.0f, 0.5f, 0.25f
 		pFrameBuffer->data.light.direction = { 0.25f, 0.5f, -1.0f };
 		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
-		pFrameBuffer->data.light.diffuse = { 1.0f, 0.5f, 0.25f, 0.0f };
+		pFrameBuffer->data.light.diffuse = { 1.0f, 1.0f, 1.0f, 0.0f };
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
+
+		// Cyan plastic
+		pMatBuffer->data.mat.Emissive = { 0.0f, 0.0f, 0.0f, 0.0f };
+		pMatBuffer->data.mat.ambient = { 0.0f, 0.1f, 0.06f, 1.0f };
+		pMatBuffer->data.mat.Diffuse = { 0.0f, 0.50980392f, 0.50980392f, 1.0f };
+		pMatBuffer->data.mat.Specular = { 1.0f, 1.0f, 1.0f, 1.0f };
+		pMatBuffer->data.mat.SpecularPower = 32;
+		pMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
+		pMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
 
 		// Set textures
 		textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);
