@@ -12,11 +12,11 @@ void SceneManager::Input(SceneData& sceneData)
 	}
 }
 
-void SceneManager::Update(double dt)
+void SceneManager::Update(SceneData& sceneData)
 {
 	if (currentScene->isActive)
 	{
-		currentScene->Update(dt);
+		currentScene->Update(sceneData);
 	}
 }
 

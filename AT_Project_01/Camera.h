@@ -8,8 +8,8 @@ struct Direction
 {
 	XMVECTOR v_forward	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR v_backward	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR v_left			= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR v_right		= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR v_left		= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	XMVECTOR v_right	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 };
 
 class Camera
@@ -18,9 +18,6 @@ class Camera
 		Camera();
 		Camera(float _width, float _height, float _fov, float _nearZ, float _farZ, bool _enableOrthoView);
 		~Camera() = default;
-
-		Camera(const Camera&) = delete;
-		Camera& operator=(const Camera&) = delete;
 
 		void SetPosition(XMVECTOR position);
 		void SetRotation(XMVECTOR rotation);
@@ -44,7 +41,7 @@ class Camera
 	private:
 		// Camera Propertices
 		float width			= 800.0f;
-		float height			= 600.0f;
+		float height		= 600.0f;
 		float fovDeg		= 90.0f;
 		float fovRad		= 0.0f;
 		float aspectRatio	= 0.0f;
@@ -67,8 +64,8 @@ class Camera
 
 		// Default movement Vectors
 		const XMVECTOR v_defForward		= XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-		const XMVECTOR v_defUp				= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		const XMVECTOR v_defUp			= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		const XMVECTOR v_defBackward	= XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
-		const XMVECTOR v_defLeft			= XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);
-		const XMVECTOR v_defRight			= XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		const XMVECTOR v_defLeft		= XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);
+		const XMVECTOR v_defRight		= XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 };

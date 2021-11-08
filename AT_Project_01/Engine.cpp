@@ -199,7 +199,8 @@ void Engine::Input()
 
 void Engine::Update(double dt)
 {
-	sceneManager.Update(dt);
+	sceneData.dt = dt;
+	sceneManager.Update(sceneData);
 }
 
 void Engine::RenderFrame()

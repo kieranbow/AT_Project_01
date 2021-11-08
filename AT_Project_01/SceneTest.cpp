@@ -68,7 +68,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionY = 0;
 	float positionZ = 0;
 
-	ModelLoader loader("Assets\\Model\\cube_proj.obj");
+	//ModelLoader loader("Assets\\Model\\cube_proj.obj");
 
 	//for (int i = 0; i < amount; i++)
 	//{
@@ -195,9 +195,9 @@ void SceneTest::Input(SceneData& sceneData)
 
 }
 
-void SceneTest::Update(double dt)
+void SceneTest::Update(SceneData& sceneData)
 {
-	static_cast<float>(dt);
+	static_cast<float>(sceneData.dt);
 
 	rot += 0.05f;
 
@@ -206,24 +206,24 @@ void SceneTest::Update(double dt)
 		camera.SetLookAt({ 0.0f, 0.0f, 0.0f });
 	}
 
-	camera.Update(dt);
-	camera2.Update(dt);
+	camera.Update(sceneData.dt);
+	camera2.Update(sceneData.dt);
 
 	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
-	spaceMarineHelmet.Update(dt);
+	spaceMarineHelmet.Update(sceneData.dt);
 
-	sphere.Update(dt);
+	sphere.Update(sceneData.dt);
 
 	//sky.transform.SetRotation(0.0f, 0.01f * rot, 0.0f);
-	sky.Update(dt);
+	sky.Update(sceneData.dt);
 
 	pyramid.transform.SetPosition(15.0f, 15.0f, 0.0f);
 	pyramid.transform.SetRotationAxis(0.5f * rot);
-	pyramid.Update(dt);
+	pyramid.Update(sceneData.dt);
 
 	single_cube.transform.SetRotation(0.0f, 0.0f, 0.5f * rot);
 	single_cube.transform.SetPosition(-15.0f, -15.0f, 0.0f);
-	single_cube.Update(dt);
+	single_cube.Update(sceneData.dt);
 
 	//for (auto& cubes : cube)
 	//{

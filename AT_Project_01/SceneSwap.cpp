@@ -69,7 +69,7 @@ void SceneSwap::Input(SceneData& sceneData)
 	}
 }
 
-void SceneSwap::Update(double dt)
+void SceneSwap::Update(SceneData& sceneData)
 {
 	float rot = 0.0f;
 	
@@ -80,7 +80,7 @@ void SceneSwap::Update(double dt)
 		rot = 0.0f;
 	}
 
-	camera.Update(dt);
+	camera.Update(sceneData.dt);
 }
 
 void SceneSwap::Draw(SceneData& sceneData)

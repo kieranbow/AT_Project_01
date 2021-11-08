@@ -18,7 +18,7 @@ class SceneTest : public Scene
 
 	// Base game scene functions
 	void Input(SceneData& sceneData) final;
-	void Update(double dt) final;
+	void Update(SceneData& sceneData) final;
 	void Draw(SceneData& sceneData) final;
 
 	private:

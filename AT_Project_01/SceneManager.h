@@ -30,7 +30,7 @@ class SceneManager
 
 		// Description
 		// Pass delta time to current scene.
-		void Update(double dt);
+		void Update(SceneData& sceneData);
 
 		// Description
 		// Pass data about graphics to current scene.

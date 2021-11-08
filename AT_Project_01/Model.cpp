@@ -126,10 +126,12 @@ void Model::Draw(Graphics* gfx)
 
 		if (isUsingTexture)
 		{
+			UINT textureBind = 0u;
 			for (auto& texture : textures)
 			{
 				// Set textures
-				texture.SetShaderResource(Bind::Texture::t0, 1u);
+				texture.SetShaderResource(textureBind, 1u);
+				textureBind++;
 			}
 			
 			//textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);

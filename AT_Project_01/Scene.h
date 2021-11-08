@@ -14,6 +14,7 @@ struct SceneData
 	Keyboard* keyboard;
 	Mouse* mouse;
 	Graphics* gfx;
+	float dt;
 };
 
 // Description
@@ -38,7 +39,7 @@ class Scene
 
 		// Base game scene functions
 		virtual void Input(SceneData& sceneData) {}
-		virtual void Update(double dt) {}
+		virtual void Update(SceneData& sceneData) {}
 		virtual void Draw(SceneData& sceneData) {}
 
 		bool isActive = false;

@@ -35,11 +35,11 @@ class Model
 		// All buffers, constants buffers and shaders are set and then drawn.
 		void Draw(Graphics* gfx);
 
-		TransformComponent transform;
-
 		void SetMaterial(Material mat);
-
 		Material GetMaterial() const;
+
+
+		TransformComponent transform;
 
 	private:
 		std::vector<Vertex> vertices;
