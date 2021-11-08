@@ -17,9 +17,8 @@ void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 	meshes.push_back(Mesh(pGfx, vertices, indices));
 
 	// Create static constant buffers
-	pWorldBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
-	//pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
-	pPixelBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pObjectBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -37,9 +36,8 @@ void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<
 	meshes.push_back(Mesh(pGfx, vertices, indices));
 
 	// Create static constant buffers for perObject and perFrame
-	pWorldBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
-	//pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
-	pPixelBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pObjectBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -93,26 +91,17 @@ void Model::Draw(Graphics* gfx)
 		mesh.Bind(gfx);
 
 		// Update world buffer and bind it to vertex shader
-		pWorldBuffer->data.m_world = transform.GetWorldMatrix();
-		pWorldBuffer->data.m_view = gfx->GetViewMatrix();
-		pWorldBuffer->data.m_projection = gfx->GetProjectionMatrix();
-		pWorldBuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pWorldBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
+		pObjectBuffer->data.m_world = transform.GetWorldMatrix();
+		pObjectBuffer->data.m_view = gfx->GetViewMatrix();
+		pObjectBuffer->data.m_projection = gfx->GetProjectionMatrix();
+		pObjectBuffer->UpdateSubResource(gfx->GetDeviceContext());
+		pObjectBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
 
-		// Update frame buffer and set bind it to vertex shader
-		//pFrameBuffer->data.m_view = gfx->GetViewMatrix();
-		//pFrameBuffer->data.m_projection = gfx->GetProjectionMatrix();
-		//pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
-		//pFrameBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1); //b1
-
-		// Update pixel buffer
-		pPixelBuffer->data.lightColor = {1.0f, 1.0f, 1.0f };
-		pPixelBuffer->data.lightStength = 0.1f;
-		pPixelBuffer->data.dynamicLightPosition = {0.0f, 0.0f, 0.0f};
-		pPixelBuffer->data.dynamicLightColor = {1.0f, 1.0f, 1.0f};
-		pPixelBuffer->data.dynamicLightStrength = 10.0f;
-		pPixelBuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pPixelBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
+		pFrameBuffer->data.light.direction = { 0.25f, 0.5f, -1.0f };
+		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
+		pFrameBuffer->data.light.diffuse = { 1.0f, 0.0f, 0.0f, 0.0f };
+		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
+		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 
 		// Set textures
 		textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);

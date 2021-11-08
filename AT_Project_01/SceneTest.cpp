@@ -46,6 +46,9 @@ void SceneTest::onCreate(SceneData& sceneData)
 	single_cube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
 	single_cube.LoadTextures(sceneData.gfx, "Assets\\Texture\\grass.png");
 
+	// https://docs.microsoft.com/en-us/windows/uwp/gaming/complete-code-for-ddstextureloader
+	// https://www.3dgep.com/texturing-lighting-directx-11/#Light_Properties-2
+
 	float width = 10.0f;
 	float height = 10.0f;
 
@@ -57,7 +60,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionY = 0;
 	float positionZ = 0;
 
-	//ModelLoader loader("Assets\\Model\\cube_proj.obj");
+	ModelLoader loader("Assets\\Model\\cube_proj.obj");
 
 	//for (int i = 0; i < amount; i++)
 	//{
@@ -65,7 +68,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	//	//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
 	//	temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
 	//	temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VertexShader.cso", L"..\\x64\\Debug\\PixelShader.cso", ied, ied_size);
-	//	temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
+	//	temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
 
 	//	cube.push_back(std::move(temp));
 	//	cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);

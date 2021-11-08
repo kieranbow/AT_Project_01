@@ -3,17 +3,18 @@ struct PS_INPUT // Same as vertex shader
     float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD;
     float3 normal : NORMAL;
-    float3 worldPosition : WORLD_POSITION;
 };
 
-cbuffer lightBuffer : register(b0)
+struct Light
 {
-    float3 ambientlightColor;
-    float ambientlightStength;
-    
-    float3 dynamicLightColor;
-    float dynamicLightStrenghth;
-    float dynamicLightPosition;
+    float3 direction;
+    float4 ambient;
+    float4 diffuse;
+};
+
+cbuffer frameBuffer : register(b0)
+{
+    Light light;
 }
 
 Texture2D frog : TEXTURE : register(t0);
@@ -29,20 +30,12 @@ float4 main(PS_INPUT input) : SV_TARGET
     //float4 blend = float4(input.normal.r, input.normal.g, input.normal.b, 1.0f);
     //float4 output = lerp(float4(0.0f, 0.0f, 0.0f, 1.0f), blend, mask);
     //float4 output = float4(input.normal, 1.0f);
+
+    input.normal = normalize(input.normal);
+    float4 finalColor = tex * light.ambient;
+    finalColor += saturate(dot(light.direction, input.normal) * light.diffuse * tex);
     
+    return finalColor;
     
-    float3 ambientLight = ambientlightColor * ambientlightStength;
-    
-    float3 lightVector = normalize(dynamicLightPosition - input.worldPosition);
-    
-    float3 NdotL = max(dot(lightVector, input.normal), 0);
-    
-    float3 diffuseLighting = NdotL * dynamicLightStrenghth * dynamicLightColor;
-    
-    ambientLight += diffuseLighting;
-    
-    float3 final = tex.rgb * saturate(ambientLight);
-    
-    
-    return float4(final, 1.0f);
+    //return float4(final, 1.0f);
 }

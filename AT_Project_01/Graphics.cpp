@@ -105,8 +105,8 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	// Create viewport
 	D3D11_VIEWPORT vp;
 	ZeroMemory(&vp, sizeof(vp));
-	vp.Width			= windowSize.first;
-	vp.Height		= windowSize.second;
+	vp.Width	= windowSize.first;
+	vp.Height	= windowSize.second;
 	vp.MinDepth	= 0;
 	vp.MaxDepth	= 1;
 	vp.TopLeftX	= 0;

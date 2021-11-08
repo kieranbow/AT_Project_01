@@ -9,11 +9,18 @@
 #include <memory>
 #include <vector>
 
+struct Light
+{
+	Light()
+	{
+		ZeroMemory(this, sizeof(Light));
+	}
+	DirectX::XMFLOAT3 direction;
+	float padding = 0;
+	DirectX::XMFLOAT4 ambient;
+	DirectX::XMFLOAT4 diffuse;
+};
 
-//struct VertexConstBuffer
-//{
-//	DirectX::XMMATRIX matrix;
-//};
 
 struct PerObject
 {
@@ -24,19 +31,7 @@ struct PerObject
 
 struct PerFrame
 {
-
-};
-
-struct PerPixel
-{
-	DirectX::XMFLOAT3 lightColor; //12
-	float lightStength; //4
-
-	DirectX::XMFLOAT3 dynamicLightColor;
-	float dynamicLightStrength;
-
-	DirectX::XMFLOAT3 dynamicLightPosition;
-	float padding;
+	Light light;
 };
 
 struct Bind

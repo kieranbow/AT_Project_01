@@ -43,9 +43,8 @@ class Model
 		std::vector<Mesh> meshes;
 		std::vector<Texture> textures;
 
-		std::unique_ptr<ConstantBuffer<PerObject>> pWorldBuffer = std::make_unique<ConstantBuffer<PerObject>>();
-		//std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
-		std::unique_ptr<ConstantBuffer<PerPixel>> pPixelBuffer = std::make_unique<ConstantBuffer<PerPixel>>();
+		std::unique_ptr<ConstantBuffer<PerObject>> pObjectBuffer = std::make_unique<ConstantBuffer<PerObject>>();
+		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
 
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();

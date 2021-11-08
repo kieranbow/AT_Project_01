@@ -5,19 +5,6 @@
 #include "Camera.h"
 #include "Model.h"
 
-struct Light
-{
-	Light()
-	{
-		ZeroMemory(this, sizeof(Light));
-	}
-	DirectX::XMFLOAT3 direction;
-	float padding = 0;
-	DirectX::XMFLOAT4 ambient;
-	DirectX::XMFLOAT4 diffuse;
-};
-
-
 class SceneTest : public Scene
 {
 	public:
