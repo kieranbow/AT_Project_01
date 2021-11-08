@@ -17,6 +17,26 @@ cbuffer frameBuffer : register(b0)
     Light light;
 }
 
+// Functions
+float Diffuse(Light light, float3 N)
+{
+    float NdotL = max(0, dot(N, light.direction));
+    return light.diffuse * NdotL;
+}
+
+float4 Specular(Light light, float3 V, float3 L, float3 N)
+{
+    // Phong lighting
+    float3 R = normalize(reflect(-L, N));
+    float RdotV = max(0, dot(R, V));
+    
+    // Blinn-phong lighting
+    float3 H = normalize(L + V);
+    float NdotH = max(0, dot(N, H));
+    
+    return light.diffuse * pow(RdotV, 0.5f);
+}
+
 Texture2D frog : TEXTURE : register(t0);
 SamplerState state : SAMPLER : register(s0);
 
@@ -32,8 +52,11 @@ float4 main(PS_INPUT input) : SV_TARGET
     //float4 output = float4(input.normal, 1.0f);
 
     input.normal = normalize(input.normal);
+    
     float4 finalColor = tex * light.ambient;
     finalColor += saturate(dot(light.direction, input.normal) * light.diffuse * tex);
+    
+    // finalColor = Diffuse(light, input.normal);
     
     return finalColor;
     
