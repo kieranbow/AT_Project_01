@@ -10,6 +10,7 @@ struct VS_OUTPUT
     float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD;
     float3 normal : NORMAL;
+    float3 worldPos : WORLD_POSITION;
 };
 
 cbuffer perObject : register(b0)
@@ -30,8 +31,13 @@ VS_OUTPUT main(VS_INPUT input)
     output.position = mul(view, output.position);
     output.position = mul(projection, output.position);
 
+    // Pass UVs
     output.texcoord = input.texcoord;
+    
+    // Calculate and normalize mesh normals for pixel shader
     output.normal = normalize(mul(float4(input.normal, 0.0f), world));
 
+    
+    output.worldPos = mul(world, input.position);
     return output;
 }

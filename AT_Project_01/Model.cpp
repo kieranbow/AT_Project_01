@@ -30,7 +30,7 @@ void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 	meshes.push_back(Mesh(pGfx, vertices, indices));
 
 	// Create static constant buffers
-	pObjectBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pWVPbuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
@@ -50,7 +50,7 @@ void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<
 	meshes.push_back(Mesh(pGfx, vertices, indices));
 
 	// Create static constant buffers for perObject and perFrame
-	pObjectBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	pWVPbuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 
@@ -106,21 +106,20 @@ void Model::Draw(Graphics* gfx)
 		// Bind Vertex and Index buffers to pipeline
 		mesh.Bind(gfx);
 
-		// Update world buffer and bind it to vertex shader
-		pObjectBuffer->data.m_world = transform.GetWorldMatrix();
-		pObjectBuffer->data.m_view = gfx->GetViewMatrix();
-		pObjectBuffer->data.m_projection = gfx->GetProjectionMatrix();
-		pObjectBuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pObjectBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
+		pWVPbuffer->data.m_world = transform.GetWorldMatrix();
+		pWVPbuffer->data.m_view = gfx->GetViewMatrix();
+		pWVPbuffer->data.m_projection = gfx->GetProjectionMatrix();
+		pWVPbuffer->UpdateSubResource(gfx->GetDeviceContext());
+		pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
 
-
-		pFrameBuffer->data.light.direction = { 0.25f, 0.5f, -1.0f };
+		// 0.25f, 0.5f, -1.0f
+		pFrameBuffer->data.light.direction = { 0.0f, 0.0f, -1.0f };
 		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
 		pFrameBuffer->data.light.diffuse = { 1.0f, 1.0f, 1.0f, 0.0f };
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 
-		// Cyan plastic
+
 		pMatBuffer->data.mat = material;
 		pMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);

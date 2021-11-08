@@ -11,7 +11,3 @@ struct Material
 	float padding[2];
 };
 
-struct MaterialProperties
-{
-	Material mat;
-};

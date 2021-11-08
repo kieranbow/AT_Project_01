@@ -9,31 +9,6 @@
 #include <memory>
 #include <vector>
 
-struct Light
-{
-	Light()
-	{
-		ZeroMemory(this, sizeof(Light));
-	}
-	DirectX::XMFLOAT3 direction;
-	float padding = 0;
-	DirectX::XMFLOAT4 ambient;
-	DirectX::XMFLOAT4 diffuse;
-};
-
-
-struct PerObject
-{
-	DirectX::XMMATRIX m_world; //16
-	DirectX::XMMATRIX m_view; //16
-	DirectX::XMMATRIX m_projection; //16
-};
-
-struct PerFrame
-{
-	Light light;
-};
-
 struct Bind
 {
 	struct Buffer

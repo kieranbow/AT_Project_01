@@ -209,6 +209,9 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantBufferTypes.h">
+      <Filter>Header Files\Graphics\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PS_unlit.hlsl">

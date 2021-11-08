@@ -1,6 +1,7 @@
 #pragma once
 #include "Mesh.h"
 #include "ConstantBuffer.h"
+#include "ConstantBufferTypes.h"
 #include "VSShader.h"
 #include "PSShader.h"
 #include "TransformComponent.h"
@@ -48,7 +49,7 @@ class Model
 		std::vector<Texture> textures;
 		Material material;
 
-		std::unique_ptr<ConstantBuffer<PerObject>> pObjectBuffer = std::make_unique<ConstantBuffer<PerObject>>();
+		std::unique_ptr<ConstantBuffer<WorldViewProj>> pWVPbuffer = std::make_unique<ConstantBuffer<WorldViewProj>>();
 		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
 		std::unique_ptr<ConstantBuffer<MaterialProperties>> pMatBuffer = std::make_unique<ConstantBuffer<MaterialProperties>>();
 

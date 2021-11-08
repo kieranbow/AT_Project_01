@@ -3,6 +3,7 @@ struct PS_INPUT // Same as vertex shader
     float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD;
     float3 normal : NORMAL;
+    float3 worldPos : WORLD_POSITION;
 };
 
 struct Material
@@ -63,7 +64,7 @@ LightResult DirectionalLight(Light light, float3 v, float3 n)
 {
     LightResult result;
     
-    float3 l = -light.direction.xyz;
+    float3 l = light.direction.xyz;
     
     result.Diffuse = Diffuse(light, l, n);
     result.Specular = Specular(light, v, l, n);
@@ -78,13 +79,13 @@ SamplerState state : SAMPLER : register(s0);
 float4 main(PS_INPUT input) : SV_TARGET
 {
     float4 tex = frog.Sample(state, input.texcoord);
-    input.normal = normalize(input.normal);
-    float4 texLight = tex * light.ambient;
-    // finalColor += saturate(dot(light.direction, input.normal) * light.diffuse * tex);
+    //input.normal = normalize(input.normal);
+    //float4 finalColor = tex * light.ambient;
+    //finalColor += saturate(dot(light.direction, input.normal) * light.diffuse * tex);
     //return finalColor;
     
     float3 L = -light.direction.xyz;
-    float3 V = normalize(input.normal - float3(0.0f, 0.0f, -1.0f));
+    float3 V = normalize(input.normal - input.worldPos);
     
     LightResult lit = DirectionalLight(light, V, input.normal);
     
