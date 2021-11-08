@@ -78,6 +78,7 @@ void Model::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_pat
 
 void Model::LoadTextures(Graphics* pGfx, std::string str_texture_file_path)
 {
+	isUsingTexture = true;
 	Texture texture(pGfx);
 
 	if(!texture.LoadAndCreateTexture(str_texture_file_path))
@@ -112,7 +113,7 @@ void Model::Draw(Graphics* gfx)
 		pObjectBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pObjectBuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
 
-		// 1.0f, 0.5f, 0.25f
+
 		pFrameBuffer->data.light.direction = { 0.25f, 0.5f, -1.0f };
 		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
 		pFrameBuffer->data.light.diffuse = { 1.0f, 1.0f, 1.0f, 0.0f };
@@ -124,8 +125,16 @@ void Model::Draw(Graphics* gfx)
 		pMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
 
-		// Set textures
-		textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);
+		if (isUsingTexture)
+		{
+			for (auto& texture : textures)
+			{
+				// Set textures
+				texture.SetShaderResource(Bind::Texture::t0, 1u);
+			}
+			
+			//textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);
+		}
 
 		// Set shaders
 		pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);

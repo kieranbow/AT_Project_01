@@ -55,4 +55,5 @@ class Model
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();
 
+		bool isUsingTexture = false;
 };
