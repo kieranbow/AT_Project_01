@@ -230,4 +230,9 @@
       <Filter>Header Files\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PBR.hlsli">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+  </ItemGroup>
 </Project>
