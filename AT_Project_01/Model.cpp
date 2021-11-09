@@ -10,7 +10,7 @@ Model::Model()
 	mat_default.Diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
 	mat_default.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
 	mat_default.Specular = { 0.5f, 0.5f, 0.5f, 1.0f };
-	mat_default.SpecularPower = 1.0f;
+	mat_default.SpecularPower = 10.0f;
 
 	material = mat_default;
 }
@@ -110,11 +110,10 @@ void Model::Draw(Graphics* gfx)
 		pWVPbuffer->data.m_view = DirectX::XMMatrixTranspose(gfx->GetViewMatrix());
 		pWVPbuffer->data.m_projection = DirectX::XMMatrixTranspose(gfx->GetProjectionMatrix());
 		pWVPbuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
+		pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 
 		// 0.25f, 0.5f, -1.0f
 		DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
-		
 		pFrameBuffer->data.light.direction = { 0.0f, 0.0f, 1.0f };
 		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
 		pFrameBuffer->data.light.diffuse = { 1.0f, 1.0f, 1.0f, 0.0f };
@@ -128,12 +127,12 @@ void Model::Draw(Graphics* gfx)
 
 		if (isUsingTexture)
 		{
-			UINT textureBind = 0u;
+			UINT startSlot = 0u;
 			for (auto& texture : textures)
 			{
 				// Set textures
-				texture.SetShaderResource(textureBind, 1u);
-				textureBind++;
+				texture.SetShaderResource(startSlot, 1u);
+				startSlot++;
 			}
 			
 			//textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);

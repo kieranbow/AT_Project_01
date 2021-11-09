@@ -33,6 +33,25 @@ Camera::Camera(float _width, float _height, float _fov, float _nearZ, float _far
 	}
 }
 
+void Camera::SetSize(std::pair<float, float> size)
+{
+	width = size.first;
+	height = size.second;
+
+	m_view = XMMatrixLookAtLH(v_eye, v_target, v_up);
+
+	if (enableOrthographic)
+	{
+		m_projection = XMMatrixOrthographicLH(width, height, nearZ, farZ);
+	}
+	else
+	{
+		aspectRatio = width / height;
+		fovRad = (fovDeg / 360.0f) * XM_2PI;
+		m_projection = XMMatrixPerspectiveFovLH(fovRad, aspectRatio, nearZ, farZ);
+	}
+}
+
 void Camera::SetPosition(XMVECTOR position)
 {
 	v_eye = position;
@@ -74,14 +93,14 @@ void Camera::SetLookAt(XMFLOAT3 position)
 	float pitch = 0.0f;
 	if (position.y != 0.0f)
 	{
-		const float distance = sqrt(position.x * position.x + position.z * position.z);
-		pitch = atan(position.y / distance);
+		const float distance = sqrtf(position.x * position.x + position.z * position.z);
+		pitch = atanf(position.y / distance);
 	}
 
 	float yaw = 0.0f;
 	if (position.x != 0.0f)
 	{
-		yaw = atan(position.x / position.z);
+		yaw = atanf(position.x / position.z);
 	}
 
 	if (position.z > 0)

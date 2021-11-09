@@ -20,6 +20,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
+	camera.SetSize(sceneData.gfx->GetWindowSize());
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
 	Material Red_plastic;
@@ -45,8 +46,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 
 	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
-	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
-	spaceMarineHelmet.SetMaterial(Emerald);
+	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
 	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
@@ -227,8 +227,6 @@ void SceneTest::Input(SceneData& sceneData)
 
 void SceneTest::Update(SceneData& sceneData)
 {
-	static_cast<float>(sceneData.dt);
-
 	rot += 0.05f;
 
 	if (lookat)
@@ -241,7 +239,7 @@ void SceneTest::Update(SceneData& sceneData)
 
 	sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
 
-	// spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
+	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
 	spaceMarineHelmet.Update(sceneData.dt);
 
 	sphere.Update(sceneData.dt);
@@ -259,7 +257,7 @@ void SceneTest::Update(SceneData& sceneData)
 
 	for (auto& cubes : cube)
 	{
-		cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
+		cubes->transform.SetRotation(0.14f * rot , 0.2f * rot , 1.0f * rot);
 		cubes->Update(sceneData.dt);
 	}
 }

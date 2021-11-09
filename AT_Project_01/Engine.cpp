@@ -199,7 +199,7 @@ void Engine::Input()
 
 void Engine::Update(double dt)
 {
-	sceneData.dt = dt;
+	sceneData.dt = static_cast<float>(dt);
 	sceneManager.Update(sceneData);
 }
 

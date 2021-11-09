@@ -19,6 +19,8 @@ class Camera
 		Camera(float _width, float _height, float _fov, float _nearZ, float _farZ, bool _enableOrthoView);
 		~Camera() = default;
 
+		void SetSize(std::pair<float, float>size);
+
 		void SetPosition(XMVECTOR position);
 		void SetRotation(XMVECTOR rotation);
 
