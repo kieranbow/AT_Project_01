@@ -209,7 +209,9 @@ void SceneTest::Update(SceneData& sceneData)
 	camera.Update(sceneData.dt);
 	camera2.Update(sceneData.dt);
 
-	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
+	sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
+
+	// spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
 	spaceMarineHelmet.Update(sceneData.dt);
 
 	sphere.Update(sceneData.dt);

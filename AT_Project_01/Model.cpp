@@ -113,7 +113,9 @@ void Model::Draw(Graphics* gfx)
 		pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
 
 		// 0.25f, 0.5f, -1.0f
-		pFrameBuffer->data.light.direction = { 0.0f, 0.0f, -1.0f };
+		DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
+		
+		pFrameBuffer->data.light.direction = { 0.0f, 0.0f, 1.0f };
 		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
 		pFrameBuffer->data.light.diffuse = { 1.0f, 1.0f, 1.0f, 0.0f };
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());

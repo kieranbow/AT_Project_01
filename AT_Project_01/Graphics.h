@@ -15,6 +15,8 @@
 
 // Set rasterizer inside draw RSSetState
 
+#include "Camera.h"
+
 class Graphics
 {
 	public:
@@ -37,6 +39,8 @@ class Graphics
 
 		DirectX::XMMATRIX GetViewMatrix() const;
 		DirectX::XMMATRIX GetProjectionMatrix() const;
+
+		Camera currentCamera;
 
 	private:
 		HRESULT hResult;

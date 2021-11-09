@@ -38,6 +38,11 @@ class Camera
 
 		Direction GetDirection() const;
 
+		XMVECTOR GetPosition()const
+		{
+			return v_eye;
+		}
+
 	private:
 		// Camera Propertices
 		float width			= 800.0f;

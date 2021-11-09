@@ -21,7 +21,7 @@ struct Light
 {
     float3 direction;
     float4 ambient;
-    float4 diffuse;
+    float4 color;
 };
 
 struct LightResult
@@ -33,6 +33,7 @@ struct LightResult
 cbuffer frameBuffer : register(b0)
 {
     Light light;
+    float4 eyePos;
 }
 
 cbuffer MaterialProperties : register(b1)
@@ -41,10 +42,10 @@ cbuffer MaterialProperties : register(b1)
 }
 
 // Functions
-float Diffuse(Light light, float3 l, float3 N)
+float Diffuse(Light light, float3 L, float3 N)
 {
-    float NdotL = saturate(dot(light.direction, N));
-    return light.diffuse * NdotL;
+    float NdotL = max(0, dot(N, L));
+    return light.color * NdotL;
 }
 
 float4 Specular(Light light, float3 V, float3 L, float3 N)
@@ -57,20 +58,39 @@ float4 Specular(Light light, float3 V, float3 L, float3 N)
     float3 H = normalize(L + V);
     float NdotH = max(0, dot(N, H));
     
-    return light.diffuse * pow(RdotV, mat.SpecularPower);
+    return light.color * pow(RdotV, mat.SpecularPower);
 }
 
-LightResult DirectionalLight(Light light, float3 v, float3 n)
+LightResult DirectionalLight(Light light, float3 V, float3 P, float3 N)
 {
     LightResult result;
     
-    float3 l = light.direction.xyz;
+    float3 L = -light.direction.xyz;
     
-    result.Diffuse = Diffuse(light, l, n);
-    result.Specular = Specular(light, v, l, n);
+    result.Diffuse = Diffuse(light, L, N);
+    result.Specular = Specular(light, V, L, N);
     
     return result;
 }
+
+LightResult ComputeLight(float3 P, float3 N)
+{
+    float3 V = normalize(eyePos.xyz - P).xyz;
+    
+    LightResult finalResult = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+    LightResult result = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+    
+    result = DirectionalLight(light, V, P, N);
+    
+    finalResult.Diffuse += result.Diffuse;
+    finalResult.Specular += result.Specular;
+    
+    finalResult.Diffuse = saturate(finalResult.Diffuse);
+    finalResult.Specular = saturate(result.Specular);
+    
+    return finalResult;
+}
+
 
 Texture2D frog : TEXTURE : register(t0);
 SamplerState state : SAMPLER : register(s0);
@@ -79,20 +99,23 @@ SamplerState state : SAMPLER : register(s0);
 float4 main(PS_INPUT input) : SV_TARGET
 {
     float4 tex = frog.Sample(state, input.texcoord);
-    //input.normal = normalize(input.normal);
+    input.normal = normalize(input.normal);
     //float4 finalColor = tex * light.ambient;
     //finalColor += saturate(dot(light.direction, input.normal) * light.diffuse * tex);
     //return finalColor;
     
-    float3 L = -light.direction.xyz;
-    float3 V = normalize(input.normal - input.worldPos);
+    float3 L = light.direction.xyz;
+    float3 V = normalize(eyePos.xyz - input.worldPos).xyz;
     
-    LightResult lit = DirectionalLight(light, V, input.normal);
+    LightResult lit = DirectionalLight(light, V, input.worldPos, input.normal);
+    
+    
+    //LightResult lit = ComputeLight(input.worldPos, input.normal);
     
     float4 emissive = mat.Emissive;
     float4 ambient = mat.ambient * light.ambient;
     float4 diffuse = mat.Diffuse * lit.Diffuse;
-    float4 Specular = mat.Specular * lit.Diffuse;
+    float4 Specular = mat.Specular * lit.Specular;
 
 
     float4 finalColor = (emissive + ambient + diffuse + Specular) * tex;

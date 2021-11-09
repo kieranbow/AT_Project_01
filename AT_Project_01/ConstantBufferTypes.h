@@ -14,6 +14,7 @@ struct WorldViewProj
 struct PerFrame
 {
 	Light light;
+	DirectX::XMFLOAT4 eyePos;
 };
 
 struct MaterialProperties
