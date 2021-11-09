@@ -106,9 +106,9 @@ void Model::Draw(Graphics* gfx)
 		// Bind Vertex and Index buffers to pipeline
 		mesh.Bind(gfx);
 
-		pWVPbuffer->data.m_world = transform.GetWorldMatrix();
-		pWVPbuffer->data.m_view = gfx->GetViewMatrix();
-		pWVPbuffer->data.m_projection = gfx->GetProjectionMatrix();
+		pWVPbuffer->data.m_world = DirectX::XMMatrixTranspose(transform.GetWorldMatrix());
+		pWVPbuffer->data.m_view = DirectX::XMMatrixTranspose(gfx->GetViewMatrix());
+		pWVPbuffer->data.m_projection = DirectX::XMMatrixTranspose(gfx->GetProjectionMatrix());
 		pWVPbuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u); //b0
 

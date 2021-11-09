@@ -104,13 +104,12 @@ float4 main(PS_INPUT input) : SV_TARGET
     //finalColor += saturate(dot(light.direction, input.normal) * light.diffuse * tex);
     //return finalColor;
     
-    float3 L = light.direction.xyz;
-    float3 V = normalize(eyePos.xyz - input.worldPos).xyz;
+    //float3 L = light.direction.xyz;
+    //float3 V = normalize(eyePos.xyz - input.worldPos).xyz;
+    //LightResult lit = DirectionalLight(light, V, input.worldPos, input.normal);
     
-    LightResult lit = DirectionalLight(light, V, input.worldPos, input.normal);
     
-    
-    //LightResult lit = ComputeLight(input.worldPos, input.normal);
+    LightResult lit = ComputeLight(input.worldPos, input.normal);
     
     float4 emissive = mat.Emissive;
     float4 ambient = mat.ambient * light.ambient;

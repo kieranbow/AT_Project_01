@@ -27,10 +27,14 @@ VS_OUTPUT main(VS_INPUT input)
     input.position.w = 1.0f;
     
     // World * View * Projection
-    output.position = mul(world, input.position);
-    output.position = mul(view, output.position);
-    output.position = mul(projection, output.position);
+   // output.position = mul(world, input.position);
+    //output.position = mul(view, output.position);
+    //output.position = mul(projection, output.position);
 
+    output.position = mul(input.position, world);
+    output.position = mul(output.position, view);
+    output.position = mul(output.position, projection);
+    
     // Pass UVs
     output.texcoord = input.texcoord;
     
@@ -38,6 +42,6 @@ VS_OUTPUT main(VS_INPUT input)
     output.normal = normalize(mul(float4(input.normal, 0.0f), world));
 
     
-    output.worldPos = mul(world, input.position);
+    output.worldPos = mul(input.position, world);
     return output;
 }

@@ -29,10 +29,24 @@ void SceneTest::onCreate(SceneData& sceneData)
 	Red_plastic.Specular = { 0.7f, 0.6f, 0.6f, 1.0f };
 	Red_plastic.SpecularPower = 32.0f;
 
+	Material Emerald;
+	Emerald.ambient = { 0.0215f, 0.1745f, 0.0215f, 1.0f };
+	Emerald.Diffuse = { 0.07568f, 0.61424f, 0.07568f, 1.0f };
+	Emerald.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
+	Emerald.Specular = { 0.633f, 0.727811f, 0.633f, 1.0f };
+	Emerald.SpecularPower = 76.8f;
+
+	Material Gold;
+	Gold.ambient = { 0.24725f, 0.1995f, 0.0745f, 1.0f };
+	Gold.Diffuse = { 0.75164f, 0.60648f, 0.22648f, 1.0f };
+	Gold.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
+	Gold.Specular = { 0.628281f, 0.555802f, 0.366065f, 1.0f };
+	Gold.SpecularPower = 51.2f;
+
 	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
-	spaceMarineHelmet.SetMaterial(Red_plastic);
+	spaceMarineHelmet.SetMaterial(Emerald);
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
 	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
@@ -68,34 +82,50 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionY = 0;
 	float positionZ = 0;
 
-	//ModelLoader loader("Assets\\Model\\cube_proj.obj");
+	// https://www.3dgep.com/texturing-lighting-directx-11/#Material_Properties
+	// https://learnopengl.com/PBR/Theory
+	// https://learnopengl.com/Advanced-Lighting/Normal-Mapping
+	// https://learnopengl.com/Advanced-OpenGL/Cubemaps
+	// http://www.codinglabs.net/article_physically_based_rendering_cook_torrance.aspx
 
-	//for (int i = 0; i < amount; i++)
-	//{
-	//	std::unique_ptr temp = std::make_unique<Model>();
-	//	//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
-	//	temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
-	//	temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
-	//	temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
 
-	//	cube.push_back(std::move(temp));
-	//	cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
-	//	cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
+	ModelLoader loader("Assets\\Model\\sphere.obj");
 
-	//	positionX += distance;
+	for (int i = 0; i < amount; i++)
+	{
+		std::unique_ptr temp = std::make_unique<Model>();
+		//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+		temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
+		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
 
-	//	if (positionX >= (distance * width))
-	//	{
-	//		positionX = 0.0f;
-	//		positionY += distance;
+		if (i & 5)
+		{
+			temp->SetMaterial(Emerald);
+		}
+		if (i & 10)
+		{
+			temp->SetMaterial(Gold);
+		}
 
-	//		if (positionY >= (distance * height))
-	//		{
-	//			positionY = 0.0f;
-	//			positionZ += distance;
-	//		}
-	//	}
-	//}
+		cube.push_back(std::move(temp));
+		cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
+		cube.at(i)->transform.SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
+
+		positionX += distance;
+
+		if (positionX >= (distance * width))
+		{
+			positionX = 0.0f;
+			positionY += distance;
+
+			if (positionY >= (distance * height))
+			{
+				positionY = 0.0f;
+				positionZ += distance;
+			}
+		}
+	}
 }
 
 void SceneTest::OnDestroy()
@@ -227,11 +257,11 @@ void SceneTest::Update(SceneData& sceneData)
 	single_cube.transform.SetPosition(-15.0f, -15.0f, 0.0f);
 	single_cube.Update(sceneData.dt);
 
-	//for (auto& cubes : cube)
-	//{
-	//	cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
-	//	cubes->Update(dt);
-	//}
+	for (auto& cubes : cube)
+	{
+		cubes->transform.SetRotation(0.14 * rot , 0.2f * rot , 1.0f * rot);
+		cubes->Update(sceneData.dt);
+	}
 }
 
 void SceneTest::Draw(SceneData& sceneData)
@@ -256,8 +286,8 @@ void SceneTest::Draw(SceneData& sceneData)
 	pyramid.Draw(sceneData.gfx);
 	single_cube.Draw(sceneData.gfx);
 
-	//for (auto& cubes : cube)
-	//{
-	//	cubes->Draw(sceneData.gfx);
-	//}
+	for (auto& cubes : cube)
+	{
+		cubes->Draw(sceneData.gfx);
+	}
 }
