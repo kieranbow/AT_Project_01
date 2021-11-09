@@ -59,14 +59,14 @@ void SceneTest::onCreate(SceneData& sceneData)
 	Gold.SpecularPower = 51.2f;
 
 	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", ied, ied_size);
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Normal.png");
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
 	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
 	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
 	sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
 	sphere.transform.SetPosition(0.0f, 25.0f, 0.0f);
 
@@ -76,11 +76,11 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
 
 	pyramid.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\pyramid.obj");
-	pyramid.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+	pyramid.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
 	pyramid.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
 
 	single_cube.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube.obj");
-	single_cube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+	single_cube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
 	single_cube.LoadTextures(sceneData.gfx, "Assets\\Texture\\grass.png");
 
 	// https://docs.microsoft.com/en-us/windows/uwp/gaming/complete-code-for-ddstextureloader
@@ -97,21 +97,14 @@ void SceneTest::onCreate(SceneData& sceneData)
 	float positionY = 0;
 	float positionZ = 0;
 
-	// https://www.3dgep.com/texturing-lighting-directx-11/#Material_Properties
-	// https://learnopengl.com/PBR/Theory
-	// https://learnopengl.com/Advanced-Lighting/Normal-Mapping
-	// https://learnopengl.com/Advanced-OpenGL/Cubemaps
-	// http://www.codinglabs.net/article_physically_based_rendering_cook_torrance.aspx
-
-
-	ModelLoader loader("Assets\\Model\\sphere.obj");
+	ModelLoader loader("Assets\\Model\\cube_proj.obj");
 
 	for (int i = 0; i < amount; i++)
 	{
 		std::unique_ptr temp = std::make_unique<Model>();
 		//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
 		temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
-		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Default.cso", ied, ied_size);
+		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
 		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
 
 		if (i & 5)

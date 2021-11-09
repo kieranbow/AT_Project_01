@@ -116,7 +116,7 @@ void Model::Draw(Graphics* gfx)
 		DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
 		pFrameBuffer->data.light.direction = { 0.0f, 0.0f, 1.0f };
 		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
-		pFrameBuffer->data.light.diffuse = { 1.0f, 1.0f, 1.0f, 0.0f };
+		pFrameBuffer->data.light.color = { 1.0f, 1.0f, 1.0f, 0.0f };
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 

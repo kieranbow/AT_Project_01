@@ -11,5 +11,5 @@ struct Light
 	DirectX::XMFLOAT3 direction;
 	float padding = 0;
 	DirectX::XMFLOAT4 ambient;
-	DirectX::XMFLOAT4 diffuse;
+	DirectX::XMFLOAT4 color;
 };

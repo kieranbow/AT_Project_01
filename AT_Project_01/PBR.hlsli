@@ -1,3 +1,9 @@
+// https://www.3dgep.com/texturing-lighting-directx-11/#Material_Properties
+// https://learnopengl.com/PBR/Theory
+// https://learnopengl.com/Advanced-Lighting/Normal-Mapping
+// https://learnopengl.com/Advanced-OpenGL/Cubemaps
+// http://www.codinglabs.net/article_physically_based_rendering_cook_torrance.aspx
+
 static float PI = 3.14159265359f;
 
 float chiGGX(float v)
