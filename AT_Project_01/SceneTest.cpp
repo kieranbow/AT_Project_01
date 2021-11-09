@@ -13,7 +13,6 @@ void SceneTest::onCreate(SceneData& sceneData)
 		{"NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
-
 	UINT ied_size = static_cast<UINT>(std::size(ied));
 
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
@@ -22,6 +21,21 @@ void SceneTest::onCreate(SceneData& sceneData)
 	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
 	camera.SetSize(sceneData.gfx->GetWindowSize());
 	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
+
+	std::shared_ptr<Camera> playerCamera = 
+		std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
+
+	std::shared_ptr<Camera> staticCamera =
+		std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
+
+	cameraManager.AddCamera(playerCamera);
+	cameraManager.AddCamera(staticCamera);
+
+
+
+
+
+
 
 	Material Red_plastic;
 	Red_plastic.ambient = { 0.0f, 0.0f, 0.0f, 1.0f };

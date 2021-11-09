@@ -2,6 +2,8 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
+#include "CameraManager.h"
+
 #include "Camera.h"
 #include "Model.h"
 
@@ -23,6 +25,7 @@ class SceneTest : public Scene
 
 	private:
 		SceneManager& currentSceneManager;
+		CameraManager cameraManager;
 
 		Light light;
 

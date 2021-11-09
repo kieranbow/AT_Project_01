@@ -57,6 +57,8 @@ class Camera
 		bool enableOrthographic = false;
 		bool enable			= false;
 
+		
+
 		Direction direction;
 
 		// Projection/View Matrix
