@@ -18,18 +18,26 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
 
-	camera.SetPosition({ 0.0f, 0.0f, -20.0f });
-	camera.SetSize(sceneData.gfx->GetWindowSize());
-	camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
+	//camera.SetPosition({ 0.0f, 0.0f, -20.0f });
+	//camera.SetSize(sceneData.gfx->GetWindowSize());
+	//camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
 
-	std::shared_ptr<Camera> playerCamera = 
-		std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
+	playerCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
+	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 
-	std::shared_ptr<Camera> staticCamera =
-		std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
+	playerCamera->SetPosition({ 0.0f, 0.0f, -30.0f });
+	staticCamera->SetPosition({ 10.0f, 10.0f, 10.0f });
 
-	cameraManager.AddCamera(playerCamera);
-	cameraManager.AddCamera(staticCamera);
+
+
+	cameraManager.AddCamera(playerCamera, 0);
+	cameraManager.AddCamera(staticCamera, 1);
+
+	cameraManager.ChangeCamera(0);
+
+
+	sceneData.gfx->SetViewMatrix(cameraManager.GetCurrentCameraViewMatrix());
+	sceneData.gfx->SetProjectionMatrix(cameraManager.GetCurrentCameraProjectionMatrix());
 
 	//std::string filePath[6];
 	//filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
@@ -200,48 +208,54 @@ void SceneTest::Input(SceneData& sceneData)
 
 	if (sceneData.keyboard->IsKeyPressed('W'))
 	{
-		camera.UpdatePosition(camera.GetDirection().v_forward * speed);
+		//camera.UpdatePosition(camera.GetDirection().v_forward * speed);
+		playerCamera->UpdatePosition(playerCamera->GetDirection().v_forward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('S'))
 	{
-		camera.UpdatePosition(camera.GetDirection().v_backward * speed);
+		//camera.UpdatePosition(camera.GetDirection().v_backward * speed);
+		playerCamera->UpdatePosition(playerCamera->GetDirection().v_backward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('A'))
 	{
-		camera.UpdatePosition(camera.GetDirection().v_left * speed);
+		//camera.UpdatePosition(camera.GetDirection().v_left * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('D'))
 	{
-		camera.UpdatePosition(camera.GetDirection().v_right * speed);
+		//camera.UpdatePosition(camera.GetDirection().v_right * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed(VK_SPACE))
 	{
-		camera.UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
+		//camera.UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
 	}
 	if (sceneData.keyboard->IsKeyPressed('Z'))
 	{
-		camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
+		//camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('Q'))
 	{
-		camera.UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
+		//camera.UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
 	}
 	if (sceneData.keyboard->IsKeyPressed('E'))
 	{
-		camera.UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
+		//camera.UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('R'))
 	{
-		camera2.EnableCamera(true);
-		camera.EnableCamera(false);
+		//camera2.EnableCamera(true);
+		//camera.EnableCamera(false);
+
+		cameraManager.ChangeCamera(1);
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('T'))
 	{
-		camera2.EnableCamera(false);
-		camera.EnableCamera(true);
+		//camera2.EnableCamera(false);
+		//camera.EnableCamera(true);
+
+		cameraManager.ChangeCamera(0);
 	}
 
 }
@@ -250,13 +264,17 @@ void SceneTest::Update(SceneData& sceneData)
 {
 	rot += 0.05f;
 
-	if (lookat)
-	{
-		camera.SetLookAt({ 0.0f, 0.0f, 0.0f });
-	}
+	//if (lookat)
+	//{
+	//	camera.SetLookAt({ 0.0f, 0.0f, 0.0f });
+	//}
 
-	camera.Update(sceneData.dt);
-	camera2.Update(sceneData.dt);
+	//camera.Update(sceneData.dt);
+	//camera2.Update(sceneData.dt);
+
+
+	cameraManager.Update(sceneData.dt);
+
 
 	sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
 
@@ -287,17 +305,20 @@ void SceneTest::Draw(SceneData& sceneData)
 {
 	sceneData.gfx->ClearBuffer(0.1f, 0.1f, 0.1f);
 
-	if (camera.IsActive())
-	{
-		sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
-		sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
-	}
+	//if (camera.IsActive())
+	//{
+	//	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
+	//	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
+	//}
 
-	if (camera2.IsActive())
-	{
-		sceneData.gfx->SetViewMatrix(camera2.GetViewMatrix());
-		sceneData.gfx->SetProjectionMatrix(camera2.GetProjectionMatrix());
-	}
+	//if (camera2.IsActive())
+	//{
+	//	sceneData.gfx->SetViewMatrix(camera2.GetViewMatrix());
+	//	sceneData.gfx->SetProjectionMatrix(camera2.GetProjectionMatrix());
+	//}
+
+	cameraManager.Draw(sceneData.gfx);
+
 
 	spaceMarineHelmet.Draw(sceneData.gfx);
 	//sphere.Draw(sceneData.gfx);

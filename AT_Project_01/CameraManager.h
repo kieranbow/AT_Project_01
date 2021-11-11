@@ -1,4 +1,5 @@
 #pragma once
+#include <DirectXMath.h>
 #include <unordered_map>
 #include "Camera.h"
 
@@ -15,7 +16,11 @@ class CameraManager
 		CameraManager(const CameraManager&) = delete;
 		CameraManager& operator=(const CameraManager&) = delete;
 
-		void AddCamera(const std::shared_ptr<Camera>& camera);
+		void AddCamera(const std::shared_ptr<Camera>& camera, camera_ID ID);
+		void ChangeCamera(camera_ID cameraID);
+
+		DirectX::XMMATRIX GetCurrentCameraViewMatrix() const;
+		DirectX::XMMATRIX GetCurrentCameraProjectionMatrix() const;
 
 		void Update(float dt);
 		void Draw(Graphics* pGfx);

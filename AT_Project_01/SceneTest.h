@@ -42,4 +42,8 @@ class SceneTest : public Scene
 		Model single_cube;
 		
 		std::vector< std::unique_ptr<Model>> cube;
+
+
+		std::shared_ptr<Camera> playerCamera;
+		std::shared_ptr<Camera> staticCamera;
 };
