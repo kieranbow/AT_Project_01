@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Components">
       <UniqueIdentifier>{5d5b9b7a-8c73-4bc5-853c-b0c11f3ef9c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{b38e020e-00f1-40c8-a111-c7d009850b81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameObjects">
+      <UniqueIdentifier>{841d5ece-02a9-43af-a4e1-9b79f3aec36b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -223,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="DDSTextureLoader11.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
