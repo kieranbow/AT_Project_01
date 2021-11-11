@@ -16,6 +16,7 @@
 // Scene
 #include "SceneManager.h"
 
+// Main class for the engine. All game logic including rendering, updating and inputs will be used heres
 class Engine
 {
 public:
@@ -32,11 +33,10 @@ public:
 
 private:
 	Window window;
-	std::unique_ptr<Keyboard> pKeyboard = std::make_unique<Keyboard>();
-	std::unique_ptr<Mouse> pMouse = std::make_unique<Mouse>();
+	SceneData sceneData;
 	SceneManager sceneManager;
 
-	SceneData sceneData;
-
+	std::unique_ptr<Keyboard> pKeyboard = std::make_unique<Keyboard>();
+	std::unique_ptr<Mouse> pMouse = std::make_unique<Mouse>();
 	std::unique_ptr<Graphics> pGraphics;
 };

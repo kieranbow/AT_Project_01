@@ -1,9 +1,7 @@
 #include "Mesh.h"
-
 #include "Graphics.h"
 #include "Model_loader.h"
 #include "ErrorChecker.h"
-
 
 Mesh::Mesh(Graphics* pGfx, std::vector<Vertex>& rVertices, std::vector<unsigned short>& rIndices)
 {

@@ -3,13 +3,15 @@
 
 Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 {
-	windowSize.first		= static_cast<float>(window_width);
+	// ----------------------------------------------------------------
+	// Window Size
+	windowSize.first	= static_cast<float>(window_width);
 	windowSize.second	= static_cast<float>(window_height);
 
+	// ----------------------------------------------------------------
 	// Create Swap Chain Description
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-
 	swapChainDesc.BufferDesc.Width	= 0;
 	swapChainDesc.BufferDesc.Height	= 0;
 	swapChainDesc.BufferDesc.Format	= DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -17,18 +19,14 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	swapChainDesc.BufferDesc.RefreshRate.Denominator	= 0;
 	swapChainDesc.BufferDesc.Scaling	= DXGI_MODE_SCALING_UNSPECIFIED;
 	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	
-	// Anti-aliasing
-	swapChainDesc.SampleDesc.Count	= 1;
+	swapChainDesc.SampleDesc.Count		= 1;	// Anti-aliasing
 	swapChainDesc.SampleDesc.Quality	= 0;
-
-	// Specify usage of buffer for outputting
-	swapChainDesc.BufferUsage		= DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount		= 1;
-	swapChainDesc.OutputWindow	= hwnd;
-	swapChainDesc.Windowed			= TRUE;
-	swapChainDesc.SwapEffect		= DXGI_SWAP_EFFECT_DISCARD;
-	swapChainDesc.Flags				= 0;
+	swapChainDesc.BufferUsage			= DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferCount			= 1;
+	swapChainDesc.OutputWindow			= hwnd;
+	swapChainDesc.Windowed				= TRUE;
+	swapChainDesc.SwapEffect			= DXGI_SWAP_EFFECT_DISCARD;
+	swapChainDesc.Flags					= 0;
 
 	// Create Device and swap chain 
 	hResult = D3D11CreateDeviceAndSwapChain(
@@ -47,33 +45,31 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	);
 	Logging::ThrowIf(hResult, "SwapChain Failed");
 
+	// ----------------------------------------------------------------
 	// Back Buffer
-	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
 	hResult = pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
 	Logging::ThrowIf(hResult, "Swap Chain failed to get buffer");
 
 	hResult = pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, &pRenderTargetView);
 	Logging::ThrowIf(hResult, "Device failed to create render target view");
 
+	// ----------------------------------------------------------------
 	// Depth buffer
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc = {};
-	depthStencilDesc.DepthEnable		= TRUE;
+	depthStencilDesc.DepthEnable	= TRUE;
 	depthStencilDesc.DepthWriteMask	= D3D11_DEPTH_WRITE_MASK_ALL;
-	depthStencilDesc.DepthFunc			= D3D11_COMPARISON_LESS;
+	depthStencilDesc.DepthFunc		= D3D11_COMPARISON_LESS;
 
-	// Create Depth State
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> pDSState;
-	hResult = pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState);
+	hResult = pDevice->CreateDepthStencilState(&depthStencilDesc, &pDSState); // Create Depth State
 	Logging::ThrowIf(hResult, "Device Failed to create Depth Stencil State");
+	
+	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u); // Bind Depth state
 
-	// Bind Depth state
-	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
-
+	// ----------------------------------------------------------------
 	// Depth Stencil
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC depthDesc = {};
 	depthDesc.Width		= static_cast<UINT>(windowSize.first);
-	depthDesc.Height		= static_cast<UINT>(windowSize.second);
+	depthDesc.Height	= static_cast<UINT>(windowSize.second);
 	depthDesc.MipLevels	= 1u; // Only use one mip level
 	depthDesc.ArraySize	= 1u;
 	depthDesc.Format	= DXGI_FORMAT_D32_FLOAT;
@@ -86,13 +82,14 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	Logging::ThrowIf(hResult, "Device Failed To Create Depth Texture");
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	descDSV.Format					= DXGI_FORMAT_D32_FLOAT;
-	descDSV.ViewDimension			= D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Format				= DXGI_FORMAT_D32_FLOAT;
+	descDSV.ViewDimension		= D3D11_DSV_DIMENSION_TEXTURE2D;
 	descDSV.Texture2D.MipSlice	= 0u;
 
 	pDevice->CreateDepthStencilView(pDepthStencil.Get(), &descDSV, &pDepthView);
 	Logging::ThrowIf(hResult, "Device Failed To Create Depth Stencil View");
 
+	// ----------------------------------------------------------------
 	// Rasterizer State
 	D3D11_RASTERIZER_DESC rasterizerDesc;
 	ZeroMemory(&rasterizerDesc, sizeof(D3D11_RASTERIZER_DESC));
@@ -102,7 +99,8 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	hResult = pDevice->CreateRasterizerState(&rasterizerDesc, &pRasterizerState);
 	Logging::ThrowIf(hResult, "Device failed to create rasterizer state");
 
-	// Create viewport
+	// ----------------------------------------------------------------
+	// Viewport
 	D3D11_VIEWPORT vp;
 	ZeroMemory(&vp, sizeof(vp));
 	vp.Width	= windowSize.first;
@@ -149,7 +147,7 @@ DirectX::XMMATRIX Graphics::GetProjectionMatrix() const
 	return m_projection;
 }
 
-void Graphics::EndFrame()
+void Graphics::Present()
 {
 	hResult = pSwapChain->Present(1u, 0u);
 	Logging::ThrowIf(hResult, "Swapchain failed to present");

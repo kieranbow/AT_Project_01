@@ -8,7 +8,7 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	// Render Window
 	window.Render(SW_SHOWDEFAULT);
 
-	// Pass window handler to graphics
+	// Pass window handler to graphics class
 	pGraphics = std::make_unique<Graphics>(window.GetWindowHandle(), width, height);
 
 	// Create scene Data struct
@@ -84,7 +84,6 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 
 		// ----------Mouse----------
-
 		case WM_MOUSEMOVE:
 		{
 			int x = LOWORD(lParam);
@@ -153,30 +152,6 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			return 0;
 		}
-
-		//case WM_INPUT:
-		//{
-			//UINT datasize;
-			//GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, NULL, &datasize, sizeof(RAWINPUTHEADER));
-			
-			//if (datasize > 0)
-			//{
-				//std::unique_ptr<BYTE[]> rawData = std::make_unique<BYTE[]>(datasize);
-				//if (GetRawInputData(
-					//reinterpret_cast<HRAWINPUT>(lParam), 
-					//RID_INPUT, rawData.get(), &datasize, sizeof(RAWINPUTHEADER)) == datasize)
-				//{
-					//RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(rawData.get());
-					//if (raw->header.dwType == RIM_TYPEMOUSE)
-					//{
-						//mouse.OnMouseMoveRaw(raw->data.mouse.lLastX, raw->data.mouse.lLastY);
-					//}
-				//}
-			//}
-			
-			//return DefWindowProc(hwnd, msg, wParam, lParam);
-		//}
-
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
@@ -205,7 +180,6 @@ void Engine::Update(double dt)
 
 void Engine::RenderFrame()
 {
-	pGraphics->ClearBuffer(1.0f, 0.5f, 0.0f);
 	sceneManager.Draw(sceneData);
-	pGraphics->EndFrame();
+	pGraphics->Present();
 }
