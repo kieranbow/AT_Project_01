@@ -32,10 +32,25 @@ void SceneTest::onCreate(SceneData& sceneData)
 	cameraManager.AddCamera(staticCamera);
 
 
+	//std::string filePath[6];
+	//filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
+	//filePath[1].append("Assets\\Texture\\cubemap\\ny.png");
+	//filePath[2].append("Assets\\Texture\\cubemap\\nz.png");
+	//filePath[3].append("Assets\\Texture\\cubemap\\px.png");
+	//filePath[4].append("Assets\\Texture\\cubemap\\py.png");
+	//filePath[5].append("Assets\\Texture\\cubemap\\pz.png");
 
+	//Texture cubeMap(sceneData.gfx);
+	//cubeMap.LoadAndCreateCubeMap(filePath);
+	//cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
+	//Texture cubeMap(sceneData.gfx);
+	//cubeMap.LoadAndCreateCubeMap("Assets\\Texture\\StandardCubeMap.png");
+	//cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
-
+	//Texture cubeMap(sceneData.gfx);
+	//cubeMap.LoadAndCreateTexture("Assets\\Texture\\StandardCubeMap.png");
+	//cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
 	Material Red_plastic;
 	Red_plastic.ambient = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -58,12 +73,12 @@ void SceneTest::onCreate(SceneData& sceneData)
 	Gold.Specular = { 0.628281f, 0.555802f, 0.366065f, 1.0f };
 	Gold.SpecularPower = 51.2f;
 
-	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", ied, ied_size);
-	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
-	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Normal.png");
-	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
-	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
+	//spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
+	//spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", ied, ied_size);
+	//spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
+	//spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Normal.png");
+	//spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
+	//spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
 	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
 	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
@@ -102,19 +117,18 @@ void SceneTest::onCreate(SceneData& sceneData)
 	for (int i = 0; i < amount; i++)
 	{
 		std::unique_ptr temp = std::make_unique<Model>();
-		//temp->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
 		temp->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
 		temp->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
-		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\1x1.png");
+		temp->LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
 
-		if (i & 5)
-		{
-			temp->SetMaterial(Emerald);
-		}
-		if (i & 10)
-		{
-			temp->SetMaterial(Gold);
-		}
+		//if (i & 5)
+		//{
+		//	temp->SetMaterial(Emerald);
+		//}
+		//if (i & 10)
+		//{
+		//	temp->SetMaterial(Gold);
+		//}
 
 		cube.push_back(std::move(temp));
 		cube.at(i)->transform.SetScale(5.0f, 5.0f, 5.0f);
@@ -247,8 +261,8 @@ void SceneTest::Update(SceneData& sceneData)
 
 	sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
 
-	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
-	spaceMarineHelmet.Update(sceneData.dt);
+	//spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
+	//spaceMarineHelmet.Update(sceneData.dt);
 
 	sphere.Update(sceneData.dt);
 
@@ -286,7 +300,7 @@ void SceneTest::Draw(SceneData& sceneData)
 		sceneData.gfx->SetProjectionMatrix(camera2.GetProjectionMatrix());
 	}
 
-	spaceMarineHelmet.Draw(sceneData.gfx);
+	//spaceMarineHelmet.Draw(sceneData.gfx);
 	sphere.Draw(sceneData.gfx);
 	sky.Draw(sceneData.gfx);
 	pyramid.Draw(sceneData.gfx);

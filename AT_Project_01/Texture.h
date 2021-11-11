@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <wrl\client.h>
 #include <string>
+#include "DDSTextureLoader11.h"
 
 class Graphics;
 
@@ -12,6 +13,7 @@ class Texture
 		~Texture() = default;
 
 		bool LoadAndCreateTexture(std::string str_file_path);
+		bool LoadAndCreateCubeMap(std::string str_file_path[6]);
 		bool CreateSampleState(UINT startSlot, UINT numSamples);
 		void SetShaderResource(UINT startSlot, UINT numViews);
 

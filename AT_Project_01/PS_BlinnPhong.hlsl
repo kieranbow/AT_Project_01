@@ -43,7 +43,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     float3 normal = input.normal * normalMap.Sample(state, input.texcoord).rgb;
     normal = normalize(normal);
 
-    LightResult lit = ComputeLight(light, eyePos.xyz, input.worldPos, normal, mat.SpecularPower);
+    LightResult lit = ComputeLight(light, eyePos.xyz, input.worldPos, input.normal, mat.SpecularPower);
     
     float4 emissive = mat.Emissive;
     float4 ambient = mat.ambient * light.ambient;

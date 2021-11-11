@@ -61,6 +61,67 @@ bool Texture::LoadAndCreateTexture(std::string str_file_path)
 	return true;
 }
 
+bool Texture::LoadAndCreateCubeMap(std::string str_file_path[6])
+{
+	ID3D11Texture2D* sky;
+
+	D3D11_TEXTURE2D_DESC cubeDesc;
+	cubeDesc.Width = width;
+	cubeDesc.Height = height;
+	cubeDesc.MipLevels = 1;
+	cubeDesc.ArraySize = 6;
+	cubeDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	cubeDesc.CPUAccessFlags = 0;
+	cubeDesc.SampleDesc.Count = 1;
+	cubeDesc.SampleDesc.Quality = 0;
+	cubeDesc.Usage = D3D11_USAGE_DEFAULT;
+	cubeDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	cubeDesc.CPUAccessFlags = 0;
+	cubeDesc.MiscFlags = D3D11_RESOURCE_MISC_TEXTURECUBE;
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC SMViewDesc;
+	SMViewDesc.Format = cubeDesc.Format;
+	SMViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURECUBE;
+	SMViewDesc.TextureCube.MipLevels = -1;
+	SMViewDesc.TextureCube.MostDetailedMip = 0;
+
+	// CreateDDSTextureFromFileEx(l_gfx->GetDevice(), &str_file_path[0], 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, D3D11_RESOURCE_MISC_TEXTURECUBE, false, (ID3D11Resource**)sky, nullptr);
+
+	D3D11_SUBRESOURCE_DATA pData[6];
+	stbi_uc* data;
+
+	for (int i = 0; i < 6; i++)
+	{
+		data = stbi_load(str_file_path[i].c_str(), &width, &height, &num_channel, 0);
+
+		if (stbi_failure_reason())
+		{
+			Logging::LogError("stbi_load failed to find texture");
+			return false;
+		}
+
+		pData[i].pSysMem = data;
+		pData[i].SysMemPitch = width * 4;
+		pData[i].SysMemSlicePitch = 0;
+	}
+
+	hr = l_gfx->GetDevice()->CreateTexture2D(&cubeDesc, &pData[0], &pTexture);
+	if (FAILED(hr))
+	{
+		Logging::ThrowIf(hr, "Failed to Create Texture2D cubemap");
+		return false;
+	}
+
+	hr = l_gfx->GetDevice()->CreateShaderResourceView(pTexture.Get(), &SMViewDesc, &pShaderResourceView);
+	if (FAILED(hr))
+	{
+		Logging::ThrowIf(hr, "Failed to Create Shader Resource View for cubemap");
+		return false;
+	}
+
+	return true;
+}
+
 bool Texture::CreateSampleState(UINT startSlot, UINT numSamples)
 {
 	D3D11_SAMPLER_DESC sampleDesc = {};

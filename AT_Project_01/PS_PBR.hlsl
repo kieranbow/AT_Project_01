@@ -47,6 +47,10 @@ Texture2D albedoMap : TEXTURE : register(t0);
 Texture2D normalMap : TEXTURE : register(t1);
 SamplerState state : SAMPLER : register(s0);
 
+TextureCube skyIR : register(t2);
+TextureCube skyPrefilter : register(t3);
+Texture2D BDRFlut : register(t4);
+
 // Main Entry Point for Pixel Shader
 float4 main(PS_INPUT input) : SV_TARGET
 {
@@ -56,7 +60,6 @@ float4 main(PS_INPUT input) : SV_TARGET
     float ior = albedo.r + 1.0f; //0.04f
     float metallic = 0.0f;
     float roughness = 0.1f;
-    float3 specular = 0.0f;
     float3 normalV = input.normal;
     
 
@@ -73,9 +76,7 @@ float4 main(PS_INPUT input) : SV_TARGET
     float3 lo = float3(0.0f, 0.0f, 0.0f);
     float3 lightPos = float3(0.0f, 0.0f, 0.0f);    
     
-    for (int i = 0; i < 1; i++)
-    {
-        float3 lightDir = -light.direction;
+        float3 lightDir = normalize(-light.direction);
         float3 halfV = normalize(viewDir + lightDir);
         float distance = length(lightPos - input.worldPos);
         float attenuation = 1.0f / (distance * distance);
@@ -93,27 +94,29 @@ float4 main(PS_INPUT input) : SV_TARGET
         
         float3 numerator = D * G * F;
         float denominator = 4.0f * max(dot(normalV, viewDir), 0.0f) * max(dot(normalV, viewDir), 0.0f);
-        specular = numerator / max(denominator, 0.001f);
+        float3 specular = numerator / max(denominator, 0.001f);
 
         // Out going radiance
         float NdotL = max(dot(normalV, lightDir), 0.0f);
-        rad = (((KD * albedo.rgb / PI) + specular) * radiance * NdotL);
+        lo = (((KD * albedo.rgb / PI) + specular) * radiance * NdotL);
         lo += rad;
-    }
     
-    float3 KS = FresnelSchlickRoughness(max(dot(normalV, viewDir), 0.0f), F0, roughness);
-    float3 KD = 1.0f - KS;
-    KD *= 1.0f - metallic;
+    //float3 KS = FresnelSchlickRoughness(max(dot(normalV, viewDir), 0.0f), F0, roughness);
+    //float3 KD = float3(1.0f, 1.0f, 1.0f) - KS;
+    //KD *= 1.0f - metallic;
     
-    //float3 irradiance = float3(0.2f, 0.2f, 0.2f);
+    //float3 irradiance = skyIR.Sample(state, normalV).rgb;
     //float3 diffuse = albedo.rgb * irradiance;
 
-
-    float3 ambient = KD * albedo.rgb + specular;
+   // float3 preFilteredColor = skyPrefilter.SampleLevel(state, reflecVector, roughness * 4.0f).rgb;
+   // float2 brdf = BDRFlut.Sample(state, float2(max(dot(normalV, viewDir), 0.0f), roughness)).rg;
+    //float3 specular = preFilteredColor * (KS * brdf.x + brdf.y);
+    
+    float3 ambient = (KD * albedo.rgb + 0.5f) + 1.0f;
     float3 color = ambient + lo;
 
     color = color / (color + float3(1.0f, 1.0f, 1.0f));
     color = pow(color, float3(1.0f / 2.2f, 1.0f / 2.2f, 1.0f / 2.2f));
 
-    return float4(color, 1.0f);
+    return float4(numerator, 1.0f);
 }
