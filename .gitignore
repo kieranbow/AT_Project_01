@@ -348,25 +348,13 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-/AT_Project_01/Assets/Model/cube.mtl
-/AT_Project_01/Assets/Model/pyramid.mtl
-/AT_Project_01/Assets/Model/sphere.mtl
-/AT_Project_01/Assets/Model/cube_proj.mtl
-/AT_Project_01/Assets/Texture/Helmet_V3_Albedo.png
-/AT_Project_01/Assets/Model/inner_sphere.mtl
-/AT_Project_01/Assets/Texture/1x1.png
-/AT_Project_01/Assets/Texture/sunset_in_the_chalk_quarry_1k.png
-/AT_Project_01/Assets/Texture/syferfontein_0d_clear_1k.png
-/AT_Project_01/Assets/Texture/normal_map.png
-/AT_Project_01/Assets/Texture/Helmet_V3_Normal.png
-/AT_Project_01/Assets/Texture/StandardCubeMap.png
-/AT_Project_01/Assets/Texture/photo_rock_albedo.png
-/AT_Project_01/Assets/Texture/Cubemap/pz.png
-/AT_Project_01/Assets/Texture/Cubemap/py.png
-/AT_Project_01/Assets/Texture/Cubemap/px.png
-/AT_Project_01/Assets/Texture/Cubemap/nz.png
-/AT_Project_01/Assets/Texture/Cubemap/ny.png
-/AT_Project_01/Assets/Texture/Cubemap/nx.png
-/AT_Project_01/Assets/Texture/Cubemap
-/AT_Project_01/Assets/Texture
-/AT_Project_01/Assets/Model/rock.mtl
+
+# Project assets
+*.png
+*.jpeg
+*.jpg
+*.tga
+*.dds
+*.mtl
+*.obj
+*.fbx
