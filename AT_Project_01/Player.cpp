@@ -51,13 +51,13 @@ void Player::Update(float dt)
 	float cam_x = camera->GetPosition().m128_f32[0];
 	float cam_y = camera->GetPosition().m128_f32[1];
 	float cam_z = camera->GetPosition().m128_f32[2];
-	float cam_rot_x = camera->GetDirection().v_forward.m128_f32[0];
-	float cam_rot_y = camera->GetDirection().v_forward.m128_f32[1];
-	float cam_rot_z = camera->GetDirection().v_forward.m128_f32[2];
+	float cam_rot_x = camera->GetRotation().m128_f32[0];
+	float cam_rot_y = camera->GetRotation().m128_f32[1];
+	float cam_rot_z = camera->GetRotation().m128_f32[2];
 
 
 	model.transform.SetPosition(cam_x, cam_y, cam_z);
-	// model.transform.SetRotation(0.0f, cam_rot_y, 0.0f);
+	model.transform.SetRotation(0.0f, cam_rot_y + 1.55f, 0.0f);
 	model.Update(dt);
 }
 

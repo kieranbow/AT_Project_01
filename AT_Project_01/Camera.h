@@ -45,6 +45,8 @@ class Camera
 			return v_eye;
 		}
 
+		XMVECTOR GetRotation() const;
+
 	private:
 		// Camera Propertices
 		float width			= 800.0f;

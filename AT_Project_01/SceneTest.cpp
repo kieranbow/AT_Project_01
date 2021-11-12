@@ -246,7 +246,7 @@ void SceneTest::Draw(SceneData& sceneData)
 
 	spaceMarineHelmet.Draw(sceneData.gfx);
 	sphere.Draw(sceneData.gfx);
-	//sky.Draw(sceneData.gfx);
+	sky.Draw(sceneData.gfx);
 	//pyramid.Draw(sceneData.gfx);
 	//single_cube.Draw(sceneData.gfx);
 

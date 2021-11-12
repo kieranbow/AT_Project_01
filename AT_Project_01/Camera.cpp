@@ -156,3 +156,8 @@ Direction Camera::GetDirection() const
 {
 	return direction;
 }
+
+XMVECTOR Camera::GetRotation() const
+{
+	return v_rotation;
+}

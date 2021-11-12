@@ -107,16 +107,22 @@ float4 main(PS_INPUT input) : SV_TARGET
     
     //float3 irradiance = skyIR.Sample(state, normalV).rgb;
     //float3 diffuse = albedo.rgb * irradiance;
+    
+    float3 irradiance = light.color.rgb;
+    float3 diffuse = albedo.rgb * irradiance;
 
    // float3 preFilteredColor = skyPrefilter.SampleLevel(state, reflecVector, roughness * 4.0f).rgb;
    // float2 brdf = BDRFlut.Sample(state, float2(max(dot(normalV, viewDir), 0.0f), roughness)).rg;
     //float3 specular = preFilteredColor * (KS * brdf.x + brdf.y);
     
-    float3 ambient = (KD * albedo.rgb + 0.5f) + 1.0f;
+    float2 brdf = input.texcoord.xy * float2(max(dot(normalV, viewDir), 0.0f), roughness);
+    specular = float3(0.5f, 0.5f, 0.5f) * (KS * brdf.x + brdf.y);
+    
+    float3 ambient = (KD * diffuse + specular) + 0.0f;
     float3 color = ambient + lo;
 
     color = color / (color + float3(1.0f, 1.0f, 1.0f));
     color = pow(color, float3(1.0f / 2.2f, 1.0f / 2.2f, 1.0f / 2.2f));
 
-    return float4(numerator, 1.0f);
+    return float4(color, 1.0f);
 }
