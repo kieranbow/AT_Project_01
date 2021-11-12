@@ -39,6 +39,15 @@ DirectX::XMMATRIX CameraManager::GetCurrentCameraProjectionMatrix() const
 	return DirectX::XMMATRIX();
 }
 
+std::shared_ptr<Camera> CameraManager::GetCurrentCamera() const
+{
+	if (currentCamera->IsActive())
+	{
+		return currentCamera;
+	}
+	return std::shared_ptr<Camera>();
+}
+
 void CameraManager::Update(float dt)
 {
 	if (currentCamera->IsActive())

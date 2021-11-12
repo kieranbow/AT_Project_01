@@ -15,29 +15,23 @@ void SceneTest::onCreate(SceneData& sceneData)
 	};
 	UINT ied_size = static_cast<UINT>(std::size(ied));
 
-	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
-	sceneData.gfx->SetProjectionMatrix(camera.GetViewMatrix());
-
-	//camera.SetPosition({ 0.0f, 0.0f, -20.0f });
-	//camera.SetSize(sceneData.gfx->GetWindowSize());
-	//camera2.SetPosition({ 10.0f, -20.0f, -20.0f });
-
+	//---------------------------------------------
+	// Cameras
 	playerCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 
 	playerCamera->SetPosition({ 0.0f, 0.0f, -30.0f });
-	staticCamera->SetPosition({ 10.0f, 10.0f, 10.0f });
+	staticCamera->SetPosition({ 0.0f, 0.0f, 30.0f });
+	staticCamera->SetRotation({ 0.0f, 110.0f, 0.0f });
 
-
-
-	cameraManager.AddCamera(playerCamera, 0);
-	cameraManager.AddCamera(staticCamera, 1);
-
-	cameraManager.ChangeCamera(0);
-
+	cameraManager.AddCamera(playerCamera, CamID::player_cam);
+	cameraManager.AddCamera(staticCamera, CamID::static_cam);
+	cameraManager.ChangeCamera(CamID::player_cam);
 
 	sceneData.gfx->SetViewMatrix(cameraManager.GetCurrentCameraViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(cameraManager.GetCurrentCameraProjectionMatrix());
+
+
 
 	//std::string filePath[6];
 	//filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
@@ -87,15 +81,15 @@ void SceneTest::onCreate(SceneData& sceneData)
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
 	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
-	//sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-	//sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
-	//sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
-	//sphere.transform.SetPosition(0.0f, 25.0f, 0.0f);
+	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
+	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
+	sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
+	sphere.transform.SetPosition(0.0f, 25.0f, 0.0f);
 
-	//sky.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
-	//sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", ied, ied_size);
-	//sky.LoadTextures(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
-	//sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
+	sky.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
+	sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", ied, ied_size);
+	sky.LoadTextures(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
+	sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
 
 	//pyramid.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\pyramid.obj");
 	//pyramid.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
@@ -164,7 +158,6 @@ void SceneTest::OnDestroy()
 void SceneTest::OnActivate()
 {
 	isActive = true;
-	camera.EnableCamera(true);
 }
 
 void SceneTest::OnDeactivate()
@@ -197,65 +190,51 @@ void SceneTest::Input(SceneData& sceneData)
 			float newTargetX = static_cast<float>(event.GetPosX());
 			float newTargetY = static_cast<float>(event.GetPosY());
 
-			camera.UpdateRotation({ newTargetX * speed, newTargetY * speed, 0.0f, 0.0f });
 		}
-	}
-
-	if (!sceneData.mouse->IsRightBtnDown())
-	{
-		
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('W'))
 	{
-		//camera.UpdatePosition(camera.GetDirection().v_forward * speed);
 		playerCamera->UpdatePosition(playerCamera->GetDirection().v_forward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('S'))
 	{
-		//camera.UpdatePosition(camera.GetDirection().v_backward * speed);
 		playerCamera->UpdatePosition(playerCamera->GetDirection().v_backward * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('A'))
 	{
-		//camera.UpdatePosition(camera.GetDirection().v_left * speed);
+		playerCamera->UpdatePosition(playerCamera->GetDirection().v_left * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed('D'))
 	{
-		//camera.UpdatePosition(camera.GetDirection().v_right * speed);
+		playerCamera->UpdatePosition(playerCamera->GetDirection().v_right * speed);
 	}
 	if (sceneData.keyboard->IsKeyPressed(VK_SPACE))
 	{
-		//camera.UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
+		playerCamera->UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
 	}
 	if (sceneData.keyboard->IsKeyPressed('Z'))
 	{
-		//camera.UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
+		playerCamera->UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('Q'))
 	{
-		//camera.UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
+		playerCamera->UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
 	}
 	if (sceneData.keyboard->IsKeyPressed('E'))
 	{
-		//camera.UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
+		playerCamera->UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('R'))
 	{
-		//camera2.EnableCamera(true);
-		//camera.EnableCamera(false);
-
-		cameraManager.ChangeCamera(1);
+		cameraManager.ChangeCamera(CamID::static_cam);
 	}
 
 	if (sceneData.keyboard->IsKeyPressed('T'))
 	{
-		//camera2.EnableCamera(false);
-		//camera.EnableCamera(true);
-
-		cameraManager.ChangeCamera(0);
+		cameraManager.ChangeCamera(CamID::player_cam);
 	}
 
 }
@@ -264,27 +243,27 @@ void SceneTest::Update(SceneData& sceneData)
 {
 	rot += 0.05f;
 
-	//if (lookat)
-	//{
-	//	camera.SetLookAt({ 0.0f, 0.0f, 0.0f });
-	//}
+	float x = playerCamera->GetPosition().m128_f32[0];
+	float y = playerCamera->GetPosition().m128_f32[1];
+	float z = playerCamera->GetPosition().m128_f32[2];
 
-	//camera.Update(sceneData.dt);
-	//camera2.Update(sceneData.dt);
+	
 
+	//sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
+	sceneData.gfx->currentCamera.SetPosition(cameraManager.GetCurrentCamera()->GetPosition());
 
 	cameraManager.Update(sceneData.dt);
 
 
-	sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
 
 	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
 	spaceMarineHelmet.Update(sceneData.dt);
-
-	//sphere.Update(sceneData.dt);
+	
+	sphere.transform.SetPosition(x, y, z);
+	sphere.Update(sceneData.dt);
 
 	////sky.transform.SetRotation(0.0f, 0.01f * rot, 0.0f);
-	//sky.Update(sceneData.dt);
+	sky.Update(sceneData.dt);
 
 	//pyramid.transform.SetPosition(15.0f, 15.0f, 0.0f);
 	//pyramid.transform.SetRotationAxis(0.5f * rot);
@@ -305,23 +284,11 @@ void SceneTest::Draw(SceneData& sceneData)
 {
 	sceneData.gfx->ClearBuffer(0.1f, 0.1f, 0.1f);
 
-	//if (camera.IsActive())
-	//{
-	//	sceneData.gfx->SetViewMatrix(camera.GetViewMatrix());
-	//	sceneData.gfx->SetProjectionMatrix(camera.GetProjectionMatrix());
-	//}
-
-	//if (camera2.IsActive())
-	//{
-	//	sceneData.gfx->SetViewMatrix(camera2.GetViewMatrix());
-	//	sceneData.gfx->SetProjectionMatrix(camera2.GetProjectionMatrix());
-	//}
-
 	cameraManager.Draw(sceneData.gfx);
 
 
 	spaceMarineHelmet.Draw(sceneData.gfx);
-	//sphere.Draw(sceneData.gfx);
+	sphere.Draw(sceneData.gfx);
 	//sky.Draw(sceneData.gfx);
 	//pyramid.Draw(sceneData.gfx);
 	//single_cube.Draw(sceneData.gfx);
