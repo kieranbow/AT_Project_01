@@ -7,35 +7,20 @@ SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneMana
 
 void SceneTest::onCreate(SceneData& sceneData)
 {
-	//D3D11_INPUT_ELEMENT_DESC ied[] =
-	//{
-	//	{"POSITION",0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	//	{"NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	//	{"TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	//};
-	//UINT ied_size = static_cast<UINT>(std::size(ied));
-
 	//---------------------------------------------
 	// Cameras
-	playerCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
-
 	pPlayer = std::make_unique<Player>(sceneData.gfx);
 
-	playerCamera->SetPosition({ 0.0f, 0.0f, -30.0f });
 	staticCamera->SetPosition({ 0.0f, 0.0f, 30.0f });
 	staticCamera->SetRotation({ 0.0f, 110.0f, 0.0f });
 
 	cameraManager.AddCamera(pPlayer->camera, CamID::player_cam);
-
-	// cameraManager.AddCamera(playerCamera, CamID::player_cam);
 	cameraManager.AddCamera(staticCamera, CamID::static_cam);
 	cameraManager.ChangeCamera(CamID::player_cam);
 
 	sceneData.gfx->SetViewMatrix(cameraManager.GetCurrentCameraViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(cameraManager.GetCurrentCameraProjectionMatrix());
-
-
 
 	//std::string filePath[6];
 	//filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
@@ -161,7 +146,7 @@ void SceneTest::OnDestroy()
 
 void SceneTest::OnActivate()
 {
-	isActive = true;
+	isSceneActive = true;
 }
 
 void SceneTest::OnDeactivate()
@@ -217,13 +202,9 @@ void SceneTest::Update(SceneData& sceneData)
 
 	pPlayer->Update(sceneData.dt);
 
-	//float x = playerCamera->GetPosition().m128_f32[0];
-	//float y = playerCamera->GetPosition().m128_f32[1];
-	//float z = playerCamera->GetPosition().m128_f32[2];
-
-	float x = pPlayer->camera->GetPosition().m128_f32[0];
-	float y = pPlayer->camera->GetPosition().m128_f32[1];
-	float z = pPlayer->camera->GetPosition().m128_f32[2];
+	//float x = pPlayer->camera->GetPosition().m128_f32[0];
+	//float y = pPlayer->camera->GetPosition().m128_f32[1];
+	//float z = pPlayer->camera->GetPosition().m128_f32[2];
 
 
 	sceneData.gfx->currentCamera.SetPosition(cameraManager.GetCurrentCamera()->GetPosition());
@@ -234,7 +215,7 @@ void SceneTest::Update(SceneData& sceneData)
 	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
 	spaceMarineHelmet.Update(sceneData.dt);
 	
-	sphere.transform.SetPosition(x, y, z);
+	//sphere.transform.SetPosition(x, y, z);
 	sphere.Update(sceneData.dt);
 
 	////sky.transform.SetRotation(0.0f, 0.01f * rot, 0.0f);
@@ -261,6 +242,7 @@ void SceneTest::Draw(SceneData& sceneData)
 
 	cameraManager.Draw(sceneData.gfx);
 
+	pPlayer->Draw(sceneData.gfx);
 
 	spaceMarineHelmet.Draw(sceneData.gfx);
 	sphere.Draw(sceneData.gfx);

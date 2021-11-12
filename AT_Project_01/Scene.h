@@ -42,5 +42,5 @@ class Scene
 		virtual void Update(SceneData& sceneData) {}
 		virtual void Draw(SceneData& sceneData) {}
 
-		bool isActive = false;
+		bool isSceneActive = false;
 };

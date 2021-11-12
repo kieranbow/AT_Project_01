@@ -35,4 +35,11 @@ class TransformComponent
 		DirectX::XMMATRIX m_rotation;
 		DirectX::XMMATRIX m_scale;
 		DirectX::XMMATRIX m_translation;
+
+		// Default movement Vectors
+		const DirectX::XMVECTOR v_defForward = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		const DirectX::XMVECTOR v_defUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		const DirectX::XMVECTOR v_defBackward = DirectX::XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
+		const DirectX::XMVECTOR v_defLeft = DirectX::XMVectorSet(-1.0f, 0.0f, 0.0f, 0.0f);
+		const DirectX::XMVECTOR v_defRight = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
 };

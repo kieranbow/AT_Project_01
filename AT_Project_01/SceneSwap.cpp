@@ -18,7 +18,7 @@ void SceneSwap::OnDestroy()
 
 void SceneSwap::OnActivate()
 {
-	isActive = true;
+	isSceneActive = true;
 	
 }
 

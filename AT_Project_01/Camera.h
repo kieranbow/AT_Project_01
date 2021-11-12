@@ -66,9 +66,9 @@ class Camera
 		XMMATRIX m_projection;
 
 		// Camera Vectors
-		XMVECTOR v_eye			= XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
-		XMVECTOR v_target		= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-		XMVECTOR v_up			= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		XMVECTOR v_eye		= XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
+		XMVECTOR v_target	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		XMVECTOR v_up		= XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 		XMVECTOR v_rotation	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 
 		// Default movement Vectors

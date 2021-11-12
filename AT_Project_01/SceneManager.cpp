@@ -6,7 +6,7 @@ SceneManager::SceneManager() : scenes(0), currentScene(NULL)
 
 void SceneManager::Input(SceneData& sceneData)
 {
-	if (currentScene->isActive)
+	if (currentScene->isSceneActive)
 	{
 		currentScene->Input(sceneData);
 	}
@@ -14,7 +14,7 @@ void SceneManager::Input(SceneData& sceneData)
 
 void SceneManager::Update(SceneData& sceneData)
 {
-	if (currentScene->isActive)
+	if (currentScene->isSceneActive)
 	{
 		currentScene->Update(sceneData);
 	}
@@ -22,7 +22,7 @@ void SceneManager::Update(SceneData& sceneData)
 
 void SceneManager::Draw(SceneData& sceneData)
 {
-	if (currentScene->isActive)
+	if (currentScene->isSceneActive)
 	{
 		currentScene->Draw(sceneData);
 	}
