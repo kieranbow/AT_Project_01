@@ -48,8 +48,8 @@ Texture2D normalMap : TEXTURE : register(t1);
 SamplerState state : SAMPLER : register(s0);
 
 TextureCube skyIR : register(t2);
-TextureCube skyPrefilter : register(t3);
-Texture2D BDRFlut : register(t4);
+//TextureCube skyPrefilter : register(t3);
+//Texture2D BDRFlut : register(t4);
 
 // Main Entry Point for Pixel Shader
 float4 main(PS_INPUT input) : SV_TARGET
@@ -105,18 +105,18 @@ float4 main(PS_INPUT input) : SV_TARGET
     //float3 KD = float3(1.0f, 1.0f, 1.0f) - KS;
     //KD *= 1.0f - metallic;
     
-    //float3 irradiance = skyIR.Sample(state, normalV).rgb;
-    //float3 diffuse = albedo.rgb * irradiance;
-    
-    float3 irradiance = light.color.rgb;
+    float3 irradiance = skyIR.Sample(state, normalV).rgb;
     float3 diffuse = albedo.rgb * irradiance;
+    
+    //float3 irradiance = light.color.rgb;
+    //float3 diffuse = albedo.rgb * irradiance;
 
    // float3 preFilteredColor = skyPrefilter.SampleLevel(state, reflecVector, roughness * 4.0f).rgb;
    // float2 brdf = BDRFlut.Sample(state, float2(max(dot(normalV, viewDir), 0.0f), roughness)).rg;
     //float3 specular = preFilteredColor * (KS * brdf.x + brdf.y);
     
-    float2 brdf = input.texcoord.xy * float2(max(dot(normalV, viewDir), 0.0f), roughness);
-    specular = float3(0.5f, 0.5f, 0.5f) * (KS * brdf.x + brdf.y);
+    //float2 brdf = input.texcoord.xy * float2(max(dot(normalV, viewDir), 0.0f), roughness);
+    //specular = float3(0.5f, 0.5f, 0.5f) * (KS * brdf.x + brdf.y);
     
     float3 ambient = (KD * diffuse + specular) + 0.0f;
     float3 color = ambient + lo;

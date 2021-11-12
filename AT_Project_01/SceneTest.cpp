@@ -22,17 +22,17 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(cameraManager.GetCurrentCameraViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(cameraManager.GetCurrentCameraProjectionMatrix());
 
-	//std::string filePath[6];
-	//filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
-	//filePath[1].append("Assets\\Texture\\cubemap\\ny.png");
-	//filePath[2].append("Assets\\Texture\\cubemap\\nz.png");
-	//filePath[3].append("Assets\\Texture\\cubemap\\px.png");
-	//filePath[4].append("Assets\\Texture\\cubemap\\py.png");
-	//filePath[5].append("Assets\\Texture\\cubemap\\pz.png");
+	std::string filePath[6];
+	filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
+	filePath[1].append("Assets\\Texture\\cubemap\\ny.png");
+	filePath[2].append("Assets\\Texture\\cubemap\\nz.png");
+	filePath[3].append("Assets\\Texture\\cubemap\\px.png");
+	filePath[4].append("Assets\\Texture\\cubemap\\py.png");
+	filePath[5].append("Assets\\Texture\\cubemap\\pz.png");
 
-	//Texture cubeMap(sceneData.gfx);
-	//cubeMap.LoadAndCreateCubeMap(filePath);
-	//cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
+	Texture cubeMap(sceneData.gfx);
+	cubeMap.LoadAndCreateCubeMap(filePath);
+	cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
 	//Texture cubeMap(sceneData.gfx);
 	//cubeMap.LoadAndCreateCubeMap("Assets\\Texture\\StandardCubeMap.png");

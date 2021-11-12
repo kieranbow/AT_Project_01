@@ -12,8 +12,8 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	// Create Swap Chain Description
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
-	swapChainDesc.BufferDesc.Width	= 0;
-	swapChainDesc.BufferDesc.Height	= 0;
+	swapChainDesc.BufferDesc.Width	= static_cast<UINT>(windowSize.first);
+	swapChainDesc.BufferDesc.Height	= static_cast<UINT>(windowSize.second);
 	swapChainDesc.BufferDesc.Format	= DXGI_FORMAT_B8G8R8A8_UNORM;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator		= 0;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator	= 0;
@@ -33,7 +33,7 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		0,
+		D3D11_CREATE_DEVICE_DEBUG,
 		NULL,
 		0,
 		D3D11_SDK_VERSION,
@@ -119,11 +119,12 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 		
 	// ----------------------------------------------------------------
 	// Output merger
-	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
+	//pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 }
 
 void Graphics::ClearBuffer(float red, float green, float blue)
 {
+	pDeviceContext->OMSetRenderTargets(2u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pRenderTargetView.Get(), color);
 	pDeviceContext->ClearDepthStencilView(pDepthView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 1u);
