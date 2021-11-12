@@ -25,7 +25,7 @@ DirectX::XMMATRIX CameraManager::GetCurrentCameraViewMatrix() const
 	{
 		return currentCamera->GetViewMatrix();
 	}
-	OutputDebugStringA("No camera active");
+	OutputDebugStringA("No active camera");
 	return DirectX::XMMATRIX();
 }
 
@@ -35,7 +35,7 @@ DirectX::XMMATRIX CameraManager::GetCurrentCameraProjectionMatrix() const
 	{
 		return currentCamera->GetProjectionMatrix();
 	}
-	OutputDebugStringA("No camera active");
+	OutputDebugStringA("No active camera");
 	return DirectX::XMMATRIX();
 }
 
@@ -45,6 +45,7 @@ std::shared_ptr<Camera> CameraManager::GetCurrentCamera() const
 	{
 		return currentCamera;
 	}
+	OutputDebugStringA("No active camera");
 	return std::shared_ptr<Camera>();
 }
 

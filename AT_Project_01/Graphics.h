@@ -51,6 +51,9 @@ class Graphics
 		// All objects will get this projection matrix
 		DirectX::XMMATRIX GetProjectionMatrix() const;
 
+		D3D11_INPUT_ELEMENT_DESC inputElemDesc[3];
+		UINT GetSizeOfInputElemDesc() const;
+
 		Camera currentCamera;
 
 	private:

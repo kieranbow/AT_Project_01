@@ -7,24 +7,28 @@ SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneMana
 
 void SceneTest::onCreate(SceneData& sceneData)
 {
-	D3D11_INPUT_ELEMENT_DESC ied[] =
-	{
-		{"POSITION",0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
-	UINT ied_size = static_cast<UINT>(std::size(ied));
+	//D3D11_INPUT_ELEMENT_DESC ied[] =
+	//{
+	//	{"POSITION",0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	//	{"NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	//	{"TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	//};
+	//UINT ied_size = static_cast<UINT>(std::size(ied));
 
 	//---------------------------------------------
 	// Cameras
 	playerCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 
+	pPlayer = std::make_unique<Player>(sceneData.gfx);
+
 	playerCamera->SetPosition({ 0.0f, 0.0f, -30.0f });
 	staticCamera->SetPosition({ 0.0f, 0.0f, 30.0f });
 	staticCamera->SetRotation({ 0.0f, 110.0f, 0.0f });
 
-	cameraManager.AddCamera(playerCamera, CamID::player_cam);
+	cameraManager.AddCamera(pPlayer->camera, CamID::player_cam);
+
+	// cameraManager.AddCamera(playerCamera, CamID::player_cam);
 	cameraManager.AddCamera(staticCamera, CamID::static_cam);
 	cameraManager.ChangeCamera(CamID::player_cam);
 
@@ -75,19 +79,19 @@ void SceneTest::onCreate(SceneData& sceneData)
 	//Gold.SpecularPower = 51.2f;
 
 	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", ied, ied_size);
+	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
 	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Normal.png");
 	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
 	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
 	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
+	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
 	sphere.transform.SetPosition(0.0f, 25.0f, 0.0f);
 
 	sky.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
-	sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", ied, ied_size);
+	sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	sky.LoadTextures(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
 	sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
 
@@ -171,6 +175,8 @@ void SceneTest::Input(SceneData& sceneData)
 		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
 	}
 
+	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
+
 	const float speed = 1.0f;
 
 	if (sceneData.mouse->IsLeftBtnDown())
@@ -193,40 +199,6 @@ void SceneTest::Input(SceneData& sceneData)
 		}
 	}
 
-	if (sceneData.keyboard->IsKeyPressed('W'))
-	{
-		playerCamera->UpdatePosition(playerCamera->GetDirection().v_forward * speed);
-	}
-	if (sceneData.keyboard->IsKeyPressed('S'))
-	{
-		playerCamera->UpdatePosition(playerCamera->GetDirection().v_backward * speed);
-	}
-	if (sceneData.keyboard->IsKeyPressed('A'))
-	{
-		playerCamera->UpdatePosition(playerCamera->GetDirection().v_left * speed);
-	}
-	if (sceneData.keyboard->IsKeyPressed('D'))
-	{
-		playerCamera->UpdatePosition(playerCamera->GetDirection().v_right * speed);
-	}
-	if (sceneData.keyboard->IsKeyPressed(VK_SPACE))
-	{
-		playerCamera->UpdatePosition({ 0.0f, 1.0f * speed, 0.0f, 0.0f });
-	}
-	if (sceneData.keyboard->IsKeyPressed('Z'))
-	{
-		playerCamera->UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
-	}
-
-	if (sceneData.keyboard->IsKeyPressed('Q'))
-	{
-		playerCamera->UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
-	}
-	if (sceneData.keyboard->IsKeyPressed('E'))
-	{
-		playerCamera->UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
-	}
-
 	if (sceneData.keyboard->IsKeyPressed('R'))
 	{
 		cameraManager.ChangeCamera(CamID::static_cam);
@@ -243,15 +215,18 @@ void SceneTest::Update(SceneData& sceneData)
 {
 	rot += 0.05f;
 
-	float x = playerCamera->GetPosition().m128_f32[0];
-	float y = playerCamera->GetPosition().m128_f32[1];
-	float z = playerCamera->GetPosition().m128_f32[2];
+	pPlayer->Update(sceneData.dt);
 
-	
+	//float x = playerCamera->GetPosition().m128_f32[0];
+	//float y = playerCamera->GetPosition().m128_f32[1];
+	//float z = playerCamera->GetPosition().m128_f32[2];
 
-	//sceneData.gfx->currentCamera.SetPosition(camera.GetPosition());
+	float x = pPlayer->camera->GetPosition().m128_f32[0];
+	float y = pPlayer->camera->GetPosition().m128_f32[1];
+	float z = pPlayer->camera->GetPosition().m128_f32[2];
+
+
 	sceneData.gfx->currentCamera.SetPosition(cameraManager.GetCurrentCamera()->GetPosition());
-
 	cameraManager.Update(sceneData.dt);
 
 

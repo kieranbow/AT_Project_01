@@ -164,6 +164,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Model_loader.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SceneSwap.cpp" />
     <ClCompile Include="SceneTest.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="Model_loader.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PSShader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />

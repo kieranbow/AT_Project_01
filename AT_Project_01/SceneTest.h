@@ -7,6 +7,8 @@
 #include "Camera.h"
 #include "Model.h"
 
+#include "Player.h"
+
 class SceneTest : public Scene
 {
 	public:
@@ -28,6 +30,8 @@ class SceneTest : public Scene
 		CameraManager cameraManager;
 
 		Light light;
+
+		std::unique_ptr<Player> pPlayer;
 
 		bool lookat = false;
 

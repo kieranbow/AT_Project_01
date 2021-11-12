@@ -111,6 +111,13 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 	vp.TopLeftY	= 0;
 	pDeviceContext->RSSetViewports(1u, &vp);
 
+	// ----------------------------------------------------------------
+	// Input Element Description
+	inputElemDesc[0] = { "POSITION",0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	inputElemDesc[1] = { "NORMAL",	0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+	inputElemDesc[2] = { "TEXCOORD",0, DXGI_FORMAT_R32G32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 };
+		
+	// ----------------------------------------------------------------
 	// Output merger
 	pDeviceContext->OMSetRenderTargets(1u, pRenderTargetView.GetAddressOf(), pDepthView.Get());
 }
@@ -145,6 +152,11 @@ DirectX::XMMATRIX Graphics::GetViewMatrix() const
 DirectX::XMMATRIX Graphics::GetProjectionMatrix() const
 {
 	return m_projection;
+}
+
+UINT Graphics::GetSizeOfInputElemDesc() const
+{
+	return static_cast<UINT>(std::size(inputElemDesc));
 }
 
 void Graphics::Present()
