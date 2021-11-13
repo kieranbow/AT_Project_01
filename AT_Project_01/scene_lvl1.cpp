@@ -51,10 +51,15 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	skyBox.transform.SetScale(5000.0f, 5000.f, 5000.0f);
 
 	floor.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Plane.obj");
-	floor.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	floor.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Floor.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	floor.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
 	floor.transform.SetPosition(0.0f, -1.0f, 0.0f);
 	floor.transform.SetScale(1000.0f, 0.0f, 1000.0f);
+
+	texelCube.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+	texelCube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	texelCube.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
+	texelCube.transform.SetPosition(0.0f, 0.0f, -4.0f);
 }
 
 void Scenelvl1::OnDestroy()
@@ -94,6 +99,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 	// Objects
 	skyBox.Update(sceneData.dt);
 	floor.Update(sceneData.dt);
+	texelCube.Update(sceneData.dt);
 
 	//---------------------------------------------
 	// Camera manager
@@ -118,6 +124,7 @@ void Scenelvl1::Draw(SceneData& sceneData)
 	// Objects
 	skyBox.Draw(sceneData.gfx);
 	floor.Draw(sceneData.gfx);
+	texelCube.Draw(sceneData.gfx);
 
 	//---------------------------------------------
 	// Camera manager

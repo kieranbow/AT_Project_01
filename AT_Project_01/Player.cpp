@@ -36,14 +36,26 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	{
 		camera->UpdatePosition({ 0.0f, -1.0f * speed, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed('Q'))
+
+
+	// Camera rotation
+	if (keyboard->IsKeyPressed(37)) // Left arrow
 	{
 		camera->UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed('E'))
+	if (keyboard->IsKeyPressed(39)) // Right arrow
 	{
 		camera->UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
 	}
+	if (keyboard->IsKeyPressed(38)) // Up arrow
+	{
+		camera->UpdateRotation({ -0.05f, 0.0f, 0.0f, 0.0f });
+	}
+	if (keyboard->IsKeyPressed(40)) // Down arrow
+	{
+		camera->UpdateRotation({ 0.05f, 0.0f, 0.0f, 0.0f });
+	}
+
 }
 
 void Player::Update(float dt)
