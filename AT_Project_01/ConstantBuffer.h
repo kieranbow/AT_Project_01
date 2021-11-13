@@ -17,6 +17,8 @@ struct Bind
 		const static UINT b1 = 1u;
 		const static UINT b2 = 2u;
 		const static UINT b3 = 3u;
+		const static UINT b4 = 4u;
+		const static UINT b5 = 5u;
 	};
 	struct Texture
 	{
@@ -24,6 +26,8 @@ struct Bind
 		const static UINT t1 = 1u;
 		const static UINT t2 = 2u;
 		const static UINT t3 = 3u;
+		const static UINT t4 = 4u;
+		const static UINT t5 = 5u;
 	};
 	struct Sampler
 	{
@@ -31,6 +35,8 @@ struct Bind
 		const static UINT s1 = 1u;
 		const static UINT s2 = 2u;
 		const static UINT s3 = 3u;
+		const static UINT s4 = 4u;
+		const static UINT s5 = 5u;
 	};
 };
 

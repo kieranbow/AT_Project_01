@@ -23,24 +23,25 @@ void SceneTest::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetProjectionMatrix(cameraManager.GetCurrentCameraProjectionMatrix());
 
 	std::string filePath[6];
-	filePath[0].append("Assets\\Texture\\cubemap\\nx.png");
-	filePath[1].append("Assets\\Texture\\cubemap\\ny.png");
-	filePath[2].append("Assets\\Texture\\cubemap\\nz.png");
-	filePath[3].append("Assets\\Texture\\cubemap\\px.png");
-	filePath[4].append("Assets\\Texture\\cubemap\\py.png");
-	filePath[5].append("Assets\\Texture\\cubemap\\pz.png");
+	filePath[0].append("Assets\\Texture\\cubemap\\px.png"); // East		+X
+	filePath[1].append("Assets\\Texture\\cubemap\\nx.png"); // West		-X
+	filePath[2].append("Assets\\Texture\\cubemap\\py.png"); // Up		+Y
+	filePath[3].append("Assets\\Texture\\cubemap\\ny.png"); // Down		-Y
+	filePath[4].append("Assets\\Texture\\cubemap\\pz.png"); // North	+Z
+	filePath[5].append("Assets\\Texture\\cubemap\\nz.png"); // South	-Z
 
 	Texture cubeMap(sceneData.gfx);
 	cubeMap.LoadAndCreateCubeMap(filePath);
 	cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
-	//Texture cubeMap(sceneData.gfx);
-	//cubeMap.LoadAndCreateCubeMap("Assets\\Texture\\StandardCubeMap.png");
-	//cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
-	//Texture cubeMap(sceneData.gfx);
-	//cubeMap.LoadAndCreateTexture("Assets\\Texture\\StandardCubeMap.png");
-	//cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
+
+
+
+
+	Texture brdfMap(sceneData.gfx);
+	brdfMap.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png");
+	brdfMap.SetShaderResource(Bind::Texture::t4, 1u);
 
 	//Material Red_plastic;
 	//Red_plastic.ambient = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -151,6 +152,7 @@ void SceneTest::OnActivate()
 
 void SceneTest::OnDeactivate()
 {
+	pPlayer.release();
 }
 
 void SceneTest::Input(SceneData& sceneData)
@@ -242,7 +244,7 @@ void SceneTest::Draw(SceneData& sceneData)
 
 	cameraManager.Draw(sceneData.gfx);
 
-	pPlayer->Draw(sceneData.gfx);
+	//pPlayer->Draw(sceneData.gfx);
 
 	spaceMarineHelmet.Draw(sceneData.gfx);
 	sphere.Draw(sceneData.gfx);

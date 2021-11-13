@@ -57,7 +57,7 @@ bool Texture::LoadAndCreateTexture(std::string str_file_path)
 		Logging::ThrowIf(hr, "Failed to Create Shader Resource View");
 		return false;
 	}
-
+	stbi_image_free(texture);
 	return true;
 }
 
@@ -69,8 +69,6 @@ bool Texture::LoadAndCreateCubeMap(std::string str_file_path[6])
 	for (int i = 0; i < 6; i++)
 	{
 		img = stbi_load(str_file_path[i].c_str(), &width, &height, &num_channel, 0);
-
-
 
 		if (stbi_failure_reason())
 		{
@@ -116,6 +114,8 @@ bool Texture::LoadAndCreateCubeMap(std::string str_file_path[6])
 		Logging::ThrowIf(hr, "Failed to Create Shader Resource View for cubemap");
 		return false;
 	}
+
+	stbi_image_free(img);
 	return true;
 }
 

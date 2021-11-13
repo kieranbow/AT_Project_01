@@ -3,6 +3,13 @@
 // https://learnopengl.com/Advanced-Lighting/Normal-Mapping
 // https://learnopengl.com/Advanced-OpenGL/Cubemaps
 // http://www.codinglabs.net/article_physically_based_rendering_cook_torrance.aspx
+// https://github.com/JJJohan/PBR/blob/master/PBR/PBR.shader
+// https://github.com/TheEvilBanana/PhysicallyBasedRendering/blob/master/PBRMatPixelShader.hlsl
+// https://wiki.jmonkeyengine.org/docs/3.4/tutorials/how-to/articles/pbr/pbr_part3.html
+// https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
+// https://learnopengl.com/PBR/IBL/Diffuse-irradiance
+// https://www.fatalerrors.org/a/physical-based-ambient-lighting-diffuse-irradiance.html
+
 
 static float PI = 3.14159265359f;
 
