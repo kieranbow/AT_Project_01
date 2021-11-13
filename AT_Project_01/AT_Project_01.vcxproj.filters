@@ -150,8 +150,11 @@
     <ClCompile Include="DDSTextureLoader11.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\GameObjects\Entity</Filter>
+    </ClCompile>
     <ClCompile Include="scene_lvl1.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,8 +257,11 @@
     <ClInclude Include="DDSTextureLoader11.h">
       <Filter>Header Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\GameObjects\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="scene_lvl1.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

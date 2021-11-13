@@ -63,5 +63,5 @@ void Player::Update(float dt)
 
 void Player::Draw(Graphics* pGfx)
 {
-	model.Draw(pGfx);
+	//model.Draw(pGfx);
 }

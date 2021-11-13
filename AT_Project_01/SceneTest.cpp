@@ -244,7 +244,7 @@ void SceneTest::Draw(SceneData& sceneData)
 
 	cameraManager.Draw(sceneData.gfx);
 
-	//pPlayer->Draw(sceneData.gfx);
+	pPlayer->Draw(sceneData.gfx);
 
 	spaceMarineHelmet.Draw(sceneData.gfx);
 	sphere.Draw(sceneData.gfx);

@@ -28,7 +28,7 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	sceneManager.AddScene(scene_Lvl1, sceneData, SceneID::lvl_1);
 
 	// Switch Scene
-	sceneManager.SwitchScene(SceneID::Testing);
+	sceneManager.SwitchScene(SceneID::lvl_1);
 }
 
 bool Engine::ProcessWndMessages()
