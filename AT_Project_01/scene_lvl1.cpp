@@ -1,4 +1,6 @@
 #include "scene_lvl1.h"
+#include <fstream>
+#include <map>
 
 Scenelvl1::Scenelvl1(SceneManager& sceneManager) : currentSceneManager(sceneManager)
 {
@@ -18,7 +20,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	for (int e = 0; e < 10; e++)
 	{
 		std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(sceneData.gfx);
-		enemy->model.transform.SetPosition(positionX - (distance * 10.0f) / 2.0f, 0.0f, 0.0f);
+		enemy->model.transform.SetPosition(positionX - (distance * 10.0f) / 2.0f, 0.0f, 10.0f);
 		pEnemy.push_back(std::move(enemy));
 
 		positionX += distance;
@@ -60,6 +62,83 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	texelCube.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	texelCube.LoadTextures(sceneData.gfx, "Assets\\Texture\\default.png");
 	texelCube.transform.SetPosition(0.0f, 0.0f, -4.0f);
+
+	std::fstream map;
+
+	std::map<std::string, std::string> obj_id;
+	obj_id.emplace("004", "004");
+
+	map.open("Assets\\Levels\\lvl1_layout.txt");
+
+	if (map.is_open())
+	{
+		std::string word;
+
+		float x = 0.0f;
+		float z = 0.0f;
+		float map_width = 12.0f;
+
+		while (map >> word)
+		{
+			if (x == map_width)
+			{
+				x = 0.0f;
+				z += 2.0f;
+			}
+
+			if (word == "001") // Floor 1x1
+			{
+				// Create object
+				std::unique_ptr<Model>floor = std::make_unique<Model>();
+				floor->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Plane.obj");
+				floor->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+				floor->transform.SetPosition(x, 0.0f, z);
+				
+				// Push object into object pool
+				objects.push_back(std::move(floor));
+
+				// Delete the object memory
+				floor.release();
+			}
+
+			if (word == "002") // Wall - 1 High
+			{
+				// Create object
+				std::unique_ptr<Model> wall = std::make_unique<Model>();
+				wall->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+				wall->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+				wall->transform.SetPosition(x, 0.5f, z);
+				
+				// Push object into object pool
+				objects.push_back(std::move(wall));
+
+				// Delete the object memory
+				wall.release();
+			}
+
+			if (word == "003") // Wall - 2 High
+			{
+
+			}
+
+			if (word == "004") // Wall - 3 High
+			{
+
+			}
+
+			x += 2.0f;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
 }
 
 void Scenelvl1::OnDestroy()
@@ -101,6 +180,11 @@ void Scenelvl1::Update(SceneData& sceneData)
 	floor.Update(sceneData.dt);
 	texelCube.Update(sceneData.dt);
 
+	for (auto& object : objects)
+	{
+		object->Update(sceneData.dt);
+	}
+
 	//---------------------------------------------
 	// Camera manager
 	sceneData.gfx->currentCamera.SetPosition(cameraManager.GetCurrentCamera()->GetPosition());
@@ -125,6 +209,12 @@ void Scenelvl1::Draw(SceneData& sceneData)
 	skyBox.Draw(sceneData.gfx);
 	floor.Draw(sceneData.gfx);
 	texelCube.Draw(sceneData.gfx);
+
+	for (auto& object : objects)
+	{
+		object->Draw(sceneData.gfx);
+	}
+
 
 	//---------------------------------------------
 	// Camera manager

@@ -23,7 +23,7 @@ public:
 	std::shared_ptr<Camera> camera;
 
 private:
-	float speed = 1.0f;
+	float speed = 0.5f;
 	float rotationSpeed = 0.05f;
 
 	int health = 0;
