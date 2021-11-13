@@ -37,7 +37,7 @@ SamplerState state : SAMPLER : register(s0);
 float4 main(PS_INPUT input) : SV_TARGET
 {
     input.texcoord = input.texcoord.yx;
-    float2 uv = 500.0f * input.texcoord;
+    float2 uv = input.texcoord / 2.0f; // 500.0f
     input.normal = normalize(input.normal);
     
     

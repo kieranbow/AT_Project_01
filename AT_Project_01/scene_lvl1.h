@@ -41,7 +41,6 @@ class Scenelvl1 : public Scene
 
 		// Objects
 		Model skyBox;
-		Model floor;
 		Model texelCube;
 
 		std::vector<std::unique_ptr<Model>> objects;

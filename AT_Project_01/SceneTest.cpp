@@ -157,9 +157,9 @@ void SceneTest::OnDeactivate()
 
 void SceneTest::Input(SceneData& sceneData)
 {
-	if (sceneData.keyboard->IsKeyPressed('F'))
+	if (sceneData.keyboard->IsKeyPressed('C'))
 	{
-		currentSceneManager.SwitchScene(SceneID::swap);
+		currentSceneManager.SwitchScene(SceneID::lvl_1);
 	}
 
 	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
