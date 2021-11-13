@@ -30,7 +30,7 @@ void SceneSwap::Input(SceneData& sceneData)
 {
 	if (sceneData.keyboard->IsKeyPressed('G'))
 	{
-		currentSceneManager.SwitchScene(currentSceneManager.IDList.Testing);
+		currentSceneManager.SwitchScene(SceneID::Testing);
 	}
 	const float speed = 0.5f;
 

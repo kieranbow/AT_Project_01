@@ -2,6 +2,7 @@
 #include "ErrorChecker.h"
 #include "SceneTest.h"
 #include "SceneSwap.h"
+#include "scene_lvl1.h"
 
 Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos) : window(wnd_title, wnd_class, width, height, x_pos, y_pos)
 {
@@ -17,15 +18,17 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	sceneData.mouse = pMouse.get();
 
 	// Declare Scenes
-	std::shared_ptr<SceneTest> sceneTest = std::make_shared<SceneTest>(sceneManager);
-	std::shared_ptr<SceneSwap> sceneSwap = std::make_shared<SceneSwap>(sceneManager);
+	std::shared_ptr<SceneTest> scene_Test = std::make_shared<SceneTest>(sceneManager);
+	std::shared_ptr<SceneSwap> scene_Swap = std::make_shared<SceneSwap>(sceneManager);
+	std::shared_ptr<Scenelvl1> scene_Lvl1 = std::make_shared<Scenelvl1>(sceneManager);
 
-	// Update IDList and create scenes
-	sceneManager.IDList.Testing = sceneManager.AddScene(sceneTest, sceneData);
-	sceneManager.IDList.swap = sceneManager.AddScene(sceneSwap, sceneData);
+	// Add scenes to scene managers unordered map
+	sceneManager.AddScene(scene_Test, sceneData, SceneID::Testing);
+	sceneManager.AddScene(scene_Swap, sceneData, SceneID::swap);
+	sceneManager.AddScene(scene_Lvl1, sceneData, SceneID::lvl_1);
 
 	// Switch Scene
-	sceneManager.SwitchScene(sceneManager.IDList.Testing);
+	sceneManager.SwitchScene(SceneID::Testing);
 }
 
 bool Engine::ProcessWndMessages()

@@ -28,10 +28,10 @@ void SceneManager::Draw(SceneData& sceneData)
 	}
 }
 
-scene_ID SceneManager::AddScene(const std::shared_ptr<Scene>& scene, SceneData& sceneData)
+scene_ID SceneManager::AddScene(const std::shared_ptr<Scene>& scene, SceneData& sceneData, scene_ID _sceneID)
 {
 	// Inserts new scene into unordered map
-	auto insert = scenes.insert(std::make_pair(addSceneID, scene));
+	auto insert = scenes.insert(std::make_pair(_sceneID, scene));
 
 	addSceneID++;
 
@@ -41,9 +41,9 @@ scene_ID SceneManager::AddScene(const std::shared_ptr<Scene>& scene, SceneData& 
 	return addSceneID - 1;
 }
 
-void SceneManager::SwitchScene(scene_ID id)
+void SceneManager::SwitchScene(scene_ID _sceneID)
 {
-	auto iter = scenes.find(id);
+	auto iter = scenes.find(_sceneID);
 
 	// Loops through the map finding the scene id that matches search id.
 	if (iter != scenes.end())
@@ -62,9 +62,9 @@ void SceneManager::SwitchScene(scene_ID id)
 	}
 }
 
-void SceneManager::RemoveScene(scene_ID id)
+void SceneManager::RemoveScene(scene_ID _sceneID)
 {
-	auto iter = scenes.find(id);
+	auto iter = scenes.find(_sceneID);
 
 	// Loops through the map finding the scene id that matches search id.
 	if (iter != scenes.end())

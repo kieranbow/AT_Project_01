@@ -152,14 +152,14 @@ void SceneTest::OnActivate()
 
 void SceneTest::OnDeactivate()
 {
-	pPlayer.release();
+	
 }
 
 void SceneTest::Input(SceneData& sceneData)
 {
 	if (sceneData.keyboard->IsKeyPressed('F'))
 	{
-		currentSceneManager.SwitchScene(currentSceneManager.IDList.swap);
+		currentSceneManager.SwitchScene(SceneID::swap);
 	}
 
 	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
