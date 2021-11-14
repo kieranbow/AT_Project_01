@@ -6,7 +6,7 @@
 Player::Player(Graphics* pGfx)
 {
 	camera = std::make_shared<Camera>(pGfx->GetWindowSize().first, pGfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
-	model.LoadMeshFromSource(pGfx, "Assets\\Model\\Dir_light.obj");
+	model.LoadMeshFromSource(pGfx, "Assets\\Model\\cube_proj.obj");
 	model.LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 }
 
@@ -75,5 +75,5 @@ void Player::Update(float dt)
 
 void Player::Draw(Graphics* pGfx)
 {
-	//model.Draw(pGfx);
+	model.Draw(pGfx);
 }

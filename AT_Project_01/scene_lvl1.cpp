@@ -37,6 +37,30 @@ objID findID(std::string id)
 };
 
 
+bool intersect(Enemy* a, Player* b)
+{
+	a->model.aabb.min_x = a->model.transform.GetPosition().x - 1.0f;
+	a->model.aabb.min_y = a->model.transform.GetPosition().y - 1.0f;
+	a->model.aabb.min_z = a->model.transform.GetPosition().z - 1.0f;
+	a->model.aabb.max_x = a->model.transform.GetPosition().x + 1.0f;
+	a->model.aabb.max_y = a->model.transform.GetPosition().y + 1.0f;
+	a->model.aabb.max_z = a->model.transform.GetPosition().z + 1.0f;
+
+	b->model.aabb.min_x = b->model.transform.GetPosition().x - 1.0f;
+	b->model.aabb.min_y = b->model.transform.GetPosition().y - 1.0f;
+	b->model.aabb.min_z = b->model.transform.GetPosition().z - 1.0f;
+	b->model.aabb.max_x = b->model.transform.GetPosition().x + 1.0f;
+	b->model.aabb.max_y = b->model.transform.GetPosition().y + 1.0f;
+	b->model.aabb.max_z = b->model.transform.GetPosition().z + 1.0f;
+
+	return (
+		a->model.aabb.min_x <= b->model.aabb.max_x && a->model.aabb.max_x >= b->model.aabb.min_x &&
+		a->model.aabb.min_y <= b->model.aabb.max_y && a->model.aabb.max_y >= b->model.aabb.min_y &&
+		a->model.aabb.min_z <= b->model.aabb.max_z && a->model.aabb.max_z >= b->model.aabb.min_z);
+
+}
+
+
 void Scenelvl1::onCreate(SceneData& sceneData)
 {
 	//---------------------------------------------
@@ -64,9 +88,10 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Cameras
-	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
-	staticCamera->SetPosition({ 0.0f, 0.0f, 30.0f });
-	staticCamera->SetRotation({ 0.0f, 110.0f, 0.0f });
+	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 45.0f, 0.01f, 10000.0f, false);
+	staticCamera->SetPosition({ -10.0f, 20.0f, 10.0f });
+	//staticCamera->SetRotation({ 0.0f, 110.0f, 0.0f });
+	staticCamera->SetRotation({ 1.5f, 0.0f, 0.0f });
 
 	//---------------------------------------------
 	// Camera manager
@@ -114,65 +139,65 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 
 			switch (findID(word))
 			{
-			case objID::Air:
-			{
-				break;
-			}
-			case objID::Floor:
-			{
-				// Create object
-				std::unique_ptr<Model>floor = std::make_unique<Model>();
-				floor->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Plane.obj");
-				floor->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Floor.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-				floor->transform.SetPosition(x, -1.0f, z);
+				case objID::Air:
+				{
+					break;
+				}
+				case objID::Floor:
+				{
+					// Create object
+					std::unique_ptr<Model>floor = std::make_unique<Model>();
+					floor->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Plane.obj");
+					floor->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Floor.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+					floor->transform.SetPosition(x, -1.0f, z);
 
-				// Push object into object pool
-				objects.push_back(std::move(floor));
+					// Push object into object pool
+					objects.push_back(std::move(floor));
 
-				// Delete the object memory
-				floor.release();
-				break;
-			}
-			case objID::Wall_1_high:
-			{
-				// Create object
-				std::unique_ptr<Model> wall = std::make_unique<Model>();
-				wall->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
-				wall->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-				wall->transform.SetPosition(x, 0.0f, z);
+					// Delete the object memory
+					floor.release();
+					break;
+				}
+				case objID::Wall_1_high:
+				{
+					// Create object
+					std::unique_ptr<Model> wall = std::make_unique<Model>();
+					wall->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+					wall->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+					wall->transform.SetPosition(x, 0.0f, z);
 
-				// Push object into object pool
-				objects.push_back(std::move(wall));
+					// Push object into object pool
+					objects.push_back(std::move(wall));
 
-				// Delete the object memory
-				wall.release();
-				break;
-			}
-			case objID::Wall_2_high:
-			{
-				// Create object
-				std::unique_ptr<Model> wall = std::make_unique<Model>();
-				wall->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
-				wall->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-				wall->transform.SetPosition(x, 0.0f, z);
+					// Delete the object memory
+					wall.release();
+					break;
+				}
+				case objID::Wall_2_high:
+				{
+					// Create object
+					std::unique_ptr<Model> wall = std::make_unique<Model>();
+					wall->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+					wall->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+					wall->transform.SetPosition(x, 0.0f, z);
 
-				std::unique_ptr<Model> wall_2 = std::make_unique<Model>();
-				wall_2->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
-				wall_2->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-				wall_2->transform.SetPosition(x, 2.0f, z);
+					std::unique_ptr<Model> wall_2 = std::make_unique<Model>();
+					wall_2->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube_proj.obj");
+					wall_2->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+					wall_2->transform.SetPosition(x, 2.0f, z);
 
-				// Push object into object pool
-				objects.push_back(std::move(wall));
-				objects.push_back(std::move(wall_2));
+					// Push object into object pool
+					objects.push_back(std::move(wall));
+					objects.push_back(std::move(wall_2));
 
-				// Delete the object memory
-				wall.release();
-				wall_2.release();
-				break;
-			}
+					// Delete the object memory
+					wall.release();
+					wall_2.release();
+					break;
+				}
 
-			default:
-				break;
+				default:
+					break;
 			}
 
 			x += 2.0f;
@@ -196,6 +221,16 @@ void Scenelvl1::OnDeactivate()
 void Scenelvl1::Input(SceneData& sceneData)
 {
 	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
+
+	if (sceneData.mouse->IsLeftBtnDown())
+	{
+		cameraManager.ChangeCamera(CamID::player_cam);
+	}
+	if (sceneData.mouse->IsRightBtnDown())
+	{
+		cameraManager.ChangeCamera(CamID::static_cam);
+	}
+
 }
 
 void Scenelvl1::Update(SceneData& sceneData)
@@ -208,9 +243,20 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 	for (auto& enemy : pEnemy)
 	{
-		enemy->LookAt(pPlayer->model.transform.GetPosition());
+		//enemy->LookAt(pPlayer->model.transform.GetPosition());
 		// enemy->MoveTo(pPlayer->model.transform.GetPosition(), sceneData.dt);
 		enemy->Update(sceneData.dt);
+
+		if (intersect(enemy.get(), pPlayer.get()))
+		{
+			pPlayer->speed *= -1.0f;
+
+		}
+		else
+		{
+			//pPlayer->speed = 0.1f;
+		}
+
 	}
 
 	//---------------------------------------------

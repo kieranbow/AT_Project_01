@@ -38,6 +38,18 @@ class Model
 		void SetMaterial(Material mat);
 		Material GetMaterial() const;
 
+		struct AABB
+		{
+			float min_x;
+			float min_y;
+			float min_z;
+
+			float max_x;
+			float max_y;
+			float max_z;
+		} aabb;
+		
+
 
 		TransformComponent transform;
 

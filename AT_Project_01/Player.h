@@ -22,8 +22,10 @@ public:
 	Model gun;
 	std::shared_ptr<Camera> camera;
 
-private:
 	float speed = 0.1f;
+
+private:
+	
 	float rotationSpeed = 0.05f;
 
 	int health = 0;
