@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "Model.h"
 
+#include "TransformComponent.h"
+
 // Forward delcares
 class Graphics;
 class Keyboard;
@@ -19,7 +21,8 @@ public:
 	void Update(float dt) final;
 	void Draw(Graphics* pGfx) final;
 
-	Model model;
+	std::unique_ptr<TransformComponent> pTransform;
+	std::unique_ptr<Model> pModel;
 
 private:
 	float speed = 1.0f;

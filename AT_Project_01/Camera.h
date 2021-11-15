@@ -40,9 +40,14 @@ class Camera
 
 		Direction GetDirection() const;
 
-		XMVECTOR GetPosition()const
+		XMVECTOR GetPosition() const
 		{
 			return v_eye;
+		}
+
+		XMFLOAT3 GetPositionFloat() const 
+		{
+			return XMFLOAT3({v_eye.m128_f32[0], v_eye.m128_f32[1] , v_eye.m128_f32[2] });
 		}
 
 		XMVECTOR GetRotation() const;

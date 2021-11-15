@@ -64,22 +64,22 @@ void SceneTest::onCreate(SceneData& sceneData)
 	//Gold.Specular = { 0.628281f, 0.555802f, 0.366065f, 1.0f };
 	//Gold.SpecularPower = 51.2f;
 
-	spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
-	spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Normal.png");
-	spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
-	spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
+	//spaceMarineHelmet.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
+	//spaceMarineHelmet.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	//spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
+	//spaceMarineHelmet.LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Normal.png");
+	//spaceMarineHelmet.transform.SetPosition(0.0f, 0.0f, 0.0f);
+	//spaceMarineHelmet.transform.SetRotation(0.0f, 3.0f, 0.0f);
 
-	sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-	sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-	sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
-	sphere.transform.SetPosition(0.0f, 25.0f, 0.0f);
+	//sphere.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
+	//sphere.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	//sphere.LoadTextures(sceneData.gfx, "Assets\\Texture\\icon.png");
+	//sphere.transform.SetPosition(0.0f, 25.0f, 0.0f);
 
-	sky.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
-	sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-	sky.LoadTextures(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
-	sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
+	//sky.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
+	//sky.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	//sky.LoadTextures(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
+	//sky.transform.SetScale(5000.0f, 5000.f, 5000.0f);
 
 	//pyramid.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\pyramid.obj");
 	//pyramid.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", ied, ied_size);
@@ -214,8 +214,8 @@ void SceneTest::Update(SceneData& sceneData)
 
 
 
-	spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
-	spaceMarineHelmet.Update(sceneData.dt);
+	//spaceMarineHelmet.transform.SetRotation(0.0f, 0.05f * rot, 0.0f);
+	//spaceMarineHelmet.Update(sceneData.dt);
 	
 	//sphere.transform.SetPosition(x, y, z);
 	sphere.Update(sceneData.dt);

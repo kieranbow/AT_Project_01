@@ -5,23 +5,27 @@
 
 Enemy::Enemy(Graphics* pGfx)
 {
-	model.LoadMeshFromSource(pGfx, "Assets\\Model\\cube_proj.obj");
-	model.LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	model.LoadTextures(pGfx, "Assets\\Texture\\icon.png");
+	pTransform = std::make_unique<TransformComponent>();
+
+	pModel = std::make_unique<Model>(pTransform.get());
+
+	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\cube_proj.obj");
+	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	pModel->LoadTextures(pGfx, "Assets\\Texture\\icon.png");
 }
 
 void Enemy::LookAt(DirectX::XMFLOAT3 position)
 {
-	if (position.x == model.transform.GetPosition().x
-		&& position.y == model.transform.GetPosition().y
-		&& position.z == model.transform.GetPosition().z)
+	if (position.x == pModel->GetPosition().x
+		&& position.y == pModel->GetPosition().y
+		&& position.z == pModel->GetPosition().z)
 	{
 		return;
 	}
 
-	position.x = model.transform.GetPosition().x - position.x;
-	position.y = model.transform.GetPosition().y - position.y;
-	position.z = model.transform.GetPosition().z - position.z;
+	position.x = pModel->GetPosition().x - position.x;
+	position.y = pModel->GetPosition().y - position.y;
+	position.z = pModel->GetPosition().z - position.z;
 
 	float pitch = 0.0f;
 	if (position.y != 0.0f)
@@ -41,14 +45,14 @@ void Enemy::LookAt(DirectX::XMFLOAT3 position)
 		yaw += DirectX::XM_PI;
 	}
 
-	model.transform.SetRotation(0.0f, yaw, 0.0f);
+	pModel->SetRotation({ 0.0f, yaw, 0.0f });
 
 }
 
 void Enemy::MoveTo(DirectX::XMFLOAT3 position, float dt)
 {
-	float xPos = model.transform.GetPosition().x;
-	float zPos = model.transform.GetPosition().z;
+	float xPos = pModel->GetPosition().x;
+	float zPos = pModel->GetPosition().z;
 
 	//DirectX::XMVECTOR direction = DirectX::XMVectorSet(position.x - xPos, 0.0f, position.z - zPos, 0.0f);
 	//DirectX::XMVector3Normalize(direction);
@@ -68,18 +72,16 @@ void Enemy::MoveTo(DirectX::XMFLOAT3 position, float dt)
 
 	if (hypotenuse < 10)
 	{
-		model.transform.SetPosition(position.x + velocity, 0.0f, position.z + velocity);
+		pModel->SetPosition({ position.x + velocity, 0.0f, position.z + velocity });
 	}
 }
 
 void Enemy::Update(float dt)
 {
-
-
-	model.Update(dt);
+	pModel->Update(dt);
 }
 
 void Enemy::Draw(Graphics* pGfx)
 {
-	model.Draw(pGfx);
+	pModel->Draw(pGfx);
 }

@@ -4,17 +4,18 @@
 #include "ConstantBufferTypes.h"
 #include "VSShader.h"
 #include "PSShader.h"
-#include "TransformComponent.h"
 #include "Texture.h"
 #include "Material.h"
 #include <string>
 
 class ModelLoader;
+class TransformComponent;
 
 class Model
 {
 	public:
 		Model();
+		Model(TransformComponent* pTransform);
 		~Model() = default;
 
 		// Using Assimp, it reads and loads the mesh from the file and stores data into buffers
@@ -29,7 +30,7 @@ class Model
 		// Textures are loaded using Texture class functions
 		void LoadTextures(Graphics* pGfx, std::string str_texture_file_path);
 
-		// Update all models components.
+		// Update models position/scale/rotation using the transform componment
 		void Update(float dt);
 
 		// All buffers, constants buffers and shaders are set and then drawn.
@@ -37,6 +38,18 @@ class Model
 
 		void SetMaterial(Material mat);
 		Material GetMaterial() const;
+
+		// Sets the position using the transform componment
+		void SetPosition(DirectX::XMFLOAT3 position);
+		DirectX::XMFLOAT3 GetPosition() const;
+
+		// Sets the rotation using the transform componment
+		void SetRotation(DirectX::XMFLOAT3 rotation);
+		DirectX::XMFLOAT3 GetRotation() const;
+
+		// Sets the scale using the transform componment
+		void SetScale(DirectX::XMFLOAT3 scale);
+		DirectX::XMFLOAT3 GetScale() const;
 
 		struct AABB
 		{
@@ -48,10 +61,6 @@ class Model
 			float max_y;
 			float max_z;
 		} aabb;
-		
-
-
-		TransformComponent transform;
 
 	private:
 		std::vector<Vertex> vertices;
@@ -59,12 +68,17 @@ class Model
 
 		std::vector<Mesh> meshes;
 		std::vector<Texture> textures;
+
+
+		TransformComponent* transform;
 		Material material;
 
+		// Constant Buffers
 		std::unique_ptr<ConstantBuffer<WorldViewProj>> pWVPbuffer = std::make_unique<ConstantBuffer<WorldViewProj>>();
 		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
 		std::unique_ptr<ConstantBuffer<MaterialProperties>> pMatBuffer = std::make_unique<ConstantBuffer<MaterialProperties>>();
 
+		// Shaders
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();
 
