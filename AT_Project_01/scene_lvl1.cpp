@@ -261,7 +261,14 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 		if (enemy->collision->AABBIntersect(pPlayer->pCollision.get()))
 		{
-			OutputDebugStringA("Hit");
+			float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
+			float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
+			float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
+
+
+			pPlayer->pRigidBody->SetVelocity({ new_velX, new_velY, new_velZ });
+
+			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
 		}
 
 

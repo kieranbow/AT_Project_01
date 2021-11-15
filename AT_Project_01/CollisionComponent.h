@@ -24,6 +24,8 @@ public:
 	// Checks AABB collision with another collision component.
 	bool AABBIntersect(CollisionComponent* collision);
 
+	bool IsColliding() const;
+
 private:
 	// Defines the bounding box for collision
 	struct AABB
@@ -36,4 +38,6 @@ private:
 		float max_y;
 		float max_z;
 	} aabb;
+
+	bool collided = false;
 };

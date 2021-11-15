@@ -2,15 +2,9 @@
 #include <DirectXMath.h>
 #include <memory>
 
-using namespace DirectX;
+#include "Direction.h"
 
-struct Direction
-{
-	XMVECTOR v_forward	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR v_backward	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR v_left		= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR v_right	= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-};
+using namespace DirectX;
 
 class Camera
 {

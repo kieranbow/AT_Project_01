@@ -37,8 +37,21 @@ void CollisionComponent::Update(TransformComponent* pTransform, XMFLOAT3 scale)
 
 bool CollisionComponent::AABBIntersect(CollisionComponent* collision)
 {
-	return(
-		collision->aabb.min_x <= aabb.max_x && collision->aabb.max_x >= aabb.min_x &&
+	if (collision->aabb.min_x <= aabb.max_x && collision->aabb.max_x >= aabb.min_x &&
 		collision->aabb.min_y <= aabb.max_y && collision->aabb.max_y >= aabb.min_y &&
-		collision->aabb.min_z <= aabb.max_z && collision->aabb.max_z >= aabb.min_z);
+		collision->aabb.min_z <= aabb.max_z && collision->aabb.max_z >= aabb.min_z)
+	{
+		collided = true;
+		return true;
+	}
+	else
+	{
+		collided = false;
+		return false;
+	}
+}
+
+bool CollisionComponent::IsColliding() const
+{
+	return collided;
 }

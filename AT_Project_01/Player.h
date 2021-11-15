@@ -35,6 +35,7 @@ private:
 
 
 	DirectX::XMFLOAT3 velocity = {0.2f, 0.2f, 0.2f};
+	DirectX::XMFLOAT3 input = { 0.0f, 0.0f, 0.0f };
 
 	float rotationSpeed = 0.05f;
 

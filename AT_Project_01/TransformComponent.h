@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "Direction.h"
 
 // The Transformation class contrains world matrix and vector allowing any object
 // that has this component to Scale, Rotate and Translate.
@@ -23,6 +24,8 @@ class TransformComponent
 		DirectX::XMFLOAT3 GetScale() const;
 		DirectX::XMFLOAT3 GetPosition() const;
 		DirectX::XMMATRIX GetWorldMatrix() const;
+
+		Direction direction;
 
 	private:
 		DirectX::XMFLOAT3 f_scale		= { 1.0f, 1.0f, 1.0f };

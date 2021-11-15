@@ -15,6 +15,8 @@ class RigidBodyComponent
 		void Update(float dt);
 
 		XMFLOAT3 GetPosition() const;
+
+		void SetVelocity(XMFLOAT3 newVelocity);
 		XMFLOAT3 GetVelocity() const;
 
 	private:

@@ -38,6 +38,7 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	}
 	if (keyboard->IsKeyPressed(VK_SPACE))
 	{
+
 		camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 	}
 	if (keyboard->IsKeyPressed('Z'))

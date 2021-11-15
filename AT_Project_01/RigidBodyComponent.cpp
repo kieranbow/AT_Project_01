@@ -20,6 +20,11 @@ XMFLOAT3 RigidBodyComponent::GetPosition() const
 	return f_position;
 }
 
+void RigidBodyComponent::SetVelocity(XMFLOAT3 newVelocity)
+{
+	f_velocity = newVelocity;
+}
+
 XMFLOAT3 RigidBodyComponent::GetVelocity() const
 {
 	return f_velocity;
