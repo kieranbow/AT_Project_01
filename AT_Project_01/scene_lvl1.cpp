@@ -259,6 +259,12 @@ void Scenelvl1::Update(SceneData& sceneData)
 		//	//pPlayer->speed = 0.1f;
 		//}
 
+		if (enemy->collision->AABBIntersect(pPlayer->pCollision.get()))
+		{
+			OutputDebugStringA("Hit");
+		}
+
+
 	}
 
 	//---------------------------------------------

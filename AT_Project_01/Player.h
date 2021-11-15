@@ -5,6 +5,7 @@
 
 #include "RigidBodyComponent.h"
 #include "TransformComponent.h"
+#include "CollisionComponent.h"
 
 // Forward delcares
 class Graphics;
@@ -27,6 +28,7 @@ public:
 	// Components
 	std::unique_ptr<RigidBodyComponent> pRigidBody;
 	std::unique_ptr<TransformComponent> pTransform;
+	std::unique_ptr<CollisionComponent> pCollision;
 
 private:
 	std::unique_ptr<Model> pModel;

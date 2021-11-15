@@ -10,12 +10,11 @@ Player::Player(Graphics* pGfx)
 
 	pTransform = std::make_unique<TransformComponent>();
 	pRigidBody = std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), velocity);
-	pModel = std::make_unique<Model>(pTransform.get());
+	pCollision = std::make_unique<CollisionComponent>(pTransform.get(), pTransform->GetScale());
 
-	
+	pModel = std::make_unique<Model>(pTransform.get());
 	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\cube_proj.obj");
 	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	
 }
 
 void Player::Input(Keyboard* keyboard, Mouse* mouse)
@@ -76,7 +75,9 @@ void Player::Update(float dt)
 	float cam_rot_y = camera->GetRotation().m128_f32[1];
 	float cam_rot_z = camera->GetRotation().m128_f32[2];
 
+	pTransform->Update();
 	pRigidBody->Update(dt);
+	pCollision->Update(pTransform.get(), pTransform->GetScale());
 
 	pModel->SetPosition(camera->GetPositionFloat());
 	pModel->SetRotation({ 0.0f, cam_rot_y + 1.55f, 0.0f });

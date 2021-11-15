@@ -3,6 +3,7 @@
 #include "Model.h"
 
 #include "TransformComponent.h"
+#include "CollisionComponent.h"
 
 // Forward delcares
 class Graphics;
@@ -22,6 +23,7 @@ public:
 	void Draw(Graphics* pGfx) final;
 
 	std::unique_ptr<TransformComponent> pTransform;
+	std::unique_ptr<CollisionComponent> collision;
 	std::unique_ptr<Model> pModel;
 
 private:

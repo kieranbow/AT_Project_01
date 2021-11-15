@@ -6,6 +6,7 @@
 Enemy::Enemy(Graphics* pGfx)
 {
 	pTransform = std::make_unique<TransformComponent>();
+	collision = std::make_unique<CollisionComponent>(pTransform.get(), pTransform->GetScale());
 
 	pModel = std::make_unique<Model>(pTransform.get());
 
@@ -78,6 +79,7 @@ void Enemy::MoveTo(DirectX::XMFLOAT3 position, float dt)
 
 void Enemy::Update(float dt)
 {
+	collision->Update(pTransform.get(), pTransform->GetScale());
 	pModel->Update(dt);
 }
 
