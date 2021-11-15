@@ -102,8 +102,47 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	sceneData.gfx->SetViewMatrix(cameraManager.GetCurrentCameraViewMatrix());
 	sceneData.gfx->SetProjectionMatrix(cameraManager.GetCurrentCameraProjectionMatrix());
 
+
+	//---------------------------------------------
+	// Textures
+	std::string skyIR_filepath[6];
+	skyIR_filepath[0].append("Assets\\Texture\\cubemap\\px_ir.png"); // East	+X
+	skyIR_filepath[1].append("Assets\\Texture\\cubemap\\nx_ir.png"); // West	-X
+	skyIR_filepath[2].append("Assets\\Texture\\cubemap\\py_ir.png"); // Up		+Y
+	skyIR_filepath[3].append("Assets\\Texture\\cubemap\\ny_ir.png"); // Down	-Y
+	skyIR_filepath[4].append("Assets\\Texture\\cubemap\\pz_ir.png"); // North	+Z
+	skyIR_filepath[5].append("Assets\\Texture\\cubemap\\nz_ir.png"); // South	-Z
+
+	Texture skyIR(sceneData.gfx);
+	skyIR.LoadAndCreateCubeMap(skyIR_filepath);
+	skyIR.SetShaderResource(Bind::Texture::t3, 1u);
+
+	std::string sky_filepath[6];
+	sky_filepath[0].append("Assets\\Texture\\cubemap\\px.png"); // East		+X
+	sky_filepath[1].append("Assets\\Texture\\cubemap\\nx.png"); // West		-X
+	sky_filepath[2].append("Assets\\Texture\\cubemap\\py.png"); // Up		+Y
+	sky_filepath[3].append("Assets\\Texture\\cubemap\\ny.png"); // Down		-Y
+	sky_filepath[4].append("Assets\\Texture\\cubemap\\pz.png"); // North	+Z
+	sky_filepath[5].append("Assets\\Texture\\cubemap\\nz.png"); // South	-Z
+
+	Texture sky(sceneData.gfx);
+	sky.LoadAndCreateCubeMap(sky_filepath);
+	sky.SetShaderResource(Bind::Texture::t4, 1u);
+
+	Texture bdrfLut(sceneData.gfx);
+	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png");
+	bdrfLut.SetShaderResource(Bind::Texture::t5, 1u);
+
 	//---------------------------------------------
 	// Objects
+	object = std::make_unique<DefaultObject>();
+	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
+	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png");
+	object->model->SetPosition({ 0.0f, 0.0f, 0.0f });
+	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
+
 	//skyBox.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
 	//skyBox.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	//skyBox.LoadTextures(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
@@ -266,7 +305,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 			float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
 
 
-			pPlayer->pRigidBody->SetVelocity({ new_velX, new_velY, new_velZ });
+			//pPlayer->pRigidBody->SetVelocity({ new_velX, new_velY, new_velZ });
 
 			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
 		}
@@ -276,6 +315,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Objects
+	object->Update(sceneData.dt);
 	//skyBox.Update(sceneData.dt);
 	//texelCube.Update(sceneData.dt);
 
@@ -305,6 +345,7 @@ void Scenelvl1::Draw(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Objects
+	object->Draw(sceneData.gfx);
 	//skyBox.Draw(sceneData.gfx);
 	//texelCube.Draw(sceneData.gfx);
 

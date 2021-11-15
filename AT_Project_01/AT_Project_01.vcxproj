@@ -157,6 +157,7 @@
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="DDSTextureLoader11.cpp" />
+    <ClCompile Include="DefaultObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="ConstantBufferTypes.h" />
     <ClInclude Include="DDSTextureLoader11.h" />
+    <ClInclude Include="DefaultObject.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />

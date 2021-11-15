@@ -5,6 +5,7 @@
 
 #include "Player.h"
 #include "Enemy.h"
+#include "DefaultObject.h"
 
 #include "Model.h"
 
@@ -44,4 +45,6 @@ class Scenelvl1 : public Scene
 		Model texelCube;
 
 		std::vector<std::unique_ptr<Model>> objects;
+
+		std::unique_ptr<DefaultObject> object;
 };

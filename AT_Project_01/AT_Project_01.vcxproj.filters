@@ -165,6 +165,9 @@
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="DefaultObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -285,6 +288,9 @@
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="Direction.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

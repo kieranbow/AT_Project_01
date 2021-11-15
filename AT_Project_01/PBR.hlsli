@@ -30,6 +30,7 @@ float NormalDistributionGGX(float3 normalV, float3 halfV, float roughness)
     float denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
     denom = PI * denom * denom;
     
+    //return nom / denom;
     return (chiGGX(NdotH2) * a2) / (PI * denom * denom);
 }
 
