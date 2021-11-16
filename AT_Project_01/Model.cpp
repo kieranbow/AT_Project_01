@@ -128,9 +128,14 @@ void Model::Draw(Graphics* gfx)
 
 		// 0.25f, 0.5f, -1.0f
 		DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
-		pFrameBuffer->data.light.direction = { 0.25f, 0.5f, 1.0f };
-		pFrameBuffer->data.light.ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
-		pFrameBuffer->data.light.color = { 1.0f, 1.0f, 1.0f, 0.0f };
+		//pFrameBuffer->data.light.direction = { 0.25f, 0.5f, 1.0f };
+		//pFrameBuffer->data.light.ambientColor = { 0.2f, 0.2f, 0.2f, 1.0f };
+		//pFrameBuffer->data.light.color = { 1.0f, 1.0f, 1.0f, 0.0f };
+		//pFrameBuffer->data.light.intensity = 1.0f;
+		pFrameBuffer->data.light.direction = gfx->directionalLight.GetLightProperty().direction;
+		pFrameBuffer->data.light.ambientColor = gfx->directionalLight.GetLightProperty().ambientColor;
+		pFrameBuffer->data.light.color = gfx->directionalLight.GetLightProperty().color;
+		pFrameBuffer->data.light.intensity = gfx->directionalLight.GetLightProperty().intensity;
 		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
 		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 

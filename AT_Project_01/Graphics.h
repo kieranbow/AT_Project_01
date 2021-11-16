@@ -16,6 +16,7 @@
 // Set rasterizer inside draw RSSetState
 
 #include "Camera.h"
+#include "DirectionalLight.h"
 
 // The class handles all the main rendering for the game.
 class Graphics
@@ -55,6 +56,7 @@ class Graphics
 		UINT GetSizeOfInputElemDesc() const;
 
 		Camera currentCamera;
+		DirectionalLight directionalLight;
 
 	private:
 		HRESULT hResult;

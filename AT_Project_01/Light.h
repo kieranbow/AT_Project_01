@@ -8,8 +8,8 @@ struct Light
 	{
 		ZeroMemory(this, sizeof(Light));
 	}
-	DirectX::XMFLOAT3 direction;
-	float padding = 0;
-	DirectX::XMFLOAT4 ambient;
-	DirectX::XMFLOAT4 color;
+	DirectX::XMFLOAT3 direction; // 12
+	float intensity = 0; // 4
+	DirectX::XMFLOAT4 ambientColor; // 16
+	DirectX::XMFLOAT4 color; // 16
 };

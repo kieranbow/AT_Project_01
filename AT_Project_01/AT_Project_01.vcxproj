@@ -161,6 +161,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="ErrorChecker.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapObjectID.h" />
     <ClInclude Include="Material.h" />

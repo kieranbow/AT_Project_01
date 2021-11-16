@@ -36,33 +36,18 @@ objID findID(std::string id)
 
 };
 
-
-//bool intersect(Enemy* a, Player* b)
-//{
-//	a->model.aabb.min_x = a->model.transform.GetPosition().x - 1.0f;
-//	a->model.aabb.min_y = a->model.transform.GetPosition().y - 1.0f;
-//	a->model.aabb.min_z = a->model.transform.GetPosition().z - 1.0f;
-//	a->model.aabb.max_x = a->model.transform.GetPosition().x + 1.0f;
-//	a->model.aabb.max_y = a->model.transform.GetPosition().y + 1.0f;
-//	a->model.aabb.max_z = a->model.transform.GetPosition().z + 1.0f;
-//
-//	b->model.aabb.min_x = b->model.transform.GetPosition().x - 1.0f;
-//	b->model.aabb.min_y = b->model.transform.GetPosition().y - 1.0f;
-//	b->model.aabb.min_z = b->model.transform.GetPosition().z - 1.0f;
-//	b->model.aabb.max_x = b->model.transform.GetPosition().x + 1.0f;
-//	b->model.aabb.max_y = b->model.transform.GetPosition().y + 1.0f;
-//	b->model.aabb.max_z = b->model.transform.GetPosition().z + 1.0f;
-//
-//	return (
-//		a->model.aabb.min_x <= b->model.aabb.max_x && a->model.aabb.max_x >= b->model.aabb.min_x &&
-//		a->model.aabb.min_y <= b->model.aabb.max_y && a->model.aabb.max_y >= b->model.aabb.min_y &&
-//		a->model.aabb.min_z <= b->model.aabb.max_z && a->model.aabb.max_z >= b->model.aabb.min_z);
-//
-//}
-
-
 void Scenelvl1::onCreate(SceneData& sceneData)
 {
+	//---------------------------------------------
+	// Lighting
+	directionalLight.SetLightDirection({ 0.0f, 0.5f, 1.0f });
+	directionalLight.SetLightIntensity(1.0f);
+	directionalLight.SetLightColor({ 1.0f, 0.75f, 0.25f });
+
+	// Pass scene directional light to graphics so that all objects can use it for rendering
+	sceneData.gfx->directionalLight = directionalLight;
+
+
 	//---------------------------------------------
 	// Entity
 	pPlayer = std::make_unique<Player>(sceneData.gfx);
@@ -142,6 +127,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png");
 	object->model->SetPosition({ 0.0f, 0.0f, 0.0f });
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
+
 
 	//skyBox.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
 	//skyBox.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
@@ -280,6 +266,8 @@ void Scenelvl1::Update(SceneData& sceneData)
 	//---------------------------------------------
 	// Entity
 	pPlayer->Update(sceneData.dt);
+
+	directionalLight.SetLightDirection({ 0.0f, 1.0f * time, 0.0f });
 
 	for (auto& enemy : pEnemy)
 	{

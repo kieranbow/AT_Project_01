@@ -51,5 +51,5 @@ float4 main(PS_INPUT input) : SV_TARGET
     float4 Specular = mat.Specular * lit.Specular;
     
     float4 finalColor = (emissive + ambient + diffuse + Specular) * albedo;
-    return finalColor;
+    return finalColor * light.intensity;
 }

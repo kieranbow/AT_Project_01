@@ -3,9 +3,14 @@
 #include "SceneManager.h"
 #include "CameraManager.h"
 
+// Entity
 #include "Player.h"
 #include "Enemy.h"
+
+// GameObjects
 #include "DefaultObject.h"
+#include "DirectionalLight.h"
+
 
 #include "Model.h"
 
@@ -39,6 +44,8 @@ class Scenelvl1 : public Scene
 		std::vector<std::unique_ptr<Enemy>>	pEnemy;
 
 		float time = 0.0f;
+
+		DirectionalLight directionalLight;
 
 		// Objects
 		Model skyBox;
