@@ -10,6 +10,7 @@
 // GameObjects
 #include "DefaultObject.h"
 #include "DirectionalLight.h"
+#include "SkyBox.h"
 
 
 #include "Model.h"
@@ -48,10 +49,10 @@ class Scenelvl1 : public Scene
 		DirectionalLight directionalLight;
 
 		// Objects
-		Model skyBox;
 		Model texelCube;
 
 		std::vector<std::unique_ptr<Model>> objects;
 
 		std::unique_ptr<DefaultObject> object;
+		std::unique_ptr<SkyBox> skybox;
 };

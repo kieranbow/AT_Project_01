@@ -128,6 +128,8 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	object->model->SetPosition({ 0.0f, 0.0f, 0.0f });
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
 
+	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
+
 
 	//skyBox.LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\inner_sphere.obj");
 	//skyBox.LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
@@ -304,6 +306,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 	//---------------------------------------------
 	// Objects
 	object->Update(sceneData.dt);
+	skybox->Update(sceneData.dt);
 	//skyBox.Update(sceneData.dt);
 	//texelCube.Update(sceneData.dt);
 
@@ -334,6 +337,7 @@ void Scenelvl1::Draw(SceneData& sceneData)
 	//---------------------------------------------
 	// Objects
 	object->Draw(sceneData.gfx);
+	skybox->Draw(sceneData.gfx);
 	//skyBox.Draw(sceneData.gfx);
 	//texelCube.Draw(sceneData.gfx);
 
