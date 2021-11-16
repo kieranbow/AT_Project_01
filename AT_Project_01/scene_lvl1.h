@@ -7,6 +7,8 @@
 #include "Player.h"
 #include "Enemy.h"
 
+#include "Map.h"
+
 // GameObjects
 #include "DefaultObject.h"
 #include "DirectionalLight.h"
@@ -43,6 +45,8 @@ class Scenelvl1 : public Scene
 		std::unique_ptr<Player> pPlayer;
 
 		std::vector<std::unique_ptr<Enemy>>	pEnemy;
+
+		Map lvl1Map;
 
 		float time = 0.0f;
 

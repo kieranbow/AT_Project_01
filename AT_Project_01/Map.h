@@ -4,25 +4,28 @@
 
 #include "MapObjectID.h"
 
-#include "Model.h"
+// Game Objects
+#include "DefaultObject.h"
+
+class Graphics;
 
 class Map
 {
 public:
-	Map() = default;
+	Map();
 	~Map() = default;
 
 	Map(const Map&) = delete;
 	Map& operator=(const Map&) = delete;
 
-	bool LoadMap(std::string file_path);
-
+	bool LoadMap(Graphics* pGfx, std::string file_path);
 	void Update(float dt);
-	void Draw();
+	void Draw(Graphics* pGfx);
 
 private:
-	std::map<ObjectID, Model> map;
+	mapObjectID FindObjectID(std::string id);
+	void CreateMapObject(Graphics* pGfx, std::string model_filePath, DirectX::XMFLOAT3 position);
 
-
-	std::vector<std::unique_ptr<Model>> objects;
+	std::map<std::string, mapObjectID> objectIDMap;
+	std::vector<std::unique_ptr<DefaultObject>> mapObjects;
 };

@@ -9,7 +9,7 @@ DefaultObject::DefaultObject()
 
 void DefaultObject::Update(float dt)
 {
-	transform->Update();
+	// transform->Update();
 	model->Update(dt);
 }
 
