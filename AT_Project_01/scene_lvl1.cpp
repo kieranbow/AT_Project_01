@@ -10,9 +10,10 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 {
 	//---------------------------------------------
 	// Lighting
-	directionalLight.SetLightDirection({ 0.0f, 0.5f, 1.0f });
+	directionalLight.SetLightDirection({ 0.0f, -0.3f, 0.5f });
 	directionalLight.SetLightIntensity(1.0f);
-	directionalLight.SetLightColor({ 1.0f, 0.75f, 0.25f });
+	directionalLight.SetLightColor({ 0.98f, 0.95f, 0.85f });
+	directionalLight.SetAmbientColor({ 0.36f, 0.49f, 0.76f });
 
 	// Pass scene directional light to graphics so that all objects can use it for rendering
 	sceneData.gfx->directionalLight = directionalLight;
@@ -92,13 +93,15 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	// Game Objects
 	object = std::make_unique<DefaultObject>();
 	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
 	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png");
 	object->model->SetPosition({ 0.0f, 0.0f, 0.0f });
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
 
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
+
+	gun = std::make_unique<Gun>();
 }
 
 void Scenelvl1::OnDestroy()
@@ -117,11 +120,13 @@ void Scenelvl1::OnDeactivate()
 void Scenelvl1::Input(SceneData& sceneData)
 {
 	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
+	gun->fire(sceneData.gfx, sceneData.mouse);
 
-	if (sceneData.mouse->IsLeftBtnDown())
-	{
-		cameraManager.ChangeCamera(CamID::player_cam);
-	}
+
+	//if (sceneData.mouse->IsLeftBtnDown())
+	//{
+	//	cameraManager.ChangeCamera(CamID::player_cam);
+	//}
 	if (sceneData.mouse->IsRightBtnDown())
 	{
 		cameraManager.ChangeCamera(CamID::static_cam);
@@ -136,8 +141,6 @@ void Scenelvl1::Update(SceneData& sceneData)
 	//---------------------------------------------
 	// Entity
 	pPlayer->Update(sceneData.dt);
-
-	directionalLight.SetLightDirection({ 0.0f, 1.0f * time, 0.0f });
 
 	for (auto& enemy : pEnemy)
 	{
@@ -167,8 +170,6 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
 		}
-
-
 	}
 
 	//---------------------------------------------
@@ -176,9 +177,11 @@ void Scenelvl1::Update(SceneData& sceneData)
 	lvl1Map.Update(sceneData.dt);
 
 	//---------------------------------------------
-	// Objects
+	// Game Objects
 	object->Update(sceneData.dt);
 	skybox->Update(sceneData.dt);
+
+	gun->Update(sceneData.dt);
 
 	//---------------------------------------------
 	// Camera manager
@@ -199,18 +202,16 @@ void Scenelvl1::Draw(SceneData& sceneData)
 		enemy->Draw(sceneData.gfx);
 	}
 
+	//---------------------------------------------
+	// Map
 	lvl1Map.Draw(sceneData.gfx);
 
 	//---------------------------------------------
-	// Objects
+	// Game Objects
 	object->Draw(sceneData.gfx);
 	skybox->Draw(sceneData.gfx);
 
-	//for (auto& object : objects)
-	//{
-	//	object->Draw(sceneData.gfx);
-	//}
-
+	gun->Draw(sceneData.gfx);
 
 	//---------------------------------------------
 	// Camera manager

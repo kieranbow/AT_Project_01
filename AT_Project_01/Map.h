@@ -24,7 +24,7 @@ public:
 
 private:
 	mapObjectID FindObjectID(std::string id);
-	void CreateMapObject(Graphics* pGfx, std::string model_filePath, DirectX::XMFLOAT3 position);
+	void CreateMapObject(Graphics* pGfx, std::string model_filePath, std::string texture_filePath, DirectX::XMFLOAT3 position);
 
 	std::map<std::string, mapObjectID> objectIDMap;
 	std::vector<std::unique_ptr<DefaultObject>> mapObjects;

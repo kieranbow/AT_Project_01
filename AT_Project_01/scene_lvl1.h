@@ -7,15 +7,14 @@
 #include "Player.h"
 #include "Enemy.h"
 
+// Map
 #include "Map.h"
 
 // GameObjects
 #include "DefaultObject.h"
 #include "DirectionalLight.h"
 #include "SkyBox.h"
-
-
-#include "Model.h"
+#include "Gun.h"
 
 class Scenelvl1 : public Scene
 {
@@ -43,20 +42,19 @@ class Scenelvl1 : public Scene
 
 		// Entity
 		std::unique_ptr<Player> pPlayer;
-
 		std::vector<std::unique_ptr<Enemy>>	pEnemy;
 
+		std::unique_ptr<Gun> gun;
+
+		// Map
 		Map lvl1Map;
 
-		float time = 0.0f;
-
+		// Lighting
 		DirectionalLight directionalLight;
 
-		// Objects
-		Model texelCube;
-
-		std::vector<std::unique_ptr<Model>> objects;
-
+		// GameObjects
 		std::unique_ptr<DefaultObject> object;
 		std::unique_ptr<SkyBox> skybox;
+
+		float time = 0.0f;
 };

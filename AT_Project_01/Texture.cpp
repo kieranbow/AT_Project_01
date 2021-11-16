@@ -127,7 +127,7 @@ bool Texture::CreateSampleState(UINT startSlot, UINT numSamples)
 	sampleDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampleDesc.MinLOD = 1u;
 	sampleDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	sampleDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampleDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT; // D3D11_FILTER_MIN_MAG_MIP_LINEAR
 	sampleDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
 	hr = l_gfx->GetDevice()->CreateSamplerState(&sampleDesc, pSampleState.GetAddressOf());

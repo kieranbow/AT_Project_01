@@ -41,18 +41,18 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 				}
 				case mapObjectID::Floor:
 				{
-					CreateMapObject(pGfx, "Assets\\Model\\Plane.obj", { x, -1.0f, z });
+					CreateMapObject(pGfx, "Assets\\Model\\Plane.obj", "Assets\\Texture\\grass_2_top.png", { x, -1.0f, z });
 					break;
 				}
 				case mapObjectID::Wall_1_high:
 				{
-					CreateMapObject(pGfx, "Assets\\Model\\cube_proj.obj", { x, 0.0f, z });
+					CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 0.0f, z });
 					break;
 				}
 				case mapObjectID::Wall_2_high:
 				{
-					CreateMapObject(pGfx, "Assets\\Model\\cube_proj.obj", { x, 0.0f, z });
-					CreateMapObject(pGfx, "Assets\\Model\\cube_proj.obj", { x, 2.0f, z });
+					CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 0.0f, z });
+					CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 2.0f, z });
 					break;
 				}
 
@@ -93,12 +93,13 @@ mapObjectID Map::FindObjectID(std::string id)
 	return mapObjectID::Invalid;
 }
 
-void Map::CreateMapObject(Graphics* pGfx, std::string model_filePath, DirectX::XMFLOAT3 position)
+void Map::CreateMapObject(Graphics* pGfx, std::string model_filePath, std::string texture_filePath, DirectX::XMFLOAT3 position)
 {
 	// Create object
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
 	obj->model->LoadMeshFromSource(pGfx, model_filePath);
-	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_Floor.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	obj->model->LoadTextures(pGfx, texture_filePath);
 	obj->transform->SetPosition(position.x, position.y, position.z);
 
 	// Push object into object pool
