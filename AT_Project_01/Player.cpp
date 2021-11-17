@@ -46,8 +46,7 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	}
 	if (keyboard->IsKeyPressed(VK_SPACE))
 	{
-		gun->fire(pGraphics, camera->GetPositionFloat(), mouse);
-		// camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
+		camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 	}
 	if (keyboard->IsKeyPressed('Z'))
 	{
@@ -56,7 +55,7 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 
 	if (mouse->IsLeftBtnDown())
 	{
-		gun->fire(pGraphics, camera->GetPositionFloat(), mouse);
+		gun->fire(pGraphics, camera->GetPositionFloat());
 	}
 
 	// Camera rotation

@@ -6,28 +6,27 @@ Gun::Gun()
 {
 }
 
-void Gun::fire(Graphics* pGfx, DirectX::XMFLOAT3 position, Mouse* mouse)
+void Gun::fire(Graphics* pGfx, DirectX::XMFLOAT3 position)
 {
-	if (mouse->IsLeftBtnDown())
-	{
-		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\cube_proj.obj");
-		bullet->transform->SetPosition(position.x, position.y, position.z); // spawn on barrel of gun
-		bulletPool.push_back(std::move(bullet));
+	std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\cube_proj.obj");
+	bullet->transform->SetPosition(position.x, position.y, position.z); // spawn on barrel of gun
+	bulletPool.push_back(std::move(bullet));
 		
-		bullet.release();
+	bullet.release();
 
-		OutputDebugStringA("Bullet spawned");
-	}
+	OutputDebugStringA("Bullet spawned");
 }
 
 void Gun::Update(float dt)
 {
 	for (auto& bullet : bulletPool)
 	{
+		float zPos = bullet->transform->GetPosition().z;
+
 		bullet->transform->SetPosition(
 			bullet->transform->GetPosition().x, 
 			bullet->transform->GetPosition().y, 
-			bullet->transform->GetPosition().z * (0.5f * dt));
+			zPos += 0.5f);
 		bullet->Update(dt);
 	}
 }

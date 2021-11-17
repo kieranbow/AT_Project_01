@@ -13,6 +13,7 @@ class Bullet : public GameObject
 		Bullet(Graphics* pGfx, std::string model_filePath);
 		~Bullet() override = default;
 
+		bool DistanceFromPlayer(float distanceFromPlayer);
 		void Update(float dt) final;
 		void Draw(Graphics* pGfx);
 

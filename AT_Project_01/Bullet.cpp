@@ -12,6 +12,11 @@ Bullet::Bullet(Graphics* pGfx, std::string model_filePath)
 	model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 }
 
+bool Bullet::DistanceFromPlayer(float distanceFromPlayer)
+{
+	return transform->GetPosition().z >= distanceFromPlayer;
+}
+
 void Bullet::Update(float dt)
 {
 	transform->Update();
