@@ -7,6 +7,8 @@
 #include "TransformComponent.h"
 #include "CollisionComponent.h"
 
+#include "Gun.h"
+
 // Forward delcares
 class Graphics;
 class Keyboard;
@@ -31,7 +33,10 @@ public:
 	std::unique_ptr<CollisionComponent> pCollision;
 
 private:
+	Graphics* pGraphics;
+
 	std::unique_ptr<Model> pModel;
+	std::unique_ptr<Gun> gun;
 
 
 	DirectX::XMFLOAT3 velocity = {0.2f, 0.2f, 0.2f};

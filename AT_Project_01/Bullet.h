@@ -17,7 +17,7 @@ class Bullet : public GameObject
 		void Draw(Graphics* pGfx);
 
 		std::unique_ptr<TransformComponent> transform;
-		std::unique_ptr<RigidBodyComponent> rigidBody;
+		//std::unique_ptr<RigidBodyComponent> rigidBody;
 		//std::unique_ptr<CollisionComponent> collision;
 		
 	private:

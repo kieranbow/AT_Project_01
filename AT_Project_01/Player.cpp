@@ -5,16 +5,24 @@
 
 Player::Player(Graphics* pGfx)
 {
-	camera = std::make_shared<Camera>(pGfx->GetWindowSize().first, pGfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
+	pGraphics = pGfx;
+
+	// Camera
+	camera = std::make_shared<Camera>(pGraphics->GetWindowSize().first, pGraphics->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
 	camera->SetPosition({ 0.0f, 2.0f, 0.0f, 0.0f });
 
+	// Components
 	pTransform = std::make_unique<TransformComponent>();
 	pRigidBody = std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), velocity);
 	pCollision = std::make_unique<CollisionComponent>(pTransform.get(), pTransform->GetScale());
 
+	// Model
 	pModel = std::make_unique<Model>(pTransform.get());
-	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\cube_proj.obj");
-	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	pModel->LoadMeshFromSource(pGraphics, "Assets\\Model\\cube_proj.obj");
+	pModel->LoadShaders(pGraphics, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGraphics->inputElemDesc, pGraphics->GetSizeOfInputElemDesc());
+
+	// Gun
+	gun = std::make_unique<Gun>();
 }
 
 void Player::Input(Keyboard* keyboard, Mouse* mouse)
@@ -38,14 +46,18 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	}
 	if (keyboard->IsKeyPressed(VK_SPACE))
 	{
-
-		camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
+		gun->fire(pGraphics, camera->GetPositionFloat(), mouse);
+		// camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 	}
 	if (keyboard->IsKeyPressed('Z'))
 	{
 		camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 	}
 
+	if (mouse->IsLeftBtnDown())
+	{
+		gun->fire(pGraphics, camera->GetPositionFloat(), mouse);
+	}
 
 	// Camera rotation
 	if (keyboard->IsKeyPressed(37)) // Left arrow
@@ -76,6 +88,8 @@ void Player::Update(float dt)
 	float cam_rot_y = camera->GetRotation().m128_f32[1];
 	float cam_rot_z = camera->GetRotation().m128_f32[2];
 
+	gun->Update(dt);
+
 	pTransform->Update();
 	pRigidBody->Update(dt);
 	pCollision->Update(pTransform.get(), pTransform->GetScale());
@@ -92,4 +106,5 @@ void Player::Update(float dt)
 void Player::Draw(Graphics* pGfx)
 {
 	pModel->Draw(pGfx);
+	gun->Draw(pGfx);
 }

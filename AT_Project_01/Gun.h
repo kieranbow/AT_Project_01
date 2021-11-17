@@ -11,7 +11,7 @@ class Gun : public GameObject
 		Gun();
 		~Gun() override = default;
 
-		void fire(Graphics* pGfx, Mouse* mouse);
+		void fire(Graphics* pGfx, DirectX::XMFLOAT3 position, Mouse* mouse);
 
 		void Update(float dt) final;
 		void Draw(Graphics* pGfx) final;

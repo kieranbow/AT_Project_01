@@ -100,8 +100,6 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
 
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
-
-	gun = std::make_unique<Gun>();
 }
 
 void Scenelvl1::OnDestroy()
@@ -120,8 +118,6 @@ void Scenelvl1::OnDeactivate()
 void Scenelvl1::Input(SceneData& sceneData)
 {
 	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
-	gun->fire(sceneData.gfx, sceneData.mouse);
-
 
 	//if (sceneData.mouse->IsLeftBtnDown())
 	//{
@@ -130,6 +126,10 @@ void Scenelvl1::Input(SceneData& sceneData)
 	if (sceneData.mouse->IsRightBtnDown())
 	{
 		cameraManager.ChangeCamera(CamID::static_cam);
+	}
+	else
+	{
+		cameraManager.ChangeCamera(CamID::player_cam);
 	}
 
 }
@@ -181,8 +181,6 @@ void Scenelvl1::Update(SceneData& sceneData)
 	object->Update(sceneData.dt);
 	skybox->Update(sceneData.dt);
 
-	gun->Update(sceneData.dt);
-
 	//---------------------------------------------
 	// Camera manager
 	sceneData.gfx->currentCamera.SetPosition(cameraManager.GetCurrentCamera()->GetPosition());
@@ -210,8 +208,6 @@ void Scenelvl1::Draw(SceneData& sceneData)
 	// Game Objects
 	object->Draw(sceneData.gfx);
 	skybox->Draw(sceneData.gfx);
-
-	gun->Draw(sceneData.gfx);
 
 	//---------------------------------------------
 	// Camera manager

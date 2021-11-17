@@ -4,7 +4,7 @@
 Bullet::Bullet(Graphics* pGfx, std::string model_filePath)
 {
 	transform = std::make_unique<TransformComponent>();
-	rigidBody = std::make_unique<RigidBodyComponent>(transform->GetPosition(), bulletVelocity);
+	//rigidBody = std::make_unique<RigidBodyComponent>(transform->GetPosition(), bulletVelocity);
 	//collision = std::make_unique<CollisionComponent>(rigidBody.get(), transform->GetScale());
 	
 	model = std::make_unique<Model>(transform.get());
@@ -15,7 +15,7 @@ Bullet::Bullet(Graphics* pGfx, std::string model_filePath)
 void Bullet::Update(float dt)
 {
 	transform->Update();
-	rigidBody->Update(dt);
+	//rigidBody->Update(dt);
 	//collision->Update(transform.get(), transform->GetScale());
 	model->Update(dt);
 }

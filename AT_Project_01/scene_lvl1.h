@@ -44,8 +44,6 @@ class Scenelvl1 : public Scene
 		std::unique_ptr<Player> pPlayer;
 		std::vector<std::unique_ptr<Enemy>>	pEnemy;
 
-		std::unique_ptr<Gun> gun;
-
 		// Map
 		Map lvl1Map;
 
