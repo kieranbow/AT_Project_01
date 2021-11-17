@@ -31,7 +31,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	for (int e = 0; e < 10; e++)
 	{
 		std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(sceneData.gfx);
-		enemy->pTransform->SetPosition(positionX - (distance * 10.0f) / 2.0f, 0.0f, 10.0f);
+		enemy->pTransform->SetPosition(positionX - (distance * 10.0f) / 2.0f, 1.0f, 10.0f);
 		pEnemy.push_back(std::move(enemy));
 
 		positionX += distance;
@@ -92,11 +92,11 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	//---------------------------------------------
 	// Game Objects
 	object = std::make_unique<DefaultObject>();
-	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png");
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png");
-	object->model->SetPosition({ 0.0f, 0.0f, 0.0f });
+	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet.obj");
+	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png"); //"Assets\\Texture\\Helmet_V3_Albedo.png"
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png"); //"Assets\\Texture\\Helmet_V3_RMAO.png"
+	object->model->SetPosition({ 0.0f, 0.0f, -3.0f });
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
 
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
@@ -144,7 +144,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 	for (auto& enemy : pEnemy)
 	{
-		//enemy->LookAt(pPlayer->model.transform.GetPosition());
+		enemy->LookAt(pPlayer->pTransform->GetPosition());
 		//enemy->MoveTo(pPlayer->model.transform.GetPosition(), sceneData.dt);
 		enemy->Update(sceneData.dt);
 

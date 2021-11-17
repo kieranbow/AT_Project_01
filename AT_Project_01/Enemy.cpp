@@ -10,7 +10,7 @@ Enemy::Enemy(Graphics* pGfx)
 
 	pModel = std::make_unique<Model>(pTransform.get());
 
-	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\cube_proj.obj");
+	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\billboard.obj");
 	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 	pModel->LoadTextures(pGfx, "Assets\\Texture\\icon.png");
 }

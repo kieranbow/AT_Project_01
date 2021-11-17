@@ -6,7 +6,7 @@
 Player::Player(Graphics* pGfx)
 {
 	camera = std::make_shared<Camera>(pGfx->GetWindowSize().first, pGfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
-
+	camera->SetPosition({ 0.0f, 2.0f, 0.0f, 0.0f });
 
 	pTransform = std::make_unique<TransformComponent>();
 	pRigidBody = std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), velocity);
