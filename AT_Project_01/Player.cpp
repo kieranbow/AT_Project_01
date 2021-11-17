@@ -14,7 +14,7 @@ Player::Player(Graphics* pGfx)
 	// Components
 	pTransform = std::make_unique<TransformComponent>();
 	pRigidBody = std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), velocity);
-	pCollision = std::make_unique<CollisionComponent>(pTransform.get(), pTransform->GetScale());
+	pCollision = std::make_unique<CollisionComponent>(pTransform->GetPosition(), pTransform->GetScale());
 
 	// Model
 	pModel = std::make_unique<Model>(pTransform.get());
@@ -91,7 +91,7 @@ void Player::Update(float dt)
 
 	pTransform->Update();
 	pRigidBody->Update(dt);
-	pCollision->Update(pTransform.get(), pTransform->GetScale());
+	pCollision->Update(pTransform->GetPosition(), pTransform->GetScale());
 
 	pModel->SetPosition(camera->GetPositionFloat());
 	pModel->SetRotation({ 0.0f, cam_rot_y + 1.55f, 0.0f });

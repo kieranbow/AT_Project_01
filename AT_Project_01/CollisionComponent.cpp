@@ -2,56 +2,24 @@
 #include "RigidBodyComponent.h"
 #include "TransformComponent.h"
 
-CollisionComponent::CollisionComponent(RigidBodyComponent* pRigidBody, XMFLOAT3 scale)
+CollisionComponent::CollisionComponent(XMFLOAT3 position, XMFLOAT3 scale)
 {
-	aabb.min_x = pRigidBody->GetPosition().x - scale.x;
-	aabb.min_y = pRigidBody->GetPosition().y - scale.y;
-	aabb.min_z = pRigidBody->GetPosition().z - scale.z;
+	aabb.min_x = position.x - scale.x;
+	aabb.min_y = position.y - scale.y;
+	aabb.min_z = position.z - scale.z;
 
-	aabb.max_x = pRigidBody->GetPosition().x + scale.x;
-	aabb.max_y = pRigidBody->GetPosition().y + scale.y;
-	aabb.max_z = pRigidBody->GetPosition().z + scale.z;
+	aabb.max_x = position.x + scale.x;
+	aabb.max_y = position.y + scale.y;
+	aabb.max_z = position.z + scale.z;
 }
 
-CollisionComponent::CollisionComponent(TransformComponent* pTransform, XMFLOAT3 scale)
+void CollisionComponent::Update(XMFLOAT3 position, XMFLOAT3 scale)
 {
-	aabb.min_x = pTransform->GetPosition().x - scale.x;
-	aabb.min_y = pTransform->GetPosition().y - scale.y;
-	aabb.min_z = pTransform->GetPosition().z - scale.z;
+	aabb.min_x = position.x - scale.x;
+	aabb.min_y = position.y - scale.y;
+	aabb.min_z = position.z - scale.z;
 
-	aabb.max_x = pTransform->GetPosition().x + scale.x;
-	aabb.max_y = pTransform->GetPosition().y + scale.y;
-	aabb.max_z = pTransform->GetPosition().z + scale.z;
-}
-
-void CollisionComponent::Update(TransformComponent* pTransform, XMFLOAT3 scale)
-{
-	aabb.min_x = pTransform->GetPosition().x - scale.x;
-	aabb.min_y = pTransform->GetPosition().y - scale.y;
-	aabb.min_z = pTransform->GetPosition().z - scale.z;
-
-	aabb.max_x = pTransform->GetPosition().x + scale.x;
-	aabb.max_y = pTransform->GetPosition().y + scale.y;
-	aabb.max_z = pTransform->GetPosition().z + scale.z;
-}
-
-bool CollisionComponent::AABBIntersect(CollisionComponent* collision)
-{
-	if (collision->aabb.min_x <= aabb.max_x && collision->aabb.max_x >= aabb.min_x &&
-		collision->aabb.min_y <= aabb.max_y && collision->aabb.max_y >= aabb.min_y &&
-		collision->aabb.min_z <= aabb.max_z && collision->aabb.max_z >= aabb.min_z)
-	{
-		collided = true;
-		return true;
-	}
-	else
-	{
-		collided = false;
-		return false;
-	}
-}
-
-bool CollisionComponent::IsColliding() const
-{
-	return collided;
+	aabb.max_x = position.x + scale.x;
+	aabb.max_y = position.y + scale.y;
+	aabb.max_z = position.z + scale.z;
 }

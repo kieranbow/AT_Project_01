@@ -21,12 +21,6 @@ void Gun::Update(float dt)
 {
 	for (auto& bullet : bulletPool)
 	{
-		float zPos = bullet->transform->GetPosition().z;
-
-		bullet->transform->SetPosition(
-			bullet->transform->GetPosition().x, 
-			bullet->transform->GetPosition().y, 
-			zPos += 0.5f);
 		bullet->Update(dt);
 	}
 }

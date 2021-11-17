@@ -85,6 +85,18 @@
     <Filter Include="Source Files\GameObjects\Entity">
       <UniqueIdentifier>{b6ae4533-7a35-4b5f-aee2-8636c0141309}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Map">
+      <UniqueIdentifier>{72ab3b48-5575-48e5-a4f9-c8193d8f24ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Collision">
+      <UniqueIdentifier>{23844394-0ef7-4cc6-b76f-083a8c11daf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{080b8092-b19c-4c70-a358-08f5a847d53d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Collision">
+      <UniqueIdentifier>{9ca21f55-f737-4a2b-88c5-0f0bf38d0554}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -156,9 +168,6 @@
     <ClCompile Include="scene_lvl1.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RigidBodyComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
@@ -179,6 +188,12 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionHandler.cpp">
+      <Filter>Source Files\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,12 +302,6 @@
     <ClInclude Include="scene_lvl1.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MapObjectID.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RigidBodyComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
@@ -316,6 +325,15 @@
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>Header Files\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionHandler.h">
+      <Filter>Header Files\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObjectID.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

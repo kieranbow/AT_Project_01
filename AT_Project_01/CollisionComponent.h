@@ -11,22 +11,15 @@ class TransformComponent;
 class CollisionComponent
 {
 public:
-	CollisionComponent(RigidBodyComponent* pRigidBody, XMFLOAT3 scale);
-	CollisionComponent(TransformComponent* pTransform, XMFLOAT3 scale);
+	CollisionComponent(XMFLOAT3 position, XMFLOAT3 scale);
 	~CollisionComponent() = default;
 
 	CollisionComponent(const CollisionComponent&) = delete;
 	CollisionComponent& operator=(const CollisionComponent&) = delete;
 
 	// Updates the aabb struct using the transform and scale.
-	void Update(TransformComponent* pTransform, XMFLOAT3 scale);
+	void Update(XMFLOAT3 position, XMFLOAT3 scale);
 
-	// Checks AABB collision with another collision component.
-	bool AABBIntersect(CollisionComponent* collision);
-
-	bool IsColliding() const;
-
-private:
 	// Defines the bounding box for collision
 	struct AABB
 	{
@@ -39,5 +32,6 @@ private:
 		float max_z;
 	} aabb;
 
-	bool collided = false;
+private:
+
 };

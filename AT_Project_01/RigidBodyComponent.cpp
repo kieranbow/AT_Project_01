@@ -15,6 +15,11 @@ void RigidBodyComponent::Update(float dt)
 	f_position.z += f_velocity.z * dt;
 }
 
+void RigidBodyComponent::SetPosition(XMFLOAT3 position)
+{
+	f_position = position;
+}
+
 XMFLOAT3 RigidBodyComponent::GetPosition() const
 {
 	return f_position;

@@ -51,17 +51,6 @@ class Model
 		void SetScale(DirectX::XMFLOAT3 scale);
 		DirectX::XMFLOAT3 GetScale() const;
 
-		struct AABB
-		{
-			float min_x;
-			float min_y;
-			float min_z;
-
-			float max_x;
-			float max_y;
-			float max_z;
-		} aabb;
-
 	private:
 		std::vector<Vertex> vertices;
 		std::vector<unsigned short> indices;

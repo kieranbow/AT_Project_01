@@ -2,6 +2,8 @@
 #include <fstream>
 #include <map>
 
+#include "CollisionHandler.h"
+
 Scenelvl1::Scenelvl1(SceneManager& sceneManager) : currentSceneManager(sceneManager)
 {
 }
@@ -17,7 +19,6 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 
 	// Pass scene directional light to graphics so that all objects can use it for rendering
 	sceneData.gfx->directionalLight = directionalLight;
-
 
 	//---------------------------------------------
 	// Entity
@@ -159,14 +160,14 @@ void Scenelvl1::Update(SceneData& sceneData)
 		//	//pPlayer->speed = 0.1f;
 		//}
 
-		if (enemy->collision->AABBIntersect(pPlayer->pCollision.get()))
+		if (CollisionHandler::DetectAABB(enemy->collision.get(), pPlayer->pCollision.get()))
 		{
 			float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
 			float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
 			float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
 
 
-			//pPlayer->pRigidBody->SetVelocity({ new_velX, new_velY, new_velZ });
+			// pPlayer->pRigidBody->SetVelocity({ new_velX, new_velY, new_velZ });
 
 			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
 		}
