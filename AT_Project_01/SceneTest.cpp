@@ -31,7 +31,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 	filePath[5].append("Assets\\Texture\\cubemap\\nz.png"); // South	-Z
 
 	Texture cubeMap(sceneData.gfx);
-	cubeMap.LoadAndCreateCubeMap(filePath);
+	cubeMap.LoadAndCreateCubeMap(filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
 	cubeMap.SetShaderResource(Bind::Texture::t2, 1u);
 
 
@@ -40,7 +40,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 
 
 	Texture brdfMap(sceneData.gfx);
-	brdfMap.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png");
+	brdfMap.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	brdfMap.SetShaderResource(Bind::Texture::t4, 1u);
 
 	//Material Red_plastic;

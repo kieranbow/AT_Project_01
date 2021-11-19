@@ -12,7 +12,7 @@ Enemy::Enemy(Graphics* pGfx)
 
 	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\billboard.obj");
 	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	pModel->LoadTextures(pGfx, "Assets\\Texture\\icon.png");
+	pModel->LoadTextures(pGfx, "Assets\\Texture\\icon.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void Enemy::LookAt(DirectX::XMFLOAT3 position)

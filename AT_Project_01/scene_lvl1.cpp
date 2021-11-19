@@ -1,7 +1,4 @@
 #include "scene_lvl1.h"
-#include <fstream>
-#include <map>
-
 #include "CollisionHandler.h"
 
 Scenelvl1::Scenelvl1(SceneManager& sceneManager) : currentSceneManager(sceneManager)
@@ -67,7 +64,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	skyIR_filepath[5].append("Assets\\Texture\\cubemap\\nz_ir.png"); // South	-Z
 
 	Texture skyIR(sceneData.gfx);
-	skyIR.LoadAndCreateCubeMap(skyIR_filepath);
+	skyIR.LoadAndCreateCubeMap(skyIR_filepath, DXGI_FORMAT_R8G8B8A8_UNORM);
 	skyIR.SetShaderResource(Bind::Texture::t3, 1u);
 
 	std::string sky_filepath[6];
@@ -79,11 +76,11 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	sky_filepath[5].append("Assets\\Texture\\cubemap\\nz.png"); // South	-Z
 
 	Texture skyHDRI(sceneData.gfx);
-	skyHDRI.LoadAndCreateCubeMap(sky_filepath);
+	skyHDRI.LoadAndCreateCubeMap(sky_filepath, DXGI_FORMAT_R8G8B8A8_UNORM);
 	skyHDRI.SetShaderResource(Bind::Texture::t4, 1u);
 
 	Texture bdrfLut(sceneData.gfx);
-	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png");
+	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	bdrfLut.SetShaderResource(Bind::Texture::t5, 1u);
 
 	//---------------------------------------------
@@ -93,10 +90,10 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	//---------------------------------------------
 	// Game Objects
 	object = std::make_unique<DefaultObject>();
-	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet.obj");
+	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png"); //"Assets\\Texture\\Helmet_V3_Albedo.png"
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png"); //"Assets\\Texture\\Helmet_V3_RMAO.png"
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png", DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png", DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	object->model->SetPosition({ 0.0f, 0.0f, -3.0f });
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
 
@@ -162,12 +159,21 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 		if (CollisionHandler::DetectAABB(enemy->collision.get(), pPlayer->pCollision.get()))
 		{
-			float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
-			float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
-			float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
+			//float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
+			//float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
+			//float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
 
+			DirectX::XMFLOAT3 something = enemy->pTransform->GetPosition();
+			DirectX::XMFLOAT3 anotherThing = pPlayer->pTransform->GetPosition();
 
-			// pPlayer->pRigidBody->SetVelocity({ new_velX, new_velY, new_velZ });
+			DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&something);
+			DirectX::XMVECTOR playerPos = DirectX::XMLoadFloat3(&anotherThing);
+			DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(enemyPos, playerPos);
+			DirectX::XMVECTOR length = DirectX::XMVector3Length(subtract);
+
+			float distance = 0.0f;
+			DirectX::XMStoreFloat(&distance, length);
+			OutputDebugStringA(std::to_string(distance).c_str());
 
 			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
 		}

@@ -10,7 +10,7 @@ Texture::Texture(Graphics* pGfx)
 	l_gfx = pGfx;
 }
 
-bool Texture::LoadAndCreateTexture(std::string str_file_path)
+bool Texture::LoadAndCreateTexture(std::string str_file_path, DXGI_FORMAT format)
 {
 	// Load raw pixel data using stbi_load
 	stbi_uc* texture = stbi_load(str_file_path.c_str(), &width, &height, &num_channel, STBI_rgb_alpha);
@@ -26,7 +26,7 @@ bool Texture::LoadAndCreateTexture(std::string str_file_path)
 	tex_desc.Height = height;
 	tex_desc.MipLevels = 1u;
 	tex_desc.ArraySize = 1u;
-	tex_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	tex_desc.Format = format; // DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM,
 	tex_desc.SampleDesc.Count = 1u;
 	tex_desc.SampleDesc.Quality = 0u;
 	tex_desc.Usage = D3D11_USAGE_DEFAULT;
@@ -61,7 +61,7 @@ bool Texture::LoadAndCreateTexture(std::string str_file_path)
 	return true;
 }
 
-bool Texture::LoadAndCreateCubeMap(std::string str_file_path[6])
+bool Texture::LoadAndCreateCubeMap(std::string str_file_path[6], DXGI_FORMAT format)
 {
 	D3D11_SUBRESOURCE_DATA pData[6];
 	stbi_uc* img;
@@ -86,7 +86,7 @@ bool Texture::LoadAndCreateCubeMap(std::string str_file_path[6])
 	cubeDesc.Height = height;
 	cubeDesc.MipLevels = 1u;
 	cubeDesc.ArraySize = 6u;
-	cubeDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	cubeDesc.Format = format; // DXGI_FORMAT_B8G8R8A8_UNORM_SRGB
 	cubeDesc.CPUAccessFlags = 0;
 	cubeDesc.SampleDesc.Count = 1;
 	cubeDesc.SampleDesc.Quality = 0;

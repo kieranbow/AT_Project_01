@@ -237,7 +237,7 @@ void Map::CreateMapObject(Graphics* pGfx, std::string model_filePath, std::strin
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
 	obj->model->LoadMeshFromSource(pGfx, model_filePath);
 	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	obj->model->LoadTextures(pGfx, texture_filePath);
+	obj->model->LoadTextures(pGfx, texture_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
 	obj->transform->SetPosition(position.x, position.y, position.z);
 
 	// Push object into object pool
@@ -253,8 +253,8 @@ void Map::CreateMapObjectPBR(Graphics* pGfx, std::string model_filePath, std::st
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
 	obj->model->LoadMeshFromSource(pGfx, model_filePath);
 	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	obj->model->LoadTextures(pGfx, albedo_filePath);
-	obj->model->LoadTextures(pGfx, rmao_filePath);
+	obj->model->LoadTextures(pGfx, albedo_filePath, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+	obj->model->LoadTextures(pGfx, rmao_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
 	obj->transform->SetPosition(position.x, position.y, position.z);
 
 	// Push object into object pool

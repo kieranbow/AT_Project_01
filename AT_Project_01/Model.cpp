@@ -90,12 +90,12 @@ void Model::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_pat
 	gfx->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Model::LoadTextures(Graphics* pGfx, std::string str_texture_file_path)
+void Model::LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI_FORMAT format)
 {
 	isUsingTexture = true;
 	Texture texture(pGfx);
 
-	if(!texture.LoadAndCreateTexture(str_texture_file_path))
+	if(!texture.LoadAndCreateTexture(str_texture_file_path, format))
 	{
 		OutputDebugStringA("didn load texture");
 	}

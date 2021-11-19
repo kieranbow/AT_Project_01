@@ -12,8 +12,8 @@ class Texture
 		Texture(Graphics* pGfx);
 		~Texture() = default;
 
-		bool LoadAndCreateTexture(std::string str_file_path);
-		bool LoadAndCreateCubeMap(std::string str_file_path[6]);
+		bool LoadAndCreateTexture(std::string str_file_path, DXGI_FORMAT format);
+		bool LoadAndCreateCubeMap(std::string str_file_path[6], DXGI_FORMAT format);
 		bool CreateSampleState(UINT startSlot, UINT numSamples);
 		void SetShaderResource(UINT startSlot, UINT numViews);
 

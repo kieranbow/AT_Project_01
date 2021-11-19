@@ -64,8 +64,8 @@ float4 main(PS_INPUT input) : SV_TARGET
     float specularIntensity = 0.5f;
     float ior = albedo.r + 1.0f; //0.04f
 
-    roughness = roughness * 1.0f;
-    metallic = metallic * 0.0f;
+    roughness = roughness * 0.0f;
+    metallic = metallic * 1.0f;
     
     float3 viewDir = normalize(eyePos.xyz - input.worldPos);
     float3 reflecVector = reflect(-viewDir, normal);

@@ -28,7 +28,7 @@ class Model
 		void LoadShaders(Graphics* pGfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements);
 
 		// Textures are loaded using Texture class functions
-		void LoadTextures(Graphics* pGfx, std::string str_texture_file_path);
+		void LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI_FORMAT format);
 
 		// Update models position/scale/rotation using the transform componment
 		void Update(float dt);

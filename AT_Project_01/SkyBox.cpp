@@ -8,7 +8,7 @@ SkyBox::SkyBox(Graphics* pGfx, std::string texture_filePath)
 	model = std::make_unique<Model>(transform.get());
 	model->LoadMeshFromSource(pGfx, "Assets\\Model\\inner_sphere.obj");
 	model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_unlit.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	model->LoadTextures(pGfx, texture_filePath);
+	model->LoadTextures(pGfx, texture_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
 	model->SetScale({ 5000.0f, 5000.f, 5000.0f });
 }
 
