@@ -22,6 +22,7 @@ struct Material
 struct Light
 {
     float3 direction;
+    float intensity;
     float4 ambient;
     float4 color;
 };
@@ -64,8 +65,8 @@ float4 main(PS_INPUT input) : SV_TARGET
     float specularIntensity = 0.5f;
     float ior = albedo.r + 1.0f; //0.04f
 
-    roughness = roughness * 0.0f;
-    metallic = metallic * 1.0f;
+    //roughness = roughness * 0.0f;
+    //metallic = metallic * 1.0f;
     
     float3 viewDir = normalize(eyePos.xyz - input.worldPos);
     float3 reflecVector = reflect(-viewDir, normal);
@@ -119,10 +120,10 @@ float4 main(PS_INPUT input) : SV_TARGET
     float2 brdf = BDRFlut.Sample(samplerState, float2(max(dot(normal, viewDir), 0.0f), roughness)).rg;
     float3 specular = preFilteredColor * (KS * brdf.x + brdf.y) * specularIntensity;
 
-    float3 ambient = (KD * diffuse + specular) * ao;
+    float3 ambient = (KD * (diffuse * light.color.rgb) + specular) * ao;
     float3 color = ambient + lo;
 
-    // Gamma stuff
+    // Gamma correction
     color = color / (color + float3(1.0f, 1.0f, 1.0f));
     color = pow(color, float3(1.0f / 2.2f, 1.0f / 2.2f, 1.0f / 2.2f));
 

@@ -36,8 +36,8 @@ class Model
 		// All buffers, constants buffers and shaders are set and then drawn.
 		void Draw(Graphics* gfx);
 
-		void SetMaterial(Material mat);
-		Material GetMaterial() const;
+		void SetMaterial(Material_BlinnPhong mat);
+		Material_BlinnPhong GetMaterial() const;
 
 		// Sets the position using the transform componment
 		void SetPosition(DirectX::XMFLOAT3 position);
@@ -60,7 +60,7 @@ class Model
 
 
 		TransformComponent* transform;
-		Material material;
+		Material_BlinnPhong material;
 
 		// Constant Buffers
 		std::unique_ptr<ConstantBuffer<WorldViewProj>> pWVPbuffer = std::make_unique<ConstantBuffer<WorldViewProj>>();

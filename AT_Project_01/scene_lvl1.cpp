@@ -117,10 +117,6 @@ void Scenelvl1::Input(SceneData& sceneData)
 {
 	pPlayer->Input(sceneData.keyboard, sceneData.mouse);
 
-	//if (sceneData.mouse->IsLeftBtnDown())
-	//{
-	//	cameraManager.ChangeCamera(CamID::player_cam);
-	//}
 	if (sceneData.mouse->IsRightBtnDown())
 	{
 		cameraManager.ChangeCamera(CamID::static_cam);
@@ -146,16 +142,9 @@ void Scenelvl1::Update(SceneData& sceneData)
 		//enemy->MoveTo(pPlayer->model.transform.GetPosition(), sceneData.dt);
 		enemy->Update(sceneData.dt);
 
-		//if (intersect(enemy.get(), pPlayer.get()))
-		//{
-		//	pPlayer->speed *= -1.0f;
-		//	// https://happycoding.io/tutorials/processing/collision-detection
-		//	// https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-resolution
-		//}
-		//else
-		//{
-		//	//pPlayer->speed = 0.1f;
-		//}
+		// https://happycoding.io/tutorials/processing/collision-detection
+		// https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-resolution
+
 
 		if (CollisionHandler::DetectAABB(enemy->collision.get(), pPlayer->pCollision.get()))
 		{
@@ -163,19 +152,36 @@ void Scenelvl1::Update(SceneData& sceneData)
 			//float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
 			//float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
 
-			DirectX::XMFLOAT3 something = enemy->pTransform->GetPosition();
-			DirectX::XMFLOAT3 anotherThing = pPlayer->pTransform->GetPosition();
+			//DirectX::XMFLOAT3 something = enemy->pTransform->GetPosition();
+			//DirectX::XMFLOAT3 anotherThing = pPlayer->pTransform->GetPosition();
 
-			DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&something);
-			DirectX::XMVECTOR playerPos = DirectX::XMLoadFloat3(&anotherThing);
-			DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(enemyPos, playerPos);
-			DirectX::XMVECTOR length = DirectX::XMVector3Length(subtract);
+			//DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&something);
+			//DirectX::XMVECTOR playerPos = DirectX::XMLoadFloat3(&anotherThing);
+			//DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(enemyPos, playerPos);
+			//DirectX::XMVECTOR length = DirectX::XMVector3Length(subtract);
+			//DirectX::XMVector3Normalize(length);
 
-			float distance = 0.0f;
-			DirectX::XMStoreFloat(&distance, length);
-			OutputDebugStringA(std::to_string(distance).c_str());
-
+			//float distance = 0.0f;
+			//DirectX::XMStoreFloat(&distance, length);
+			//OutputDebugStringA(std::to_string(distance).c_str());
+			
 			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
+
+
+			float vel_X = pPlayer->pRigidBody->GetVelocity().x;
+			float vel_Y = pPlayer->pRigidBody->GetVelocity().y;
+			float vel_Z = pPlayer->pRigidBody->GetVelocity().z;
+
+			float xPos = pPlayer->pRigidBody->GetPosition().x;
+			float yPos = pPlayer->pRigidBody->GetPosition().y;
+			float zPos = pPlayer->pRigidBody->GetPosition().z;
+
+			vel_X = -vel_X;
+			vel_Y = -vel_Y;
+			vel_Z = -vel_Z;
+
+			pPlayer->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
+
 		}
 	}
 

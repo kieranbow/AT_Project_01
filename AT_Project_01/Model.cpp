@@ -5,7 +5,7 @@
 
 Model::Model()
 {
-	Material mat_default;
+	Material_BlinnPhong mat_default;
 	mat_default.ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
 	mat_default.Diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
 	mat_default.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -19,7 +19,7 @@ Model::Model(TransformComponent* _pTransform)
 {
 	transform = _pTransform;
 
-	Material mat_default;
+	Material_BlinnPhong mat_default;
 	mat_default.ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
 	mat_default.Diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
 	mat_default.Emissive = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -166,12 +166,12 @@ void Model::Draw(Graphics* gfx)
 	}
 }
 
-void Model::SetMaterial(Material mat)
+void Model::SetMaterial(Material_BlinnPhong mat)
 {
 	material = mat;
 }
 
-Material Model::GetMaterial() const
+Material_BlinnPhong Model::GetMaterial() const
 {
 	return material;
 }

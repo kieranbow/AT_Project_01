@@ -19,5 +19,5 @@ struct PerFrame
 
 struct MaterialProperties
 {
-	Material mat;
+	Material_BlinnPhong mat;
 };
