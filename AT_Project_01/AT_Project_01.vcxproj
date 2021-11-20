@@ -175,6 +175,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScenePBRShowcase.cpp" />
     <ClCompile Include="SceneSwap.cpp" />
     <ClCompile Include="SceneTest.cpp" />
     <ClCompile Include="scene_lvl1.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScenePBRShowcase.h" />
     <ClInclude Include="SceneSwap.h" />
     <ClInclude Include="SceneTest.h" />
     <ClInclude Include="scene_lvl1.h" />

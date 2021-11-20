@@ -3,6 +3,7 @@
 #include "SceneTest.h"
 #include "SceneSwap.h"
 #include "scene_lvl1.h"
+#include "ScenePBRShowcase.h"
 
 Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int x_pos, int y_pos) : window(wnd_title, wnd_class, width, height, x_pos, y_pos)
 {
@@ -18,17 +19,19 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	sceneData.mouse = pMouse.get();
 
 	// Declare Scenes
-	std::shared_ptr<SceneTest> scene_Test = std::make_shared<SceneTest>(sceneManager);
-	std::shared_ptr<SceneSwap> scene_Swap = std::make_shared<SceneSwap>(sceneManager);
-	std::shared_ptr<Scenelvl1> scene_Lvl1 = std::make_shared<Scenelvl1>(sceneManager);
+	//std::shared_ptr<SceneTest> scene_Test = std::make_shared<SceneTest>(sceneManager);
+	//std::shared_ptr<SceneSwap> scene_Swap = std::make_shared<SceneSwap>(sceneManager);
+	//std::shared_ptr<Scenelvl1> scene_Lvl1 = std::make_shared<Scenelvl1>(sceneManager);
+	std::shared_ptr<ScenePBRShowcase> scene_PBR = std::make_shared<ScenePBRShowcase>(sceneManager);
 
 	// Add scenes to scene managers unordered map
-	sceneManager.AddScene(scene_Test, sceneData, SceneID::Testing);
-	sceneManager.AddScene(scene_Swap, sceneData, SceneID::swap);
-	sceneManager.AddScene(scene_Lvl1, sceneData, SceneID::lvl_1);
+	//sceneManager.AddScene(scene_Test, sceneData, SceneID::Testing);
+	//sceneManager.AddScene(scene_Swap, sceneData, SceneID::swap);
+	//sceneManager.AddScene(scene_Lvl1, sceneData, SceneID::lvl_1);
+	sceneManager.AddScene(scene_PBR, sceneData, SceneID::PBR);
 
 	// Switch Scene
-	sceneManager.SwitchScene(SceneID::lvl_1);
+	sceneManager.SwitchScene(SceneID::PBR);
 }
 
 bool Engine::ProcessWndMessages()

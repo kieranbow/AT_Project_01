@@ -1,6 +1,5 @@
 #pragma once
 #include "Light.h"
-#include "Material.h"
 
 struct WorldViewProj
 {
@@ -13,9 +12,4 @@ struct PerFrame
 {
 	Light light;
 	DirectX::XMFLOAT4 eyePos;
-};
-
-struct MaterialProperties
-{
-	Material_BlinnPhong mat;
 };

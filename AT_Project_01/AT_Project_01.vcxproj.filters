@@ -195,6 +195,9 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
+    <ClCompile Include="ScenePBRShowcase.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="MapObjectID.h">
       <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="ScenePBRShowcase.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

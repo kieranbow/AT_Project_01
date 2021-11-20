@@ -20,6 +20,7 @@ struct SceneID
 	const static scene_ID lvl_3		= 4u;
 	const static scene_ID lvl_4		= 5u;
 	const static scene_ID ending	= 6u;
+	const static scene_ID PBR		= 7u;
 };
 
 // Scene Manager uses pass through methods to send data like input, delta time and graphics
