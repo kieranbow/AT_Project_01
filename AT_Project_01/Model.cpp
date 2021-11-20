@@ -12,7 +12,7 @@ Model::Model()
 	mat_default.Specular = { 0.5f, 0.5f, 0.5f, 1.0f };
 	mat_default.SpecularPower = 10.0f;
 
-	material = mat_default;
+	BP_material = mat_default;
 }
 
 Model::Model(TransformComponent* _pTransform)
@@ -26,7 +26,7 @@ Model::Model(TransformComponent* _pTransform)
 	mat_default.Specular = { 0.5f, 0.5f, 0.5f, 1.0f };
 	mat_default.SpecularPower = 10.0f;
 
-	material = mat_default;
+	BP_material = mat_default;
 }
 
 void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
@@ -46,7 +46,15 @@ void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 	// Create static constant buffers
 	pWVPbuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
-	pMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+
+	if (isUsingPBRMat)
+	{
+		pPBRMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	}
+	else
+	{
+		pBPMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	}
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -66,7 +74,15 @@ void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<
 	// Create static constant buffers for perObject and perFrame
 	pWVPbuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
 	pFrameBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
-	pMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	
+	if (isUsingPBRMat)
+	{
+		pPBRMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	}
+	else
+	{
+		pBPMatBuffer->CreateStaticConstantBuffer(pGfx->GetDevice());
+	}
 
 	// Loop through meshes and bind their buffers to the pipeline
 	for (auto& mesh : meshes)
@@ -128,10 +144,6 @@ void Model::Draw(Graphics* gfx)
 
 		// 0.25f, 0.5f, -1.0f
 		DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
-		//pFrameBuffer->data.light.direction = { 0.25f, 0.5f, 1.0f };
-		//pFrameBuffer->data.light.ambientColor = { 0.2f, 0.2f, 0.2f, 1.0f };
-		//pFrameBuffer->data.light.color = { 1.0f, 1.0f, 1.0f, 0.0f };
-		//pFrameBuffer->data.light.intensity = 1.0f;
 		pFrameBuffer->data.light.direction = gfx->directionalLight.GetLightProperty().direction;
 		pFrameBuffer->data.light.ambientColor = gfx->directionalLight.GetLightProperty().ambientColor;
 		pFrameBuffer->data.light.color = gfx->directionalLight.GetLightProperty().color;
@@ -140,9 +152,19 @@ void Model::Draw(Graphics* gfx)
 		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 
 
-		pMatBuffer->data.mat = material;
-		pMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
+		if (isUsingPBRMat)
+		{
+			pPBRMatBuffer->data = PBR_material;
+			pPBRMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
+			pPBRMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
+		}
+		else
+		{
+			pBPMatBuffer->data = BP_material;
+			pBPMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
+			pBPMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
+		}
+
 
 		if (isUsingTexture)
 		{
@@ -166,14 +188,25 @@ void Model::Draw(Graphics* gfx)
 	}
 }
 
-void Model::SetMaterial(Material_BlinnPhong mat)
+void Model::SetBlinnPhongMaterial(Material_BlinnPhong mat)
 {
-	material = mat;
+	BP_material = mat;
 }
 
-Material_BlinnPhong Model::GetMaterial() const
+Material_BlinnPhong Model::GetBlinnPhongMaterial() const
 {
-	return material;
+	return BP_material;
+}
+
+void Model::SetPBRMaterial(Material_PBR mat)
+{
+	PBR_material = mat;
+	isUsingPBRMat = true;
+}
+
+Material_PBR Model::GetPBRMaterial() const
+{
+	return PBR_material;
 }
 
 void Model::SetPosition(DirectX::XMFLOAT3 position)

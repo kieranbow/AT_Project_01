@@ -25,33 +25,27 @@ cbuffer frameBuffer : register(b0)
 
 cbuffer MaterialProperties : register(b1)
 {
-    BlinnPhong_material mat;
+    PBR_material mat;
 }
 
-Texture2D albedoMap : TEXTURE : register(t0);
-//Texture2D normalMap : TEXTURE : register(t1);
-Texture2D RMAO : TEXTURE : register(t1);
 TextureCube skyIR : register(t3);
 TextureCube skyPrefilter : register(t4);
 Texture2D BDRFlut : register(t5);
 
-SamplerState samplerState : SAMPLER : register(s0);
 
+SamplerState samplerState : SAMPLER : register(s0);
 
 float4 main(PS_INPUT input) : SV_TARGET
 {
     // Base propertices
-    float4 albedo = albedoMap.Sample(samplerState, input.texcoord);
+    float4 albedo = mat.baseColor;
     float3 normal = normalize(input.normal);
-    float roughness = RMAO.Sample(samplerState, input.texcoord).r;
-    float metallic = RMAO.Sample(samplerState, input.texcoord).g;
-    float ao = RMAO.Sample(samplerState, input.texcoord).b;
+    float roughness = mat.roughness;
+    float metallic = mat.metallic;
+    float ao = mat.ambientOcculsion;
     float specularIntensity = 0.25f; // 0.5f
     float ior = albedo.r + 1.0f; //0.04f
 
-    //roughness = roughness * 0.0f;
-    //metallic = metallic * 1.0f;
-    
     float3 viewDir = normalize(eyePos.xyz - input.worldPos);
     float3 reflecVector = reflect(-viewDir, normal);
     
@@ -113,3 +107,4 @@ float4 main(PS_INPUT input) : SV_TARGET
 
     return float4(color, 1.0f);
 }
+

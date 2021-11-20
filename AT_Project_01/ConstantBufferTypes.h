@@ -2,8 +2,6 @@
 #include "Light.h"
 #include "Material.h"
 
-// https://developer.nvidia.com/content/constant-buffers-without-constant-pain-0
-
 struct WorldViewProj
 {
 	DirectX::XMMATRIX m_world; //16

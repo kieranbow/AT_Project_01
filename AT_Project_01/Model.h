@@ -36,8 +36,11 @@ class Model
 		// All buffers, constants buffers and shaders are set and then drawn.
 		void Draw(Graphics* gfx);
 
-		void SetMaterial(Material_BlinnPhong mat);
-		Material_BlinnPhong GetMaterial() const;
+		void SetBlinnPhongMaterial(Material_BlinnPhong mat);
+		Material_BlinnPhong GetBlinnPhongMaterial() const;
+
+		void SetPBRMaterial(Material_PBR mat);
+		Material_PBR GetPBRMaterial() const;
 
 		// Sets the position using the transform componment
 		void SetPosition(DirectX::XMFLOAT3 position);
@@ -60,13 +63,16 @@ class Model
 
 
 		TransformComponent* transform;
-		Material_BlinnPhong material;
+		Material_BlinnPhong BP_material;
+		Material_PBR PBR_material;
+
+		bool isUsingPBRMat = false;
 
 		// Constant Buffers
 		std::unique_ptr<ConstantBuffer<WorldViewProj>> pWVPbuffer = std::make_unique<ConstantBuffer<WorldViewProj>>();
 		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
-		std::unique_ptr<ConstantBuffer<MaterialProperties>> pMatBuffer = std::make_unique<ConstantBuffer<MaterialProperties>>();
-
+		std::unique_ptr<ConstantBuffer<Material_BlinnPhong>> pBPMatBuffer = std::make_unique<ConstantBuffer<Material_BlinnPhong>>();
+		std::unique_ptr<ConstantBuffer<Material_PBR>> pPBRMatBuffer = std::make_unique<ConstantBuffer<Material_PBR>>();
 		// Shaders
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
 		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();

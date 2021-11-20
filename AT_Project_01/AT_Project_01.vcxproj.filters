@@ -352,12 +352,18 @@
     <FxCompile Include="PS_Floor.hlsl">
       <Filter>Header Files\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="PS_PBRMaterial.hlsl">
+      <Filter>Header Files\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="PBR.hlsli">
       <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="BlinnPhong.hlsli">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Materials.hlsli">
       <Filter>Header Files\Shaders</Filter>
     </None>
   </ItemGroup>

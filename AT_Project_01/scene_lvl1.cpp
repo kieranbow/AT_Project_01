@@ -93,9 +93,29 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
 	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png", DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png", DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
+	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	object->model->SetPosition({ 0.0f, 0.0f, -3.0f });
 	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
+
+
+	Material_PBR blue_rubber;
+	blue_rubber.ambientOcculsion = 1.0f;
+	blue_rubber.baseColor = { 0.1f, 0.1f, 1.0f, 1.0f };
+	blue_rubber.metallic = 0.0f;
+	blue_rubber.roughness = 0.7f;
+
+	Material_PBR gold;
+	gold.ambientOcculsion = 1.0f;
+	gold.baseColor = { 1.0f, 0.766f, 0.336f, 1.0f };
+	gold.metallic = 1.0f;
+	gold.roughness = 0.1f;
+
+	sphere = std::make_unique<DefaultObject>();
+	sphere->model->SetPBRMaterial(blue_rubber);
+	sphere->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
+	sphere->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+
+	sphere->model->SetPosition({ 0.0f, 0.0f, -30.0f });
 
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
 }
@@ -167,6 +187,14 @@ void Scenelvl1::Update(SceneData& sceneData)
 			
 			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
 
+			// https://stackoverflow.com/questions/10291862/what-is-the-best-way-to-get-distance-between-2-points-with-directxmath
+			// https://gamedev.stackexchange.com/questions/5906/collision-resolution
+			// https://www.plasmaphysics.org.uk/print/collision2d.htm
+			// https://relativity.net.au/gaming/java/SimpleCollisionDetection.html
+			// https://stackoverflow.com/questions/67237843/3d-rigid-body-sphere-collision-response-c
+			// https://stackoverflow.com/questions/3232318/sphere-sphere-collision-detection-reaction
+			// https://happycoding.io/tutorials/processing/collision-detection
+
 
 			float vel_X = pPlayer->pRigidBody->GetVelocity().x;
 			float vel_Y = pPlayer->pRigidBody->GetVelocity().y;
@@ -193,6 +221,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 	// Game Objects
 	object->Update(sceneData.dt);
 	skybox->Update(sceneData.dt);
+	sphere->Update(sceneData.dt);
 
 	//---------------------------------------------
 	// Camera manager
@@ -221,6 +250,7 @@ void Scenelvl1::Draw(SceneData& sceneData)
 	// Game Objects
 	object->Draw(sceneData.gfx);
 	skybox->Draw(sceneData.gfx);
+	sphere->Draw(sceneData.gfx);
 
 	//---------------------------------------------
 	// Camera manager

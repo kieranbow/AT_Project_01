@@ -14,9 +14,8 @@ struct Material_BlinnPhong
 struct Material_PBR
 {
 	DirectX::XMFLOAT4 baseColor; // 16
-	float metallic_strength; // 4
-	float roughness_strength; // 4
-	float ao_strength; // 4
+	float metallic; // 4
+	float roughness; // 4
+	float ambientOcculsion; // 4
 	float padding; // 4
 };
-
