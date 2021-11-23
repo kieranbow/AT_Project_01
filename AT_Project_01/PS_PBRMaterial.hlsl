@@ -28,6 +28,7 @@ cbuffer MaterialProperties : register(b1)
     PBR_material mat;
 }
 
+// t3, t4, t5 are reserved for PS_PBRMaterial and PS_PBR shader
 TextureCube skyIR : register(t3);
 TextureCube skyPrefilter : register(t4);
 Texture2D BDRFlut : register(t5);

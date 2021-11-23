@@ -31,6 +31,8 @@ cbuffer MaterialProperties : register(b1)
 Texture2D albedoMap : TEXTURE : register(t0);
 //Texture2D normalMap : TEXTURE : register(t1);
 Texture2D RMAO : TEXTURE : register(t1);
+
+// t3, t4, t5 are reserved for PS_PBRMaterial and PS_PBR shader
 TextureCube skyIR : register(t3);
 TextureCube skyPrefilter : register(t4);
 Texture2D BDRFlut : register(t5);

@@ -8,6 +8,7 @@
 #include "Model.h"
 
 #include "Player.h"
+#include "DefaultObject.h"
 
 class SceneTest : public Scene
 {
@@ -43,6 +44,6 @@ class SceneTest : public Scene
 		Model pyramid;
 		Model single_cube;
 		
-		std::vector< std::unique_ptr<Model>> cube;
+		std::vector< std::unique_ptr<DefaultObject>> cube;
 		std::shared_ptr<Camera> staticCamera;
 };

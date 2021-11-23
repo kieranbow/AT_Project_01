@@ -33,7 +33,7 @@ Graphics::Graphics(HWND hwnd, int window_width, int window_height)
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
+		0,
 		NULL,
 		0,
 		D3D11_SDK_VERSION,
