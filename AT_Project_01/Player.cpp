@@ -17,7 +17,7 @@ Player::Player(Graphics* pGfx)
 	pCollision = std::make_unique<CollisionComponent>(pTransform->GetPosition(), pTransform->GetScale());
 
 	// Model
-	pModel = std::make_unique<Model>(pTransform.get());
+	pModel = std::make_unique<ModelComponent>(pTransform.get());
 	pModel->LoadMeshFromSource(pGraphics, "Assets\\Model\\cube_proj.obj");
 	pModel->LoadShaders(pGraphics, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGraphics->inputElemDesc, pGraphics->GetSizeOfInputElemDesc());
 

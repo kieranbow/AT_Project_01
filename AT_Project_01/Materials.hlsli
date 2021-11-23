@@ -1,5 +1,3 @@
-#pragma once
-
 // HLSL header file for materials used by both BlinnPhong and PBR shaders
 
 struct BlinnPhong_material

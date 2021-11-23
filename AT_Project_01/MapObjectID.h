@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+// An enum class containing all the IDs used for map objects
 enum class mapObjectID
 {
 	Invalid,

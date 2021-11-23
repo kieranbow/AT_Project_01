@@ -5,7 +5,7 @@
 #include "RigidBodyComponent.h"
 #include "CollisionComponent.h"
 
-#include "Model.h"
+#include "ModelComponent.h"
 
 class Bullet : public GameObject
 {
@@ -22,6 +22,6 @@ class Bullet : public GameObject
 		//std::unique_ptr<CollisionComponent> collision;
 		
 	private:
-		std::unique_ptr<Model> model;
+		std::unique_ptr<ModelComponent> model;
 		DirectX::XMFLOAT3 bulletVelocity = { 0.0f, 0.0f, 0.1f };
 };

@@ -1,7 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
 
-// Description
 // Vertex Struct that contrain a position and color.
 struct Vertex
 {

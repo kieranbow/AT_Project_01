@@ -4,7 +4,7 @@
 DefaultObject::DefaultObject()
 {
 	transform = std::make_unique<TransformComponent>();
-	model = std::make_unique<Model>(transform.get());
+	model = std::make_unique<ModelComponent>(transform.get());
 }
 
 void DefaultObject::Update(float dt)

@@ -20,7 +20,7 @@ class Gun : public GameObject
 
 
 	private:
-		std::unique_ptr<Model> model;
+		std::unique_ptr<ModelComponent> model;
 		std::vector<std::unique_ptr<Bullet>> bulletPool;
 
 		int rate_of_fire = 0;

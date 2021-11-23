@@ -1,18 +1,4 @@
-struct Light
-{
-    float3 direction;
-    float intensity;
-    float4 ambient;
-    float4 color;
-};
-
-struct LightResult
-{
-    float4 Diffuse;
-    float4 Specular;
-};
-
-
+#include <Light.hlsli>
 
 float4 Diffuse(Light light, float3 L, float3 N)
 {

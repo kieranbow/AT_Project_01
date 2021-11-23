@@ -3,7 +3,6 @@
 #include <string>
 #include <comdef.h>
 
-// Description
 // Contains functions for checking and calling errors found inside the program
 class Logging
 {

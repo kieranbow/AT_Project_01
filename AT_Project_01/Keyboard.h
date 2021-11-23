@@ -3,12 +3,12 @@
 #include <array>
 #include <queue>
 
-// Description
+
 // Keyboard class that handles reading char and keycodes.
 class Keyboard
 {
 	public:
-	// Description
+
 	// Nested Event Class for the KeyBoard class which contains 
 	// an enum class of EventType and functions to control these EventType.
 	class KeyboardEvent

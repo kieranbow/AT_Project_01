@@ -1,9 +1,9 @@
-#include "Model.h"
+#include "ModelComponent.h"
 #include "Model_loader.h"
 #include "Graphics.h"
 #include "TransformComponent.h"
 
-Model::Model()
+ModelComponent::ModelComponent()
 {
 	Material_BlinnPhong mat_default;
 	mat_default.ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -15,7 +15,7 @@ Model::Model()
 	BP_material = mat_default;
 }
 
-Model::Model(TransformComponent* _pTransform)
+ModelComponent::ModelComponent(TransformComponent* _pTransform)
 {
 	transform = _pTransform;
 
@@ -29,7 +29,7 @@ Model::Model(TransformComponent* _pTransform)
 	BP_material = mat_default;
 }
 
-void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
+void ModelComponent::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 {
 	// Load mesh using Assimp
 	ModelLoader loader(
@@ -63,7 +63,7 @@ void Model::LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path)
 	}
 }
 
-void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices)
+void ModelComponent::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices)
 {
 	vertices = _vertices;
 	indices = _indices;
@@ -91,7 +91,7 @@ void Model::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<
 	}
 }
 
-void Model::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements)
+void ModelComponent::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements)
 {
 	// Read and Create vertex shader
 	pVertexShader->ReadVSShaderToBlob(vs_file_path);
@@ -106,7 +106,7 @@ void Model::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_pat
 	gfx->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Model::LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI_FORMAT format)
+void ModelComponent::LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI_FORMAT format)
 {
 	isUsingTexture = true;
 	Texture texture(pGfx);
@@ -124,12 +124,12 @@ void Model::LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI
 	textures.push_back(texture);
 }
 
-void Model::Update(float dt)
+void ModelComponent::Update(float dt)
 {
 	transform->Update();
 }
 
-void Model::Draw(Graphics* gfx)
+void ModelComponent::Draw(Graphics* gfx)
 {
 	for (auto& mesh : meshes)
 	{
@@ -188,53 +188,53 @@ void Model::Draw(Graphics* gfx)
 	}
 }
 
-void Model::SetBlinnPhongMaterial(Material_BlinnPhong mat)
+void ModelComponent::SetBlinnPhongMaterial(Material_BlinnPhong mat)
 {
 	BP_material = mat;
 }
 
-Material_BlinnPhong Model::GetBlinnPhongMaterial() const
+Material_BlinnPhong ModelComponent::GetBlinnPhongMaterial() const
 {
 	return BP_material;
 }
 
-void Model::SetPBRMaterial(Material_PBR mat)
+void ModelComponent::SetPBRMaterial(Material_PBR mat)
 {
 	PBR_material = mat;
 	isUsingPBRMat = true;
 }
 
-Material_PBR Model::GetPBRMaterial() const
+Material_PBR ModelComponent::GetPBRMaterial() const
 {
 	return PBR_material;
 }
 
-void Model::SetPosition(DirectX::XMFLOAT3 position)
+void ModelComponent::SetPosition(DirectX::XMFLOAT3 position)
 {
 	transform->SetPosition(position.x, position.y, position.z);
 }
 
-DirectX::XMFLOAT3 Model::GetPosition() const
+DirectX::XMFLOAT3 ModelComponent::GetPosition() const
 {
 	return transform->GetPosition();
 }
 
-void Model::SetRotation(DirectX::XMFLOAT3 rotation)
+void ModelComponent::SetRotation(DirectX::XMFLOAT3 rotation)
 {
 	transform->SetRotation(rotation.x, rotation.y, rotation.z);
 }
 
-DirectX::XMFLOAT3 Model::GetRotation() const
+DirectX::XMFLOAT3 ModelComponent::GetRotation() const
 {
 	return transform->GetRotation();
 }
 
-void Model::SetScale(DirectX::XMFLOAT3 scale)
+void ModelComponent::SetScale(DirectX::XMFLOAT3 scale)
 {
 	transform->SetScale(scale.x, scale.y, scale.z);
 }
 
-DirectX::XMFLOAT3 Model::GetScale() const
+DirectX::XMFLOAT3 ModelComponent::GetScale() const
 {
 	return transform->GetScale();
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "Model.h"
+#include "ModelComponent.h"
 #include "Camera.h"
 
 #include "RigidBodyComponent.h"
@@ -35,7 +35,7 @@ public:
 private:
 	Graphics* pGraphics;
 
-	std::unique_ptr<Model> pModel;
+	std::unique_ptr<ModelComponent> pModel;
 	std::unique_ptr<Gun> gun;
 
 

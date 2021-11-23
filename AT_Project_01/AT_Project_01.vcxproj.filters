@@ -40,12 +40,6 @@
     <Filter Include="Header Files\Graphics\Shader">
       <UniqueIdentifier>{8f90863b-d838-4525-acdc-3ff21ab5048c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Graphics\Geometry">
-      <UniqueIdentifier>{378f6eb3-4605-44d1-96f4-d5c201377b92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Graphics\Geometry">
-      <UniqueIdentifier>{a32303ba-0ed1-4c2e-aa89-241d5b5a4a1c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Scenes">
       <UniqueIdentifier>{6c7d56bb-b9c7-478a-adf0-5b8e556a2b31}</UniqueIdentifier>
     </Filter>
@@ -135,12 +129,6 @@
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Graphics\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>Source Files\Graphics\Geometry</Filter>
-    </ClCompile>
     <ClCompile Include="Model_loader.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
@@ -197,6 +185,12 @@
     </ClCompile>
     <ClCompile Include="ScenePBRShowcase.cpp">
       <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,12 +256,6 @@
     </ClInclude>
     <ClInclude Include="tiny_obj_loader.h">
       <Filter>Header Files\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Header Files\Graphics\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\Graphics\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="Model_loader.h">
       <Filter>Header Files\Utility</Filter>
@@ -341,6 +329,12 @@
     <ClInclude Include="ScenePBRShowcase.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="ModelComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PS_unlit.hlsl">
@@ -370,6 +364,9 @@
       <Filter>Header Files\Shaders</Filter>
     </None>
     <None Include="Materials.hlsli">
+      <Filter>Header Files\Shaders</Filter>
+    </None>
+    <None Include="Light.hlsli">
       <Filter>Header Files\Shaders</Filter>
     </None>
   </ItemGroup>

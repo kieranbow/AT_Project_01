@@ -7,7 +7,7 @@ Bullet::Bullet(Graphics* pGfx, std::string model_filePath)
 	rigidBody = std::make_unique<RigidBodyComponent>(transform->GetPosition(), bulletVelocity);
 	//collision = std::make_unique<CollisionComponent>(rigidBody.get(), transform->GetScale());
 	
-	model = std::make_unique<Model>(transform.get());
+	model = std::make_unique<ModelComponent>(transform.get());
 	model->LoadMeshFromSource(pGfx, model_filePath);
 	model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 }

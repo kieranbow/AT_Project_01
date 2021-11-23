@@ -6,6 +6,7 @@
 
 using namespace DirectX;
 
+// Camera class that allows a camera to be positioned, rotated in game.
 class Camera
 {
 	public:
@@ -13,6 +14,7 @@ class Camera
 		Camera(float _width, float _height, float _fov, float _nearZ, float _farZ, bool _enableOrthoView);
 		~Camera() = default;
 
+		// Sets the size of the camera for the projection matrix
 		void SetSize(std::pair<float, float>size);
 
 		void SetPosition(XMVECTOR position);
@@ -57,8 +59,6 @@ class Camera
 		float farZ			= 10000.0f;
 		bool enableOrthographic = false;
 		bool enable			= false;
-
-		
 
 		Direction direction;
 

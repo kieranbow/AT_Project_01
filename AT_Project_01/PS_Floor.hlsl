@@ -1,21 +1,11 @@
 #include <BlinnPhong.hlsli>
+#include <Materials.hlsli>
 struct PS_INPUT // Same as vertex shader
 {
     float4 position : SV_POSITION;
     float2 texcoord : TEXCOORD;
     float3 normal : NORMAL;
     float3 worldPos : WORLD_POSITION;
-};
-
-struct Material
-{
-    float4 Emissive;
-    float4 ambient;
-    float4 Diffuse;
-    float4 Specular;
-    float SpecularPower;
-    bool UseTexture;
-    float2 padding;
 };
 
 cbuffer frameBuffer : register(b0)
@@ -26,7 +16,7 @@ cbuffer frameBuffer : register(b0)
 
 cbuffer MaterialProperties : register(b1)
 {
-    Material mat;
+    BlinnPhong_material mat;
 }
 
 Texture2D albedoMap : TEXTURE : register(t0);

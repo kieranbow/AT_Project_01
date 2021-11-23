@@ -3,8 +3,12 @@
 #include <unordered_map>
 #include "Camera.h"
 
+// Forward declaration
+class Graphics;
+
 using camera_ID = unsigned int;
 
+// A struct to contain all IDs for cameras.
 struct CamID
 {
 	const static camera_ID static_cam = 0u;
@@ -16,8 +20,7 @@ struct CamID
 	const static camera_ID cine_cam_5 = 7u;
 };
 
-class Graphics;
-
+// A simple camera manager that uses a finite state machine to update cameras in a given scene
 class CameraManager
 {
 	public:

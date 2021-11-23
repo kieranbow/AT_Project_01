@@ -1,5 +1,6 @@
 #include <PBR.hlsli>
 #include <Materials.hlsli>
+#include <Light.hlsli>
 
 struct PS_INPUT // Same as vertex shader
 {
@@ -7,14 +8,6 @@ struct PS_INPUT // Same as vertex shader
     float2 texcoord : TEXCOORD;
     float3 normal : NORMAL;
     float3 worldPos : WORLD_POSITION;
-};
-
-struct Light
-{
-    float3 direction;
-    float intensity;
-    float4 ambient;
-    float4 color;
 };
 
 cbuffer frameBuffer : register(b0)

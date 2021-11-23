@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#include "Model.h"
+#include "ModelComponent.h"
 #include "TransformComponent.h"
 
 class Graphics;
@@ -15,7 +15,7 @@ public:
 	void Update(float dt) final;
 	void Draw(Graphics* pGfx) final;
 
-	std::unique_ptr<Model> model;
+	std::unique_ptr<ModelComponent> model;
 	std::unique_ptr<TransformComponent> transform;
 
 };

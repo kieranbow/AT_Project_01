@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "Model.h"
+#include "ModelComponent.h"
 
 #include "TransformComponent.h"
 #include "CollisionComponent.h"
@@ -24,7 +24,7 @@ public:
 
 	std::unique_ptr<TransformComponent> pTransform;
 	std::unique_ptr<CollisionComponent> collision;
-	std::unique_ptr<Model> pModel;
+	std::unique_ptr<ModelComponent> pModel;
 
 private:
 	float speed = 1.0f;

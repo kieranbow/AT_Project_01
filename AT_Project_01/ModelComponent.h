@@ -11,12 +11,12 @@
 class ModelLoader;
 class TransformComponent;
 
-class Model
+class ModelComponent
 {
 	public:
-		Model();
-		Model(TransformComponent* pTransform);
-		~Model() = default;
+		ModelComponent();
+		ModelComponent(TransformComponent* pTransform);
+		~ModelComponent() = default;
 
 		// Using Assimp, it reads and loads the mesh from the file and stores data into buffers
 		void LoadMeshFromSource(Graphics* pGfx, std::string mesh_file_path);

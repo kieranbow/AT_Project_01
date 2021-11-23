@@ -169,7 +169,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ModelComponent.cpp" />
     <ClCompile Include="Model_loader.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -212,7 +212,7 @@
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Keyboard.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="ModelComponent.h" />
     <ClInclude Include="Model_loader.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Player.h" />
@@ -260,6 +260,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BlinnPhong.hlsli" />
+    <None Include="Light.hlsli" />
     <None Include="Materials.hlsli" />
     <None Include="PBR.hlsli" />
   </ItemGroup>

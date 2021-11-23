@@ -5,7 +5,7 @@
 #include "CameraManager.h"
 
 #include "Camera.h"
-#include "Model.h"
+#include "ModelComponent.h"
 
 #include "Player.h"
 #include "DefaultObject.h"
@@ -38,11 +38,11 @@ class SceneTest : public Scene
 
 		float rot = 0.0f;
 
-		Model spaceMarineHelmet;
-		Model sphere;
-		Model sky;
-		Model pyramid;
-		Model single_cube;
+		ModelComponent spaceMarineHelmet;
+		ModelComponent sphere;
+		ModelComponent sky;
+		ModelComponent pyramid;
+		ModelComponent single_cube;
 		
 		std::vector< std::unique_ptr<DefaultObject>> cube;
 		std::shared_ptr<Camera> staticCamera;
