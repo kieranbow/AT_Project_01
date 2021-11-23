@@ -39,6 +39,8 @@ private:
 	// Creates a map object that uses PBR rendering
 	void CreateMapObjectPBR(Graphics* pGfx, std::string model_filePath, std::string albedo_filePath, std::string rmao_filePath, DirectX::XMFLOAT3 position);
 
+	void CreateMapObjectPBRFromLoader(Graphics* pGfx, std::string albedo_filePath, std::string rmao_filePath, DirectX::XMFLOAT3 position, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices);
+
 	std::map<std::string, mapObjectID> objectIDMap;
 	std::vector<std::unique_ptr<DefaultObject>> mapObjects;
 };

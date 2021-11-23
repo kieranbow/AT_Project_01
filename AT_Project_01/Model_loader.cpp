@@ -37,6 +37,12 @@ ModelLoader::ModelLoader(std::string _file_path)
 	}
 }
 
+void ModelLoader::Release()
+{
+	vertices.clear();
+	indices.clear();
+}
+
 std::vector<Vertex> ModelLoader::GetVertices() const
 {
 	return vertices;

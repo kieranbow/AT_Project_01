@@ -17,6 +17,8 @@ class ModelLoader
 		ModelLoader(std::string _file_path);
 		~ModelLoader() = default;
 
+		void Release();
+
 		std::vector<Vertex> GetVertices() const;
 		std::vector<unsigned short> GetIndices() const;
 
