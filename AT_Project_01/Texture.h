@@ -6,17 +6,39 @@
 
 class Graphics;
 
+struct TextureData
+{
+	unsigned char* pixels;
+	int width;
+	int height;
+	int num_channels;
+};
+
 class Texture
 {
 	public:
 		Texture(Graphics* pGfx);
 		~Texture() = default;
 
+		// Load the nessessary data like pixels and image size into a TextureData struct
+		TextureData LoadTextureData(std::string str_file_path);
+
+		// Create a texture and shader resource using TextureData struct
+		bool CreateTextureFromTextureData(TextureData& texturedata, DXGI_FORMAT format);
+
+		// Create and load a texture and shader resource from a filepath
 		bool LoadAndCreateTexture(std::string str_file_path, DXGI_FORMAT format);
+
+		// Create and load a cubemap and shader resource from a filepath
 		bool LoadAndCreateCubeMap(std::string str_file_path[6], DXGI_FORMAT format);
+		
+		// Create Sample state for pixel shader
 		bool CreateSampleState(UINT startSlot, UINT numSamples);
+
+		// Bound the shader resource to the graphics pipeline for rendering 
 		void SetShaderResource(UINT startSlot, UINT numViews);
 
+		// Get a pointer to ID3D11Texture2D
 		ID3D11Texture2D* GetTexture() const;
 
 	private:

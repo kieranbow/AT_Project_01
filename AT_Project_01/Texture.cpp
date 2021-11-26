@@ -10,6 +10,65 @@ Texture::Texture(Graphics* pGfx)
 	l_gfx = pGfx;
 }
 
+TextureData Texture::LoadTextureData(std::string str_file_path)
+{
+	// Create default textureData.
+	TextureData textureData;
+
+	// Load and store pixel values into struct.
+	textureData.pixels = stbi_load(str_file_path.c_str(), &textureData.width, &textureData.height, &textureData.num_channels, STBI_rgb_alpha);
+
+	// Check if the texture failed to read and return a default TextureData.
+	if (stbi_failure_reason())
+	{
+		Logging::LogError("stbi_load failed to find texture");
+		return TextureData();
+	}
+
+	return textureData;
+}
+
+bool Texture::CreateTextureFromTextureData(TextureData& texturedata, DXGI_FORMAT format)
+{
+	ZeroMemory(&tex_desc, sizeof(tex_desc));
+	tex_desc.Width = texturedata.width;
+	tex_desc.Height = texturedata.height;
+	tex_desc.MipLevels = 1u;
+	tex_desc.ArraySize = 1u;
+	tex_desc.Format = format; // DXGI_FORMAT_B8G8R8A8_UNORM_SRGB, DXGI_FORMAT_R8G8B8A8_UNORM,
+	tex_desc.SampleDesc.Count = 1u;
+	tex_desc.SampleDesc.Quality = 0u;
+	tex_desc.Usage = D3D11_USAGE_DEFAULT;
+	tex_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	tex_desc.CPUAccessFlags = 0u;
+	tex_desc.MiscFlags = 0u;
+
+	D3D11_SUBRESOURCE_DATA tex_data = {};
+	tex_data.pSysMem = texturedata.pixels;
+	tex_data.SysMemPitch = texturedata.width * texturedata.num_channels; // img width * number of channels
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
+	srvd.Format = tex_desc.Format;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MostDetailedMip = 0;
+	srvd.Texture2D.MipLevels = -1;
+
+	hr = l_gfx->GetDevice()->CreateTexture2D(&tex_desc, &tex_data, &pTexture);
+	if (FAILED(hr))
+	{
+		Logging::ThrowIf(hr, "Failed to Create Texture2D");
+		return false;
+	}
+
+	hr = l_gfx->GetDevice()->CreateShaderResourceView(pTexture.Get(), &srvd, &pShaderResourceView);
+	if (FAILED(hr))
+	{
+		Logging::ThrowIf(hr, "Failed to Create Shader Resource View");
+		return false;
+	}
+	return true;
+}
+
 bool Texture::LoadAndCreateTexture(std::string str_file_path, DXGI_FORMAT format)
 {
 	// Load raw pixel data using stbi_load

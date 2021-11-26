@@ -30,6 +30,9 @@ class ModelComponent
 		// Textures are loaded using Texture class functions
 		void LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI_FORMAT format);
 
+
+		void LoadTextureUsingTextureData(Graphics* pGfx, TextureData textureData, DXGI_FORMAT format);
+
 		// Update models position/scale/rotation using the transform componment
 		void Update(float dt);
 

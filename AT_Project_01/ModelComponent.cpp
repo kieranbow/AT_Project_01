@@ -124,6 +124,24 @@ void ModelComponent::LoadTextures(Graphics* pGfx, std::string str_texture_file_p
 	textures.push_back(texture);
 }
 
+void ModelComponent::LoadTextureUsingTextureData(Graphics* pGfx, TextureData textureData, DXGI_FORMAT format)
+{
+	isUsingTexture = true;
+	Texture texture(pGfx);
+
+	if (!texture.CreateTextureFromTextureData(textureData, format))
+	{
+		OutputDebugStringA("didn load texture");
+	}
+
+	if (!texture.CreateSampleState(0u, 1u))
+	{
+		OutputDebugStringA("didn create sample");
+	}
+
+	textures.push_back(texture);
+}
+
 void ModelComponent::Update(float dt)
 {
 	transform->Update();
