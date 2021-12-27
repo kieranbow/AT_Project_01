@@ -14,7 +14,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	directionalLight.SetLightColor({ 0.98f, 0.95f, 0.85f });
 	directionalLight.SetAmbientColor({ 0.36f, 0.49f, 0.76f });
 
-	// Pass scene directional light to graphics so that all objects can use it for rendering
+	// Pass the scene's directional light to graphics so that all objects can use it for rendering
 	sceneData.gfx->directionalLight = directionalLight;
 
 	//---------------------------------------------
@@ -82,6 +82,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	Texture bdrfLut(sceneData.gfx);
 	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	bdrfLut.SetShaderResource(Bind::Texture::t5, 1u);
+	
 
 	//---------------------------------------------
 	// Map
@@ -118,6 +119,44 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	sphere->model->SetPosition({ 0.0f, 0.0f, -30.0f });
 
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
+
+	float sphere_width = 5.0f;
+	float sphere_distance = 2.0f;
+	float sphere_positionX = 0;
+	float sphere_positionY = 0;
+
+	Material_PBR aluminum;
+	aluminum.ambientOcculsion = 1.0f;
+	aluminum.baseColor = { 0.913f, 0.921f, 0.925f, 1.0f };
+	aluminum.metallic = 0.0f;
+	aluminum.roughness = 0.0f;
+
+	float metallic = 0.0f;
+	float roughness = 0.0f;
+
+	for (int i = 0; i < 5; i++)
+	{
+		std::unique_ptr<DefaultObject> sphere = std::make_unique<DefaultObject>();
+
+		//blue_rubber.metallic = metallic;
+		blue_rubber.roughness = roughness;
+
+		sphere->model->SetPBRMaterial(blue_rubber);
+		sphere->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
+		sphere->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+		sphere->transform->SetPosition(sphere_positionX, sphere_positionY, 0.0f);
+		spheres.push_back(std::move(sphere));
+
+		sphere_positionX += distance;
+		if (sphere_positionX >= (distance * sphere_width))
+		{
+			sphere_positionX = 0.0f;
+			sphere_positionY += distance;
+		}
+		sphere.release();
+		//metallic += 0.25;
+		roughness += 0.25;
+	}
 }
 
 void Scenelvl1::OnDestroy()
@@ -222,6 +261,11 @@ void Scenelvl1::Update(SceneData& sceneData)
 	object->Update(sceneData.dt);
 	skybox->Update(sceneData.dt);
 	sphere->Update(sceneData.dt);
+	
+	for (auto& sphere : spheres)
+	{
+		sphere->Update(sceneData.dt);
+	}
 
 	//---------------------------------------------
 	// Camera manager
@@ -251,6 +295,11 @@ void Scenelvl1::Draw(SceneData& sceneData)
 	object->Draw(sceneData.gfx);
 	skybox->Draw(sceneData.gfx);
 	sphere->Draw(sceneData.gfx);
+
+	for (auto& sphere : spheres)
+	{
+		sphere->Draw(sceneData.gfx);
+	}
 
 	//---------------------------------------------
 	// Camera manager

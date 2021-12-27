@@ -9,11 +9,10 @@ int CALLBACK WinMain(
 	_In_ int nCmdShow)
 {
 	// Creates engine instance
-	Engine bowEngine(L"funny box", L"MyWindow", 1280, 720, 50, 50);
+	Engine bowEngine(L"First Person Game", L"MyWindow", 1280, 720, 50, 50);
 
 	Timer timer;
 
-	// Process window messages
 	while (bowEngine.ProcessWndMessages() == true)
 	{
 		double dt = timer.GetMilisecondsElapse();

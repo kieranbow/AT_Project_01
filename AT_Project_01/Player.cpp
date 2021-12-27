@@ -46,39 +46,42 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	}
 	if (keyboard->IsKeyPressed(VK_SPACE))
 	{
-		camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
+		//camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
+
+		gun->fire(pGraphics, camera->GetPositionFloat());
 	}
-	if (keyboard->IsKeyPressed('Z'))
-	{
-		camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
-	}
+	//if (keyboard->IsKeyPressed('Z'))
+	//{
+	//	camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
+	//}
 
 	// https://stackoverflow.com/questions/28026562/sfml-cant-get-the-projectile-shooting-in-the-right-direction
 	// https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11584
 	// https://learnopengl.com/Getting-started/Camera
 
-	if (mouse->IsLeftBtnDown())
-	{
-		gun->fire(pGraphics, camera->GetPositionFloat());
-	}
+	//if (mouse->IsLeftBtnDown())
+	//{
+	//	gun->fire(pGraphics, camera->GetPositionFloat());
+	//}
 
 	// Camera rotation
-	if (keyboard->IsKeyPressed(37)) // Left arrow
+	if (keyboard->IsKeyPressed('Q')) // '37' Left arrow
 	{
 		camera->UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed(39)) // Right arrow
+	if (keyboard->IsKeyPressed('E')) // '39' Right arrow
 	{
 		camera->UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed(38)) // Up arrow
-	{
-		camera->UpdateRotation({ -0.05f, 0.0f, 0.0f, 0.0f });
-	}
-	if (keyboard->IsKeyPressed(40)) // Down arrow
-	{
-		camera->UpdateRotation({ 0.05f, 0.0f, 0.0f, 0.0f });
-	}
+
+	//if (keyboard->IsKeyPressed(38)) // Up arrow
+	//{
+	//	camera->UpdateRotation({ -0.05f, 0.0f, 0.0f, 0.0f });
+	//}
+	//if (keyboard->IsKeyPressed(40)) // Down arrow
+	//{
+	//	camera->UpdateRotation({ 0.05f, 0.0f, 0.0f, 0.0f });
+	//}
 
 }
 

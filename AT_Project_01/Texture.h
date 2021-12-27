@@ -2,10 +2,11 @@
 #include <d3d11.h>
 #include <wrl\client.h>
 #include <string>
-#include "DDSTextureLoader11.h"
 
 class Graphics;
 
+// A struct that contains the propertices for a texture like width, height,
+// pixels and number of color channels.
 struct TextureData
 {
 	unsigned char* pixels;
@@ -14,6 +15,8 @@ struct TextureData
 	int num_channels;
 };
 
+// The Texture class handles all loading of textures and cubemaps. It is also reponsible for creating sampler States for the pixel shader 
+// and Shader Resource View.
 class Texture
 {
 	public:
@@ -44,15 +47,16 @@ class Texture
 	private:
 		HRESULT hr;
 
+		// ComPtr for ID3D11
 		Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampleState;
 		Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture;
 		Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
 
-		D3D11_TEXTURE2D_DESC tex_desc = {};
-
-		int width = 0;
-		int height = 0;
+		// Image propertices
+		int img_width = 0;
+		int img_height = 0;
 		int num_channel = 0;
 
+		// Local pointer to Graphics class
 		Graphics* l_gfx;
 };

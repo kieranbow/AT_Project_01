@@ -17,23 +17,11 @@ Map::Map()
 
 bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 {
-	// Load all the meshes that will be used in the map
 	ModelLoader floor("Assets\\Model\\Plane.obj");
 	ModelLoader wall("Assets\\Model\\cube_proj.obj");
 	ModelLoader pillar_start("Assets\\Model\\pillar_start.obj");
 	ModelLoader pillar_mid("Assets\\Model\\pillar_mid.obj");
 	ModelLoader pillar_end("Assets\\Model\\pillar_end.obj");
-
-	// Texture file paths
-	std::string floor_albedo = "Assets\\Texture\\Grey tiles\\large_grey_tiles_diff_1k.png";
-	std::string floor_rmao = "Assets\\Texture\\Grey tiles\\large_grey_tiles_rmao_1k.png";
-
-	std::string wall_albedo = "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png";
-	std::string wall_rmao = "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png";
-
-	std::string pillar_albedo = "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png";
-	std::string pillar_rmao = "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png";
-
 
 	TextureData wallAlbedo;
 	TextureData wallRMAO;
@@ -139,7 +127,6 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 					break;
 				}
 
-
 				case mapObjectID::Pillar_3_high:
 				{
 					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_start.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 0.0f, z });
@@ -152,8 +139,6 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 
 					break;
 				}
-
-
 
 				case mapObjectID::Roof: // Roof and floor
 				{

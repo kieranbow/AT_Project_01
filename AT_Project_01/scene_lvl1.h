@@ -54,6 +54,7 @@ class Scenelvl1 : public Scene
 		std::unique_ptr<DefaultObject> object;
 		std::unique_ptr<DefaultObject> sphere;
 		std::unique_ptr<SkyBox> skybox;
+		std::vector<std::unique_ptr<DefaultObject>> spheres;
 
 		float time = 0.0f;
 };

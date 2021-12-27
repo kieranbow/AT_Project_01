@@ -22,13 +22,13 @@ Engine::Engine(LPCWSTR wnd_title, LPCWSTR wnd_class, int width, int height, int 
 	//std::shared_ptr<SceneTest> scene_Test = std::make_shared<SceneTest>(sceneManager);
 	//std::shared_ptr<SceneSwap> scene_Swap = std::make_shared<SceneSwap>(sceneManager);
 	std::shared_ptr<Scenelvl1> scene_Lvl1 = std::make_shared<Scenelvl1>(sceneManager);
-	std::shared_ptr<ScenePBRShowcase> scene_PBR = std::make_shared<ScenePBRShowcase>(sceneManager);
+	// std::shared_ptr<ScenePBRShowcase> scene_PBR = std::make_shared<ScenePBRShowcase>(sceneManager);
 
 	// Add scenes to scene managers unordered map
 	//sceneManager.AddScene(scene_Test, sceneData, SceneID::Testing);
 	//sceneManager.AddScene(scene_Swap, sceneData, SceneID::swap);
 	sceneManager.AddScene(scene_Lvl1, sceneData, SceneID::lvl_1);
-	sceneManager.AddScene(scene_PBR, sceneData, SceneID::PBR);
+	// sceneManager.AddScene(scene_PBR, sceneData, SceneID::PBR);
 
 	// Switch Scene
 	sceneManager.SwitchScene(SceneID::lvl_1);
@@ -43,7 +43,7 @@ LRESULT Engine::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-		// Keyboard
+		// ----------Keyboard----------
 		case WM_KEYDOWN:
 		{
 			unsigned char keycode = static_cast<unsigned char>(wParam);
@@ -186,6 +186,7 @@ void Engine::Update(double dt)
 
 void Engine::RenderFrame()
 {
+	// Draw all objects inside the scene and present it to the window
 	sceneManager.Draw(sceneData);
 	pGraphics->Present();
 }

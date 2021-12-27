@@ -1,17 +1,6 @@
-// https://www.3dgep.com/texturing-lighting-directx-11/#Material_Properties
-// https://learnopengl.com/PBR/Theory
-// https://learnopengl.com/Advanced-Lighting/Normal-Mapping
-// https://learnopengl.com/Advanced-OpenGL/Cubemaps
-// http://www.codinglabs.net/article_physically_based_rendering_cook_torrance.aspx
-// https://github.com/JJJohan/PBR/blob/master/PBR/PBR.shader
-// https://github.com/TheEvilBanana/PhysicallyBasedRendering/blob/master/PBRMatPixelShader.hlsl
-// https://wiki.jmonkeyengine.org/docs/3.4/tutorials/how-to/articles/pbr/pbr_part3.html
-// https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf
-// https://learnopengl.com/PBR/IBL/Diffuse-irradiance
-// https://www.fatalerrors.org/a/physical-based-ambient-lighting-diffuse-irradiance.html
-
-
 static float PI = 3.14159265359f;
+static float DIFFUSE_MIP_LEVEL = 5.0f;
+static float SPEC_MIP_LEVEL = 5.0f;
 
 float chiGGX(float v)
 {
@@ -21,8 +10,7 @@ float chiGGX(float v)
 // Trowbridge-Reitz GGX normal distribution
 float NormalDistributionGGX(float3 normalV, float3 halfV, float roughness)
 {
-    float a = roughness * roughness;
-    float a2 = a * a;
+    float a2 = roughness * roughness;
     float NdotH = max(dot(normalV, halfV), 0.0f);
     float NdotH2 = NdotH * NdotH;
     
@@ -30,13 +18,13 @@ float NormalDistributionGGX(float3 normalV, float3 halfV, float roughness)
     float denom = (NdotH2 * (a2 - 1.0f) + 1.0f);
     denom = PI * denom * denom;
     
-    //return nom / denom;
-    return (chiGGX(NdotH2) * a2) / (PI * denom * denom);
+    return nom / denom;
+    //return (chiGGX(NdotH2) * a2) / (PI * denom * denom);
 }
 
 float GeometrySchlickGGX(float NdotV, float roughness)
 {
-    float r = roughness + 1.0f;
+    float r = roughness + 1.0f; // Disney modification. Reduces 'Hotness'
     float k = (r * r) / 8.0f;
     
     float nom = NdotV;
