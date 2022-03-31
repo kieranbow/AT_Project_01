@@ -1,6 +1,8 @@
 #include "scene_lvl1.h"
 #include "CollisionHandler.h"
 
+#include <iostream>
+
 Scenelvl1::Scenelvl1(SceneManager& sceneManager) : currentSceneManager(sceneManager)
 {
 }
@@ -20,7 +22,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	//---------------------------------------------
 	// Entity
 	pPlayer = std::make_unique<Player>(sceneData.gfx);
-	
+	pPlayer->pTransform->SetPosition(0.0f, 0.0f, -10.0f);
 	float width = 10.0f;
 	float height = 10.0f;
 	float distance = 10.0f;
@@ -204,52 +206,60 @@ void Scenelvl1::Update(SceneData& sceneData)
 		// https://happycoding.io/tutorials/processing/collision-detection
 		// https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-resolution
 
-
-		if (CollisionHandler::DetectAABB(enemy->collision.get(), pPlayer->pCollision.get()))
+		XMVECTOR normal;
+		float depthColl;
+		int fColl;
+		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, normal, depthColl, fColl))
 		{
-			//float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
-			//float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
-			//float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
-
-			//DirectX::XMFLOAT3 something = enemy->pTransform->GetPosition();
-			//DirectX::XMFLOAT3 anotherThing = pPlayer->pTransform->GetPosition();
-
-			//DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&something);
-			//DirectX::XMVECTOR playerPos = DirectX::XMLoadFloat3(&anotherThing);
-			//DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(enemyPos, playerPos);
-			//DirectX::XMVECTOR length = DirectX::XMVector3Length(subtract);
-			//DirectX::XMVector3Normalize(length);
-
-			//float distance = 0.0f;
-			//DirectX::XMStoreFloat(&distance, length);
-			//OutputDebugStringA(std::to_string(distance).c_str());
-			
-			//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
-
-			// https://stackoverflow.com/questions/10291862/what-is-the-best-way-to-get-distance-between-2-points-with-directxmath
-			// https://gamedev.stackexchange.com/questions/5906/collision-resolution
-			// https://www.plasmaphysics.org.uk/print/collision2d.htm
-			// https://relativity.net.au/gaming/java/SimpleCollisionDetection.html
-			// https://stackoverflow.com/questions/67237843/3d-rigid-body-sphere-collision-response-c
-			// https://stackoverflow.com/questions/3232318/sphere-sphere-collision-detection-reaction
-			// https://happycoding.io/tutorials/processing/collision-detection
-
-
-			float vel_X = pPlayer->pRigidBody->GetVelocity().x;
-			float vel_Y = pPlayer->pRigidBody->GetVelocity().y;
-			float vel_Z = pPlayer->pRigidBody->GetVelocity().z;
-
-			float xPos = pPlayer->pRigidBody->GetPosition().x;
-			float yPos = pPlayer->pRigidBody->GetPosition().y;
-			float zPos = pPlayer->pRigidBody->GetPosition().z;
-
-			vel_X = -vel_X;
-			vel_Y = -vel_Y;
-			vel_Z = -vel_Z;
-
 			pPlayer->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
-
 		}
+
+
+		//if (CollisionHandler::DetectAABB(enemy->collision.get(), pPlayer->pCollision.get()))
+		//{
+		//	//float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
+		//	//float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
+		//	//float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
+
+		//	//DirectX::XMFLOAT3 something = enemy->pTransform->GetPosition();
+		//	//DirectX::XMFLOAT3 anotherThing = pPlayer->pTransform->GetPosition();
+
+		//	//DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&something);
+		//	//DirectX::XMVECTOR playerPos = DirectX::XMLoadFloat3(&anotherThing);
+		//	//DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(enemyPos, playerPos);
+		//	//DirectX::XMVECTOR length = DirectX::XMVector3Length(subtract);
+		//	//DirectX::XMVector3Normalize(length);
+
+		//	//float distance = 0.0f;
+		//	//DirectX::XMStoreFloat(&distance, length);
+		//	//OutputDebugStringA(std::to_string(distance).c_str());
+		//	
+		//	//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
+
+		//	// https://stackoverflow.com/questions/10291862/what-is-the-best-way-to-get-distance-between-2-points-with-directxmath
+		//	// https://gamedev.stackexchange.com/questions/5906/collision-resolution
+		//	// https://www.plasmaphysics.org.uk/print/collision2d.htm
+		//	// https://relativity.net.au/gaming/java/SimpleCollisionDetection.html
+		//	// https://stackoverflow.com/questions/67237843/3d-rigid-body-sphere-collision-response-c
+		//	// https://stackoverflow.com/questions/3232318/sphere-sphere-collision-detection-reaction
+		//	// https://happycoding.io/tutorials/processing/collision-detection
+
+
+		//	float vel_X = pPlayer->pRigidBody->GetVelocity().x;
+		//	float vel_Y = pPlayer->pRigidBody->GetVelocity().y;
+		//	float vel_Z = pPlayer->pRigidBody->GetVelocity().z;
+
+		//	float xPos = pPlayer->pRigidBody->GetPosition().x;
+		//	float yPos = pPlayer->pRigidBody->GetPosition().y;
+		//	float zPos = pPlayer->pRigidBody->GetPosition().z;
+
+		//	vel_X = -vel_X * 0.5f;
+		//	vel_Y = -vel_Y * 0.5f;
+		//	vel_Z = -vel_Z * 0.5f;
+
+		//	pPlayer->pRigidBody->SetVelocity({ vel_X, vel_Y, vel_Z });
+
+		//}
 	}
 
 	//---------------------------------------------

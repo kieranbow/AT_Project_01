@@ -32,6 +32,10 @@ public:
 		float max_z;
 	} aabb;
 
+	XMVECTOR min;
+	XMVECTOR max;
+
+
 private:
 
 };
