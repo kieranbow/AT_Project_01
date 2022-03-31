@@ -97,12 +97,17 @@ void Player::Update(float dt)
 	gun->Update(dt);
 
 	pTransform->Update();
-	pRigidBody->Update(dt);
-	pCollision->Update(pTransform->GetPosition(), pTransform->GetScale());
 
-	pModel->SetPosition(camera->GetPositionFloat());
-	pModel->SetRotation({ 0.0f, cam_rot_y + 1.55f, 0.0f });
-	pModel->Update(dt);
+	//pRigidBody->Update(dt);
+
+	XMFLOAT3 position;
+	XMStoreFloat3(&position, camera->GetPosition());
+
+	pCollision->Update(position, pTransform->GetScale());
+
+	//pModel->SetPosition(camera->GetPositionFloat());
+	//pModel->SetRotation({ 0.0f, cam_rot_y + 1.55f, 0.0f });
+	//pModel->Update(dt);
 
 	//pModel->transform.SetPosition(cam_x, cam_y, cam_z);
 	//pModel->transform.SetRotation(0.0f, cam_rot_y + 1.55f, 0.0f);
@@ -111,6 +116,6 @@ void Player::Update(float dt)
 
 void Player::Draw(Graphics* pGfx)
 {
-	pModel->Draw(pGfx);
+	//pModel->Draw(pGfx);
 	gun->Draw(pGfx);
 }

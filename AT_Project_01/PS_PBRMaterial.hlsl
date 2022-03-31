@@ -89,8 +89,11 @@ float4 main(PS_INPUT input) : SV_TARGET
 
     // Use the cubemap and brdf lookup table and apply them together to create specular
     float3 preFilteredColor = skyPrefilter.Sample(samplerState, reflecVector).rgb;
+
+    float3 fix = lerp(preFilteredColor, irradiance, roughness);
+
     float2 brdf = BDRFlut.Sample(samplerState, float2(max(dot(normal, viewDir), 0.0f), roughness)).rg;
-    float3 specular = preFilteredColor * (KS * brdf.x + brdf.y) * specularIntensity;
+    float3 specular = fix * (KS * brdf.x + brdf.y) * specularIntensity;
 
     float3 ambient = (KD * (diffuse * light.color.rgb) + specular) * ao;
     float3 color = ambient + lo;

@@ -136,6 +136,12 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	float metallic = 0.0f;
 	float roughness = 0.0f;
 
+	Material_PBR test;
+	test.ambientOcculsion = 1.0f;
+	test.baseColor = { 0.9f, 0.9f, 0.9f, 1.0f };
+	test.roughness = 0.0f;
+	test.metallic = 1.0f;
+
 	for (int i = 0; i < 5; i++)
 	{
 		std::unique_ptr<DefaultObject> sphere = std::make_unique<DefaultObject>();
@@ -143,7 +149,8 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 		//blue_rubber.metallic = metallic;
 		blue_rubber.roughness = roughness;
 
-		sphere->model->SetPBRMaterial(blue_rubber);
+
+		sphere->model->SetPBRMaterial(test);
 		sphere->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
 		sphere->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 		sphere->transform->SetPosition(sphere_positionX, sphere_positionY, 0.0f);
@@ -156,8 +163,8 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 			sphere_positionY += distance;
 		}
 		sphere.release();
-		//metallic += 0.25;
-		roughness += 0.25;
+
+		test.roughness += 0.25f;
 	}
 }
 
@@ -211,7 +218,9 @@ void Scenelvl1::Update(SceneData& sceneData)
 		int fColl;
 		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, normal, depthColl, fColl))
 		{
-			pPlayer->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
+			pPlayer->camera->UpdatePosition({ -1.0f, 0.0f, -1.0f, 0.0f });
+			
+			//pPlayer->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
 		}
 
 
