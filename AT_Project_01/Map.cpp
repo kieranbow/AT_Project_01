@@ -40,7 +40,7 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 
 	float x = 0.0f;
 	float z = 0.0f;
-	float map_width = 32.0f; // width * 2
+	float map_width = 56.0f; // width * 2
 
 	map_file.open(file_path);
 
@@ -64,93 +64,53 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 				}
 				case mapObjectID::Floor:
 				{
-					//CreateMapObject(pGfx, "Assets\\Model\\Plane.obj", "Assets\\Texture\\Grey tiles\\large_grey_tiles_diff_1k.png", { x, -1.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\Plane.obj", "Assets\\Texture\\Grey tiles\\large_grey_tiles_diff_1k.png", "Assets\\Texture\\Grey tiles\\large_grey_tiles_rmao_1k.png", { x, -1.0f, z });
-
 					CreateMapObjectPBRFromLoader(pGfx, floorAlbedo, floorRMAO, { x, -1.0f, z }, floor.GetVertices(), floor.GetIndices());
-
 					break;
 				}
 				case mapObjectID::Wall_1_high:
 				{
-					//CreateMapObject(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", { x, 0.0f, z });
-					//CreateMapObjectPBR(pGfx,"Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png",{ x, 0.0f, z });
-					
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 0.0f, z }, wall.GetVertices(), wall.GetIndices());
-					
 					break;
 				}
 				case mapObjectID::Wall_2_high:
 				{
-					//CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 0.0f, z });
-					//CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 2.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 0.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 2.0f, z });
-					
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 0.0f, z }, wall.GetVertices(), wall.GetIndices());
-					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 2.0f, z }, wall.GetVertices(), wall.GetIndices());
-					
+					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 2.0f, z }, wall.GetVertices(), wall.GetIndices());	
 					break;
 				}
 				case mapObjectID::Wall_3_high:
 				{
-					//CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 0.0f, z });
-					//CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 2.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 0.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 2.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 4.0f, z });
-
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 0.0f, z }, wall.GetVertices(), wall.GetIndices());
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 2.0f, z }, wall.GetVertices(), wall.GetIndices());
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 4.0f, z }, wall.GetVertices(), wall.GetIndices());
-
 					break;
 				}
 
 				case mapObjectID::Pillar_1_high:
 				{
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_start.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 0.0f, z });
-					
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 0.0f, z }, pillar_start.GetVertices(), pillar_start.GetIndices());
-
 					break;
 				}
 
 				case mapObjectID::Pillar_2_high:
 				{
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_start.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 0.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_mid.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 2.0f, z });
-					
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 0.0f, z }, pillar_start.GetVertices(), pillar_start.GetIndices());
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 2.0f, z }, pillar_mid.GetVertices(), pillar_mid.GetIndices());
-
 					break;
 				}
 
 				case mapObjectID::Pillar_3_high:
 				{
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_start.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 0.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_mid.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 2.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\pillar_end.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 4.0f, z });
-					
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 0.0f, z }, pillar_start.GetVertices(), pillar_start.GetIndices());
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 2.0f, z }, pillar_mid.GetVertices(), pillar_mid.GetIndices());
 					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 4.0f, z }, pillar_end.GetVertices(), pillar_end.GetIndices());
-
 					break;
 				}
 
 				case mapObjectID::Roof: // Roof and floor
 				{
-					//CreateMapObject(pGfx, "Assets\\Model\\Plane.obj", "Assets\\Texture\\Grey tiles\\large_grey_tiles_diff_1k.png", { x, -1.0f, z });
-					//CreateMapObject(pGfx, "Assets\\Model\\cube.obj", "Assets\\Texture\\grass_2.png", { x, 4.0f, z });
-
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\Plane.obj", "Assets\\Texture\\Grey tiles\\large_grey_tiles_diff_1k.png", "Assets\\Texture\\Grey tiles\\large_grey_tiles_rmao_1k.png", { x, -1.0f, z });
-					//CreateMapObjectPBR(pGfx, "Assets\\Model\\cube_proj.obj", "Assets\\Texture\\factory wall\\factory_wall_diff_1k.png", "Assets\\Texture\\factory wall\\factory_wall_arm_1k.png", { x, 4.0f, z });
-					
 					CreateMapObjectPBRFromLoader(pGfx, floorAlbedo, floorRMAO, { x, -1.0f, z }, floor.GetVertices(), floor.GetIndices());
-					CreateMapObjectPBRFromLoader(pGfx, wallAlbedo, wallRMAO, { x, 4.0f, z }, wall.GetVertices(), wall.GetIndices());
-
+					CreateMapObjectPBRFromLoader(pGfx, floorAlbedo, floorRMAO, { x, 4.0f, z }, wall.GetVertices(), wall.GetIndices());
 					break;
 				}
 
@@ -237,13 +197,12 @@ void Map::CreateMapObjectPBRFromLoader(Graphics* pGfx, TextureData albedo, Textu
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
 	obj->model->LoadMesh(pGfx, _vertices, _indices);
 	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	//obj->model->LoadTextures(pGfx, albedo_filePath, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
-	//obj->model->LoadTextures(pGfx, rmao_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
 
 	obj->model->LoadTextureUsingTextureData(pGfx, albedo, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
 	obj->model->LoadTextureUsingTextureData(pGfx, rmao, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
 
 	obj->transform->SetPosition(position.x, position.y, position.z);
+	obj->transform->SetScale(1.0f, 1.0f, 1.0f);
 
 	// Push object into object pool
 	mapObjects.push_back(std::move(obj));

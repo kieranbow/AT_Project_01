@@ -23,6 +23,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	// Entity
 	pPlayer = std::make_unique<Player>(sceneData.gfx);
 	pPlayer->pTransform->SetPosition(0.0f, 0.0f, -10.0f);
+
 	float width = 10.0f;
 	float height = 10.0f;
 	float distance = 10.0f;
@@ -84,7 +85,6 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	Texture bdrfLut(sceneData.gfx);
 	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	bdrfLut.SetShaderResource(Bind::Texture::t5, 1u);
-	
 
 	//---------------------------------------------
 	// Map
@@ -112,13 +112,6 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	gold.baseColor = { 1.0f, 0.766f, 0.336f, 1.0f };
 	gold.metallic = 1.0f;
 	gold.roughness = 0.1f;
-
-	sphere = std::make_unique<DefaultObject>();
-	sphere->model->SetPBRMaterial(blue_rubber);
-	sphere->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-	sphere->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-
-	sphere->model->SetPosition({ 0.0f, 0.0f, -30.0f });
 
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
 
@@ -165,6 +158,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 		sphere.release();
 
 		test.roughness += 0.25f;
+		// test.metallic += 0.50f;
 	}
 }
 
@@ -206,69 +200,30 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 	for (auto& enemy : pEnemy)
 	{
-		enemy->LookAt(pPlayer->pTransform->GetPosition());
-		//enemy->MoveTo(pPlayer->model.transform.GetPosition(), sceneData.dt);
-		enemy->Update(sceneData.dt);
+		XMFLOAT3 position;
+		XMStoreFloat3(&position, pPlayer->camera->GetPosition());
 
-		// https://happycoding.io/tutorials/processing/collision-detection
-		// https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-resolution
+		enemy->LookAt(position);
+		enemy->Update(sceneData.dt);
 
 		XMVECTOR normal;
 		float depthColl;
 		int fColl;
 		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, normal, depthColl, fColl))
 		{
-			pPlayer->camera->UpdatePosition({ -1.0f, 0.0f, -1.0f, 0.0f });
-			
-			//pPlayer->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
+			if (fColl == 0 || fColl == 1)
+			{
+				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
+			}
+			if (fColl == 2 || fColl == 3)
+			{
+				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
+			}
+			else
+			{
+				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
+			}
 		}
-
-
-		//if (CollisionHandler::DetectAABB(enemy->collision.get(), pPlayer->pCollision.get()))
-		//{
-		//	//float new_velX = pPlayer->pRigidBody->GetVelocity().x * -1.0f;
-		//	//float new_velY = pPlayer->pRigidBody->GetVelocity().y * -1.0f;
-		//	//float new_velZ = pPlayer->pRigidBody->GetVelocity().z * -1.0f;
-
-		//	//DirectX::XMFLOAT3 something = enemy->pTransform->GetPosition();
-		//	//DirectX::XMFLOAT3 anotherThing = pPlayer->pTransform->GetPosition();
-
-		//	//DirectX::XMVECTOR enemyPos = DirectX::XMLoadFloat3(&something);
-		//	//DirectX::XMVECTOR playerPos = DirectX::XMLoadFloat3(&anotherThing);
-		//	//DirectX::XMVECTOR subtract = DirectX::XMVectorSubtract(enemyPos, playerPos);
-		//	//DirectX::XMVECTOR length = DirectX::XMVector3Length(subtract);
-		//	//DirectX::XMVector3Normalize(length);
-
-		//	//float distance = 0.0f;
-		//	//DirectX::XMStoreFloat(&distance, length);
-		//	//OutputDebugStringA(std::to_string(distance).c_str());
-		//	
-		//	//pPlayer->pRigidBody->SetVelocity({new_velX, new_velY, new_velZ});
-
-		//	// https://stackoverflow.com/questions/10291862/what-is-the-best-way-to-get-distance-between-2-points-with-directxmath
-		//	// https://gamedev.stackexchange.com/questions/5906/collision-resolution
-		//	// https://www.plasmaphysics.org.uk/print/collision2d.htm
-		//	// https://relativity.net.au/gaming/java/SimpleCollisionDetection.html
-		//	// https://stackoverflow.com/questions/67237843/3d-rigid-body-sphere-collision-response-c
-		//	// https://stackoverflow.com/questions/3232318/sphere-sphere-collision-detection-reaction
-		//	// https://happycoding.io/tutorials/processing/collision-detection
-
-
-		//	float vel_X = pPlayer->pRigidBody->GetVelocity().x;
-		//	float vel_Y = pPlayer->pRigidBody->GetVelocity().y;
-		//	float vel_Z = pPlayer->pRigidBody->GetVelocity().z;
-
-		//	float xPos = pPlayer->pRigidBody->GetPosition().x;
-		//	float yPos = pPlayer->pRigidBody->GetPosition().y;
-		//	float zPos = pPlayer->pRigidBody->GetPosition().z;
-
-		//	vel_X = -vel_X * 0.5f;
-		//	vel_Y = -vel_Y * 0.5f;
-		//	vel_Z = -vel_Z * 0.5f;
-
-		//	pPlayer->pRigidBody->SetVelocity({ vel_X, vel_Y, vel_Z });
-
-		//}
 	}
 
 	//---------------------------------------------
@@ -279,7 +234,6 @@ void Scenelvl1::Update(SceneData& sceneData)
 	// Game Objects
 	object->Update(sceneData.dt);
 	skybox->Update(sceneData.dt);
-	sphere->Update(sceneData.dt);
 	
 	for (auto& sphere : spheres)
 	{
@@ -311,9 +265,8 @@ void Scenelvl1::Draw(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Game Objects
-	object->Draw(sceneData.gfx);
+	//object->Draw(sceneData.gfx);
 	skybox->Draw(sceneData.gfx);
-	sphere->Draw(sceneData.gfx);
 
 	for (auto& sphere : spheres)
 	{

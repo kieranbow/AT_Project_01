@@ -29,6 +29,8 @@ public:
 	// Draws all map objects
 	void Draw(Graphics* pGfx);
 
+	const std::vector<std::unique_ptr<DefaultObject>>& getMapObjects() const { return mapObjects; }
+
 private:
 	// Returns an enum using a string
 	mapObjectID FindObjectID(std::string id);

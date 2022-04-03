@@ -48,12 +48,12 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	{
 		//camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 
-		gun->fire(pGraphics, camera->GetPositionFloat());
+		//gun->fire(pGraphics, camera->GetPositionFloat());
 	}
-	//if (keyboard->IsKeyPressed('Z'))
-	//{
-	//	camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
-	//}
+	if (keyboard->IsKeyPressed('Z'))
+	{
+		//camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
+	}
 
 	// https://stackoverflow.com/questions/28026562/sfml-cant-get-the-projectile-shooting-in-the-right-direction
 	// https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11584
