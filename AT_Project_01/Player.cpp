@@ -49,6 +49,18 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 		//camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 
 		//gun->fire(pGraphics, camera->GetPositionFloat());
+
+		XMFLOAT4X4 matrix;
+		XMStoreFloat4x4(&matrix, camera->GetViewMatrix());
+
+		float cam_x = matrix._13 * 0.05f;
+		float cam_y = matrix._23 * 0.05f;
+		float cam_z = matrix._33 * 0.05f;
+
+		XMFLOAT3 camPosition;
+		XMStoreFloat3(&camPosition, camera->GetPosition());
+
+		gun->fire(pGraphics, camPosition, {cam_x, cam_y, cam_z});
 	}
 	if (keyboard->IsKeyPressed('Z'))
 	{
@@ -87,13 +99,6 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 
 void Player::Update(float dt)
 {
-	float cam_x = camera->GetPosition().m128_f32[0];
-	float cam_y = camera->GetPosition().m128_f32[1];
-	float cam_z = camera->GetPosition().m128_f32[2];
-	float cam_rot_x = camera->GetRotation().m128_f32[0];
-	float cam_rot_y = camera->GetRotation().m128_f32[1];
-	float cam_rot_z = camera->GetRotation().m128_f32[2];
-
 	gun->Update(dt);
 
 	pTransform->Update();

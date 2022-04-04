@@ -19,8 +19,8 @@ class ModelLoader
 
 		void Release();
 
-		std::vector<Vertex> GetVertices() const;
-		std::vector<unsigned short> GetIndices() const;
+		const std::vector<Vertex>& GetVertices() const;
+		const std::vector<unsigned short>& GetIndices() const;
 
 	private:
 		Assimp::Importer importer;

@@ -191,7 +191,7 @@ void Map::CreateMapObjectPBR(Graphics* pGfx, std::string model_filePath, std::st
 	obj.release();
 }
 
-void Map::CreateMapObjectPBRFromLoader(Graphics* pGfx, TextureData albedo, TextureData rmao, DirectX::XMFLOAT3 position, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices)
+void Map::CreateMapObjectPBRFromLoader(Graphics* pGfx, const TextureData & albedo, const TextureData & rmao, const DirectX::XMFLOAT3 & position, const std::vector<Vertex>& _vertices, const std::vector<unsigned short>& _indices)
 {
 	// Create object
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();

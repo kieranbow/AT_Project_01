@@ -43,12 +43,12 @@ void ModelLoader::Release()
 	indices.clear();
 }
 
-std::vector<Vertex> ModelLoader::GetVertices() const
+const std::vector<Vertex>& ModelLoader::GetVertices() const
 {
 	return vertices;
 }
 
-std::vector<unsigned short> ModelLoader::GetIndices() const
+const std::vector<unsigned short>& ModelLoader::GetIndices() const
 {
 	return indices;
 }

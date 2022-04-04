@@ -9,6 +9,8 @@
 #include "MapObjectID.h"
 
 class Graphics;
+class Player;
+class Enemy;
 
 // A map that can load the objects with a layout of the map from a text file
 class Map
@@ -41,7 +43,7 @@ private:
 	// Creates a map object that uses PBR rendering
 	void CreateMapObjectPBR(Graphics* pGfx, std::string model_filePath, std::string albedo_filePath, std::string rmao_filePath, DirectX::XMFLOAT3 position);
 
-	void CreateMapObjectPBRFromLoader(Graphics* pGfx, TextureData albedo, TextureData rmao, DirectX::XMFLOAT3 position, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices);
+	void CreateMapObjectPBRFromLoader(Graphics* pGfx, const TextureData & albedo, const TextureData & rmao, const DirectX::XMFLOAT3 & position, const std::vector<Vertex>& _vertices, const std::vector<unsigned short>& _indices);
 
 	std::map<std::string, mapObjectID> objectIDMap;
 	std::vector<std::unique_ptr<DefaultObject>> mapObjects;

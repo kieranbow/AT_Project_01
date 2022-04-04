@@ -6,12 +6,12 @@ Gun::Gun()
 {
 }
 
-void Gun::fire(Graphics* pGfx, DirectX::XMFLOAT3 position)
+void Gun::fire(Graphics* pGfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 velocity)
 {
 	std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\cube_proj.obj");
-	bullet->transform->SetPosition(position.x, position.y, position.z); // spawn on barrel of gun
+	bullet->transform->SetPosition(position.x, position.y, position.z);
+	bullet->rigidBody->SetVelocity(velocity);
 	bulletPool.push_back(std::move(bullet));
-		
 	bullet.release();
 
 	OutputDebugStringA("Bullet spawned");

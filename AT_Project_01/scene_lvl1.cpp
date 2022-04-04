@@ -92,74 +92,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Game Objects
-	object = std::make_unique<DefaultObject>();
-	object->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-	object->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_Albedo.png", DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
-	object->model->LoadTextures(sceneData.gfx, "Assets\\Texture\\Helmet_V3_RMAO.png", DXGI_FORMAT_R8G8B8A8_UNORM);
-	object->model->SetPosition({ 0.0f, 0.0f, -3.0f });
-	object->model->SetRotation({ 0.0f, 3.0f, 0.0f });
-
-
-	Material_PBR blue_rubber;
-	blue_rubber.ambientOcculsion = 1.0f;
-	blue_rubber.baseColor = { 0.1f, 0.1f, 1.0f, 1.0f };
-	blue_rubber.metallic = 0.0f;
-	blue_rubber.roughness = 0.7f;
-
-	Material_PBR gold;
-	gold.ambientOcculsion = 1.0f;
-	gold.baseColor = { 1.0f, 0.766f, 0.336f, 1.0f };
-	gold.metallic = 1.0f;
-	gold.roughness = 0.1f;
-
 	skybox = std::make_unique<SkyBox>(sceneData.gfx, "Assets\\Texture\\syferfontein_0d_clear_1k.png");
-
-	float sphere_width = 5.0f;
-	float sphere_distance = 2.0f;
-	float sphere_positionX = 0;
-	float sphere_positionY = 0;
-
-	Material_PBR aluminum;
-	aluminum.ambientOcculsion = 1.0f;
-	aluminum.baseColor = { 0.913f, 0.921f, 0.925f, 1.0f };
-	aluminum.metallic = 0.0f;
-	aluminum.roughness = 0.0f;
-
-	float metallic = 0.0f;
-	float roughness = 0.0f;
-
-	Material_PBR test;
-	test.ambientOcculsion = 1.0f;
-	test.baseColor = { 0.9f, 0.9f, 0.9f, 1.0f };
-	test.roughness = 0.0f;
-	test.metallic = 1.0f;
-
-	for (int i = 0; i < 5; i++)
-	{
-		std::unique_ptr<DefaultObject> sphere = std::make_unique<DefaultObject>();
-
-		//blue_rubber.metallic = metallic;
-		blue_rubber.roughness = roughness;
-
-
-		sphere->model->SetPBRMaterial(test);
-		sphere->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-		sphere->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-		sphere->transform->SetPosition(sphere_positionX, sphere_positionY, 0.0f);
-		spheres.push_back(std::move(sphere));
-
-		sphere_positionX += distance;
-		if (sphere_positionX >= (distance * sphere_width))
-		{
-			sphere_positionX = 0.0f;
-			sphere_positionY += distance;
-		}
-		sphere.release();
-
-		test.roughness += 0.25f;
-		// test.metallic += 0.50f;
-	}
 }
 
 void Scenelvl1::OnDestroy()
@@ -211,10 +144,12 @@ void Scenelvl1::Update(SceneData& sceneData)
 		int fColl;
 		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, normal, depthColl, fColl))
 		{
+			// faces on x axis
 			if (fColl == 0 || fColl == 1)
 			{
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
 			}
+			// faces on z axis
 			if (fColl == 2 || fColl == 3)
 			{
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
@@ -226,19 +161,18 @@ void Scenelvl1::Update(SceneData& sceneData)
 		}
 	}
 
+	for (CollisionHandler::AABBIntersect())
+	{
+		
+	}
+
 	//---------------------------------------------
 	// Map
 	lvl1Map.Update(sceneData.dt);
 
 	//---------------------------------------------
 	// Game Objects
-	object->Update(sceneData.dt);
 	skybox->Update(sceneData.dt);
-	
-	for (auto& sphere : spheres)
-	{
-		sphere->Update(sceneData.dt);
-	}
 
 	//---------------------------------------------
 	// Camera manager
@@ -265,13 +199,7 @@ void Scenelvl1::Draw(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Game Objects
-	//object->Draw(sceneData.gfx);
 	skybox->Draw(sceneData.gfx);
-
-	for (auto& sphere : spheres)
-	{
-		sphere->Draw(sceneData.gfx);
-	}
 
 	//---------------------------------------------
 	// Camera manager
