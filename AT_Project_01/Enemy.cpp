@@ -53,19 +53,8 @@ void Enemy::LookAt(DirectX::XMFLOAT3 position)
 
 void Enemy::MoveTo(DirectX::XMFLOAT3 position, float dt)
 {
-	float xPos = pModel->GetPosition().x;
-	float zPos = pModel->GetPosition().z;
-
-	//DirectX::XMVECTOR direction = DirectX::XMVectorSet(position.x - xPos, 0.0f, position.z - zPos, 0.0f);
-	//DirectX::XMVector3Normalize(direction);
-
-	//DirectX::XMVECTOR velocity = direction * speed * dt;
-
-	//model.transform.SetPosition(position.x + velocity.m128_f32[0], 0.0f, position.z + velocity.m128_f32[2]);
-
-
-	float distance_x = position.x - xPos;
-	float distance_z = position.z - zPos;
+	float distance_x = position.x - pModel->GetPosition().x;
+	float distance_z = position.z - pModel->GetPosition().z;
 
 	// normalize
 	float hypotenuse = sqrtf((distance_x * distance_x) + (distance_z * distance_z));

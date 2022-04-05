@@ -52,7 +52,7 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 		XMFLOAT4X4 matrix;
 		XMStoreFloat4x4(&matrix, camera->GetViewMatrix());
 
-		float cam_x = matrix._13 * 0.05f;
+		float cam_x = matrix._13 * 0.05f; // 0.05 is to slow down the bullets by a certain amount
 		float cam_y = matrix._23 * 0.05f;
 		float cam_z = matrix._33 * 0.05f;
 
@@ -67,11 +67,11 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	}
 
 	// Camera rotation
-	if (keyboard->IsKeyPressed(37)) // '37' Left arrow
+	if (keyboard->IsKeyPressed(37)) // Left arrow
 	{
 		camera->UpdateRotation({ 0.0f, -rotationSpeed, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed(39)) // '39' Right arrow
+	if (keyboard->IsKeyPressed(39)) // Right arrow
 	{
 		camera->UpdateRotation({ 0.0f, rotationSpeed, 0.0f, 0.0f });
 	}
@@ -84,7 +84,6 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	{
 		camera->UpdateRotation({ rotationSpeed, 0.0f, 0.0f, 0.0f });
 	}
-
 }
 
 void Player::Update(float dt)

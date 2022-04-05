@@ -19,7 +19,7 @@ class Bullet : public GameObject
 
 		std::unique_ptr<TransformComponent> transform;
 		std::unique_ptr<RigidBodyComponent> rigidBody;
-		//std::unique_ptr<CollisionComponent> collision;
+		std::unique_ptr<CollisionComponent> collision;
 		
 	private:
 		std::unique_ptr<ModelComponent> model;

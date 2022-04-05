@@ -34,11 +34,12 @@ class Player : public GameObject
 		std::unique_ptr<CollisionComponent> pCollision;
 		std::unique_ptr<HealthComponent> pHealth;
 
+		std::unique_ptr<Gun> gun;
+
 	private:
 		Graphics* pGraphics;
 
 		std::unique_ptr<ModelComponent> pModel;
-		std::unique_ptr<Gun> gun;
 
 		DirectX::XMFLOAT3 velocity = {0.2f, 0.2f, 0.2f};
 	

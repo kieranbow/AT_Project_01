@@ -97,6 +97,8 @@ float4 main(PS_INPUT input) : SV_TARGET
     // Use the cubemap and brdf lookup table and apply them together to create specular
     float3 preFilteredColor = skyPrefilter.Sample(samplerState, reflecVector * DIFFUSE_MIP_LEVEL).rgb;
     
+    // Since the project doesn't do cubemap convolutions, this line is a simple fix to allowing objects to have
+    // different roughness values.
     float3 fix = lerp(preFilteredColor, irradiance, roughness);
     
     float2 brdf = BDRFlut.Sample(samplerState, float2(max(dot(normal, viewDir), 0.0f), roughness * SPEC_MIP_LEVEL)).rg;

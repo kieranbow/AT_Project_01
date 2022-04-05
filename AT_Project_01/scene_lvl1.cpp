@@ -120,7 +120,6 @@ void Scenelvl1::Input(SceneData& sceneData)
 	{
 		cameraManager.ChangeCamera(CamID::player_cam);
 	}
-
 }
 
 void Scenelvl1::Update(SceneData& sceneData)
@@ -139,13 +138,14 @@ void Scenelvl1::Update(SceneData& sceneData)
 		enemy->LookAt(position);
 		enemy->Update(sceneData.dt);
 
-		XMVECTOR normal;
-		float depthColl;
-		int fColl;
-		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, normal, depthColl, fColl))
+		XMVECTOR enemyNormal; 
+		float enemyDepthColl; 
+		int enemyFColl;
+
+		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, enemyNormal, enemyDepthColl, enemyFColl))
 		{
 			// faces on x axis
-			if (fColl == 0 || fColl == 1)
+			if (enemyFColl == 0 || enemyFColl == 1)
 			{
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
 				pPlayer->pHealth->subtractHealth(10.0f);
@@ -155,7 +155,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 			}
 			// faces on z axis
-			if (fColl == 2 || fColl == 3)
+			if (enemyFColl == 2 || enemyFColl == 3)
 			{
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
 				pPlayer->pHealth->subtractHealth(10.0f);
@@ -168,9 +168,25 @@ void Scenelvl1::Update(SceneData& sceneData)
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
 			}
 		}
+
+		XMVECTOR bulletNormal;
+		float bulletDepthColl;
+		int bulletFColl;
+		for (size_t bullet = 0; bullet < pPlayer->gun->getBulletPool().size(); bullet++)
+		{
+			if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->gun->getBulletPool()[bullet]->collision->min, pPlayer->gun->getBulletPool()[bullet]->collision->max, bulletNormal, bulletDepthColl, bulletFColl))
+			{
+				enemy->pHealth->subtractHealth(25.0f);
+
+
+			}
+		}
 	}
 
-	//if (pPlayer->pHealth->getStatus() == 1) OutputDebugStringA("Dead\n");
+	if (enemy->pHealth->getStatus() == 1)
+	{
+		enemy->pTransform->SetPosition(0.0f, -1.0f, 0.0f);
+	}
 
 	//---------------------------------------------
 	// Map

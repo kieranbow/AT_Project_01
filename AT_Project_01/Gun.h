@@ -18,6 +18,7 @@ class Gun : public GameObject
 
 		std::unique_ptr<TransformComponent> transform;
 
+		const std::vector<std::unique_ptr<Bullet>>& getBulletPool() const;
 
 	private:
 		std::unique_ptr<ModelComponent> model;
