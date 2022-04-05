@@ -148,11 +148,20 @@ void Scenelvl1::Update(SceneData& sceneData)
 			if (fColl == 0 || fColl == 1)
 			{
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
+				pPlayer->pHealth->subtractHealth(10.0f);
+				
+				std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
+				OutputDebugStringW(string.c_str());
+
 			}
 			// faces on z axis
 			if (fColl == 2 || fColl == 3)
 			{
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
+				pPlayer->pHealth->subtractHealth(10.0f);
+
+				std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
+				OutputDebugStringW(string.c_str());
 			}
 			else
 			{
@@ -161,10 +170,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 		}
 	}
 
-	for (CollisionHandler::AABBIntersect())
-	{
-		
-	}
+	//if (pPlayer->pHealth->getStatus() == 1) OutputDebugStringA("Dead\n");
 
 	//---------------------------------------------
 	// Map

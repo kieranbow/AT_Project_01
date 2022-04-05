@@ -12,9 +12,10 @@ Player::Player(Graphics* pGfx)
 	camera->SetPosition({ 0.0f, 2.0f, 0.0f, 0.0f });
 
 	// Components
-	pTransform = std::make_unique<TransformComponent>();
-	pRigidBody = std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), velocity);
-	pCollision = std::make_unique<CollisionComponent>(pTransform->GetPosition(), pTransform->GetScale());
+	pTransform	= std::make_unique<TransformComponent>();
+	pRigidBody	= std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), velocity);
+	pCollision	= std::make_unique<CollisionComponent>(pTransform->GetPosition(), pTransform->GetScale());
+	pHealth		= std::make_unique<HealthComponent>();
 
 	// Model
 	pModel = std::make_unique<ModelComponent>(pTransform.get());
@@ -48,8 +49,6 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	{
 		//camera->UpdatePosition({ 0.0f, 1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 
-		//gun->fire(pGraphics, camera->GetPositionFloat());
-
 		XMFLOAT4X4 matrix;
 		XMStoreFloat4x4(&matrix, camera->GetViewMatrix());
 
@@ -67,33 +66,24 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 		//camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });
 	}
 
-	// https://stackoverflow.com/questions/28026562/sfml-cant-get-the-projectile-shooting-in-the-right-direction
-	// https://pybullet.org/Bullet/phpBB3/viewtopic.php?t=11584
-	// https://learnopengl.com/Getting-started/Camera
-
-	//if (mouse->IsLeftBtnDown())
-	//{
-	//	gun->fire(pGraphics, camera->GetPositionFloat());
-	//}
-
 	// Camera rotation
-	if (keyboard->IsKeyPressed('Q')) // '37' Left arrow
+	if (keyboard->IsKeyPressed(37)) // '37' Left arrow
 	{
-		camera->UpdateRotation({ 0.0f, -0.05f, 0.0f, 0.0f });
+		camera->UpdateRotation({ 0.0f, -rotationSpeed, 0.0f, 0.0f });
 	}
-	if (keyboard->IsKeyPressed('E')) // '39' Right arrow
+	if (keyboard->IsKeyPressed(39)) // '39' Right arrow
 	{
-		camera->UpdateRotation({ 0.0f, 0.05f, 0.0f, 0.0f });
+		camera->UpdateRotation({ 0.0f, rotationSpeed, 0.0f, 0.0f });
 	}
 
-	//if (keyboard->IsKeyPressed(38)) // Up arrow
-	//{
-	//	camera->UpdateRotation({ -0.05f, 0.0f, 0.0f, 0.0f });
-	//}
-	//if (keyboard->IsKeyPressed(40)) // Down arrow
-	//{
-	//	camera->UpdateRotation({ 0.05f, 0.0f, 0.0f, 0.0f });
-	//}
+	if (keyboard->IsKeyPressed(38)) // Up arrow
+	{
+		camera->UpdateRotation({ -rotationSpeed, 0.0f, 0.0f, 0.0f });
+	}
+	if (keyboard->IsKeyPressed(40)) // Down arrow
+	{
+		camera->UpdateRotation({ rotationSpeed, 0.0f, 0.0f, 0.0f });
+	}
 
 }
 
@@ -110,17 +100,14 @@ void Player::Update(float dt)
 
 	pCollision->Update(position, pTransform->GetScale());
 
-	//pModel->SetPosition(camera->GetPositionFloat());
-	//pModel->SetRotation({ 0.0f, cam_rot_y + 1.55f, 0.0f });
-	//pModel->Update(dt);
+	pModel->SetPosition(position);
+	pModel->SetRotation({ camera->GetRotation().m128_f32[0], camera->GetRotation().m128_f32[1], camera->GetRotation().m128_f32[2] });
+	pModel->Update(dt);
 
-	//pModel->transform.SetPosition(cam_x, cam_y, cam_z);
-	//pModel->transform.SetRotation(0.0f, cam_rot_y + 1.55f, 0.0f);
-	//pModel->Update(dt);
 }
 
 void Player::Draw(Graphics* pGfx)
 {
-	//pModel->Draw(pGfx);
+	pModel->Draw(pGfx);
 	gun->Draw(pGfx);
 }

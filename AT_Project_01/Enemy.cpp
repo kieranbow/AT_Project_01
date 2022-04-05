@@ -9,6 +9,7 @@ Enemy::Enemy(Graphics* pGfx)
 	collision = std::make_unique<CollisionComponent>(pTransform->GetPosition(), pTransform->GetScale());
 
 	pModel = std::make_unique<ModelComponent>(pTransform.get());
+	pHealth = std::make_unique<HealthComponent>();
 
 	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\billboard.obj");
 	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());

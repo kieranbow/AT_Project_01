@@ -163,6 +163,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="HealthComponent.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="ErrorChecker.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="HealthComponent.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Map.h" />
