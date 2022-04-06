@@ -172,22 +172,24 @@ void Scenelvl1::Update(SceneData& sceneData)
 		XMVECTOR bulletNormal;
 		float bulletDepthColl;
 		int bulletFColl;
-		for (size_t bullet = 0; bullet < pPlayer->gun->getBulletPool().size(); bullet++)
+		for (auto& bullet : pPlayer->gun->getBulletPool())
 		{
-			if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->gun->getBulletPool()[bullet]->collision->min, pPlayer->gun->getBulletPool()[bullet]->collision->max, bulletNormal, bulletDepthColl, bulletFColl))
+			if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, bullet->pCollision->min, bullet->pCollision->max, bulletNormal, bulletDepthColl, bulletFColl))
 			{
 				enemy->pHealth->subtractHealth(25.0f);
-
-
+				
+				bullet->pRigidBody->SetVelocity({0.0f, 0.0f, 0.0f});
+				bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);
 			}
 		}
-	}
 
-	if (enemy->pHealth->getStatus() == 1)
-	{
-		enemy->pTransform->SetPosition(0.0f, -1.0f, 0.0f);
-	}
+		if (enemy->pHealth->getStatus() == 1)
+		{
+			enemy->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
+		}
 
+	}
+	
 	//---------------------------------------------
 	// Map
 	lvl1Map.Update(sceneData.dt);

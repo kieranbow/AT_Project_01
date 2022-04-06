@@ -17,11 +17,11 @@ class Bullet : public GameObject
 		void Update(float dt) final;
 		void Draw(Graphics* pGfx);
 
-		std::unique_ptr<TransformComponent> transform;
-		std::unique_ptr<RigidBodyComponent> rigidBody;
-		std::unique_ptr<CollisionComponent> collision;
+		std::unique_ptr<TransformComponent> pTransform;
+		std::unique_ptr<RigidBodyComponent> pRigidBody;
+		std::unique_ptr<CollisionComponent> pCollision;
 		
 	private:
-		std::unique_ptr<ModelComponent> model;
+		std::unique_ptr<ModelComponent> pModel;
 		DirectX::XMFLOAT3 bulletVelocity = { 0.0f, 0.0f, 0.1f };
 };

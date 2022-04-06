@@ -9,9 +9,9 @@ Gun::Gun()
 void Gun::fire(Graphics* pGfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 velocity)
 {
 	std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\cube_proj.obj");
-	bullet->transform->SetPosition(position.x, position.y, position.z);
-	bullet->transform->SetScale(2.0f, 2.0f, 2.0f);
-	bullet->rigidBody->SetVelocity(velocity);
+	bullet->pTransform->SetPosition(position.x, position.y, position.z);
+	bullet->pTransform->SetScale(2.0f, 2.0f, 2.0f);
+	bullet->pRigidBody->SetVelocity(velocity);
 	bulletPool.push_back(std::move(bullet));
 	bullet.release();
 }
