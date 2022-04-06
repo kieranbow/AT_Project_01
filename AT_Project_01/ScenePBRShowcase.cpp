@@ -74,10 +74,10 @@ void ScenePBRShowcase::onCreate(SceneData& sceneData)
 		//blue_rubber.metallic = metallic;
 		blue_rubber.roughness = roughness;
 
-		sphere->model->SetPBRMaterial(blue_rubber);
-		sphere->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-		sphere->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-		sphere->transform->SetPosition(positionX, positionY, 0.0f);
+		sphere->pModel->SetPBRMaterial(blue_rubber);
+		sphere->pModel->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
+		sphere->pModel->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+		sphere->pTransform->SetPosition(positionX, positionY, 0.0f);
 		spheres.push_back(std::move(sphere));
 
 		positionX += distance;

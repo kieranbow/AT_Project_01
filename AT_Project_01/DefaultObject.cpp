@@ -3,17 +3,18 @@
 
 DefaultObject::DefaultObject()
 {
-	transform = std::make_unique<TransformComponent>();
-	model = std::make_unique<ModelComponent>(transform.get());
-	collision = std::make_unique<CollisionComponent>(transform->GetPosition(), transform->GetScale());
+	pTransform	= std::make_unique<TransformComponent>();
+	pModel		= std::make_unique<ModelComponent>(pTransform.get());
+	pCollision	= std::make_unique<CollisionComponent>(pTransform->GetPosition(), pTransform->GetScale());
 }
 
 void DefaultObject::Update(float dt)
 {
-	model->Update(dt);
+	pModel->Update(dt);
+	pCollision->Update(pTransform->GetPosition(), pTransform->GetScale());
 }
 
 void DefaultObject::Draw(Graphics* pGfx)
 {
-	model->Draw(pGfx);
+	pModel->Draw(pGfx);
 }

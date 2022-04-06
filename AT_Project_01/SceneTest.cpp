@@ -145,12 +145,12 @@ void SceneTest::onCreate(SceneData& sceneData)
 	for (int i = 0; i < amount; i++)
 	{
 		std::unique_ptr temp = std::make_unique<DefaultObject>();
-		temp->model->SetPBRMaterial(material);
+		temp->pModel->SetPBRMaterial(material);
 		//temp->model->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
-		temp->model->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-		temp->model->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
-		temp->transform->SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
-		temp->transform->SetScale(2.0f, 2.0f, 2.0f);
+		temp->pModel->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
+		temp->pModel->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+		temp->pTransform->SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
+		temp->pTransform->SetScale(2.0f, 2.0f, 2.0f);
 		cube.push_back(std::move(temp));
 
 		positionX += distance;
@@ -262,7 +262,7 @@ void SceneTest::Update(SceneData& sceneData)
 
 	for (auto& cubes : cube)
 	{
-		cubes->transform->SetRotation(0.14f * rot , 0.2f * rot , 1.0f * rot);
+		cubes->pTransform->SetRotation(0.14f * rot , 0.2f * rot , 1.0f * rot);
 		cubes->Update(sceneData.dt);
 	}
 }

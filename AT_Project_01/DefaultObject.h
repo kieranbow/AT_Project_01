@@ -16,7 +16,7 @@ class DefaultObject : public GameObject
 		void Update(float dt) final;
 		void Draw(Graphics* pGfx) final;
 
-		std::unique_ptr<ModelComponent> model;
-		std::unique_ptr<TransformComponent> transform;
-		std::unique_ptr<CollisionComponent> collision;
+		std::unique_ptr<ModelComponent> pModel;
+		std::unique_ptr<TransformComponent> pTransform;
+		std::unique_ptr<CollisionComponent> pCollision;
 };

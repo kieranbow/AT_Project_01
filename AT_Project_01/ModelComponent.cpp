@@ -149,60 +149,61 @@ void ModelComponent::Update(float dt)
 
 void ModelComponent::Draw(Graphics* gfx)
 {
-	for (auto& mesh : meshes)
+	if (m_enable)
 	{
-		// Bind Vertex and Index buffers to pipeline
-		mesh.Bind(gfx);
-
-		pWVPbuffer->data.m_world = DirectX::XMMatrixTranspose(transform->GetWorldMatrix());
-		pWVPbuffer->data.m_view = DirectX::XMMatrixTranspose(gfx->GetViewMatrix());
-		pWVPbuffer->data.m_projection = DirectX::XMMatrixTranspose(gfx->GetProjectionMatrix());
-		pWVPbuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
-
-		// 0.25f, 0.5f, -1.0f
-		DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
-		pFrameBuffer->data.light.direction = gfx->directionalLight.GetLightProperty().direction;
-		pFrameBuffer->data.light.ambientColor = gfx->directionalLight.GetLightProperty().ambientColor;
-		pFrameBuffer->data.light.color = gfx->directionalLight.GetLightProperty().color;
-		pFrameBuffer->data.light.intensity = gfx->directionalLight.GetLightProperty().intensity;
-		pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
-		pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
-
-
-		if (isUsingPBRMat)
+		for (auto& mesh : meshes)
 		{
-			pPBRMatBuffer->data = PBR_material;
-			pPBRMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
-			pPBRMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
-		}
-		else
-		{
-			pBPMatBuffer->data = BP_material;
-			pBPMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
-			pBPMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
-		}
+			// Bind Vertex and Index buffers to pipeline
+			mesh.Bind(gfx);
 
+			pWVPbuffer->data.m_world		= DirectX::XMMatrixTranspose(transform->GetWorldMatrix());
+			pWVPbuffer->data.m_view			= DirectX::XMMatrixTranspose(gfx->GetViewMatrix());
+			pWVPbuffer->data.m_projection	= DirectX::XMMatrixTranspose(gfx->GetProjectionMatrix());
+			pWVPbuffer->UpdateSubResource(gfx->GetDeviceContext());
+			pWVPbuffer->SetVSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
 
-		if (isUsingTexture)
-		{
-			UINT startSlot = 0u;
-			for (auto& texture : textures)
+			DirectX::XMStoreFloat4(&pFrameBuffer->data.eyePos, gfx->currentCamera.GetPosition());
+			pFrameBuffer->data.light.direction		= gfx->directionalLight.GetLightProperty().direction;
+			pFrameBuffer->data.light.ambientColor	= gfx->directionalLight.GetLightProperty().ambientColor;
+			pFrameBuffer->data.light.color			= gfx->directionalLight.GetLightProperty().color;
+			pFrameBuffer->data.light.intensity		= gfx->directionalLight.GetLightProperty().intensity;
+			pFrameBuffer->UpdateSubResource(gfx->GetDeviceContext());
+			pFrameBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b0, 1u);
+
+			if (isUsingPBRMat)
 			{
-				// Set textures
-				texture.SetShaderResource(startSlot, 1u);
-				startSlot++;
+				pPBRMatBuffer->data = PBR_material;
+				pPBRMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
+				pPBRMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
 			}
-			
-			//textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);
+			else
+			{
+				pBPMatBuffer->data = BP_material;
+				pBPMatBuffer->UpdateSubResource(gfx->GetDeviceContext());
+				pBPMatBuffer->SetPSConstBuffer(gfx->GetDeviceContext(), Bind::Buffer::b1, 1u);
+			}
+
+
+			if (isUsingTexture)
+			{
+				UINT startSlot = 0u;
+				for (auto& texture : textures)
+				{
+					// Set textures
+					texture.SetShaderResource(startSlot, 1u);
+					startSlot++;
+				}
+
+				//textures.at(0).SetShaderResource(Bind::Texture::t0, 1u);
+			}
+
+			// Set shaders
+			pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
+			pPixelShader->SetPSShader(gfx->GetDeviceContext(), 0u);
+
+			// Draw
+			gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
 		}
-
-		// Set shaders
-		pVertexShader->SetVSShader(gfx->GetDeviceContext(), 0u);
-		pPixelShader->SetPSShader(gfx->GetDeviceContext(), 0u);
-
-		// Draw
-		gfx->GetDeviceContext()->DrawIndexed(static_cast<UINT>(indices.size()), 0u, 0u);
 	}
 }
 
@@ -255,4 +256,19 @@ void ModelComponent::SetScale(DirectX::XMFLOAT3 scale)
 DirectX::XMFLOAT3 ModelComponent::GetScale() const
 {
 	return transform->GetScale();
+}
+
+void ModelComponent::enableRendering()
+{
+	m_enable = true;
+}
+
+void ModelComponent::disableRendering()
+{
+	m_enable = false;
+}
+
+const bool& ModelComponent::getRenderStatus() const
+{
+	return m_enable;
 }

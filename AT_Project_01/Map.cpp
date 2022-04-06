@@ -162,10 +162,10 @@ void Map::CreateMapObject(Graphics* pGfx, std::string model_filePath, std::strin
 {
 	// Create object
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
-	obj->model->LoadMeshFromSource(pGfx, model_filePath);
-	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	obj->model->LoadTextures(pGfx, texture_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
-	obj->transform->SetPosition(position.x, position.y, position.z);
+	obj->pModel->LoadMeshFromSource(pGfx, model_filePath);
+	obj->pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	obj->pModel->LoadTextures(pGfx, texture_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
+	obj->pTransform->SetPosition(position.x, position.y, position.z);
 
 	// Push object into object pool
 	mapObjects.push_back(std::move(obj));
@@ -178,11 +178,11 @@ void Map::CreateMapObjectPBR(Graphics* pGfx, std::string model_filePath, std::st
 {
 	// Create object
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
-	obj->model->LoadMeshFromSource(pGfx, model_filePath);
-	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
-	obj->model->LoadTextures(pGfx, albedo_filePath, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
-	obj->model->LoadTextures(pGfx, rmao_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
-	obj->transform->SetPosition(position.x, position.y, position.z);
+	obj->pModel->LoadMeshFromSource(pGfx, model_filePath);
+	obj->pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	obj->pModel->LoadTextures(pGfx, albedo_filePath, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+	obj->pModel->LoadTextures(pGfx, rmao_filePath, DXGI_FORMAT_R8G8B8A8_UNORM);
+	obj->pTransform->SetPosition(position.x, position.y, position.z);
 
 	// Push object into object pool
 	mapObjects.push_back(std::move(obj));
@@ -195,14 +195,14 @@ void Map::CreateMapObjectPBRFromLoader(Graphics* pGfx, const TextureData & albed
 {
 	// Create object
 	std::unique_ptr<DefaultObject> obj = std::make_unique<DefaultObject>();
-	obj->model->LoadMesh(pGfx, _vertices, _indices);
-	obj->model->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	obj->pModel->LoadMesh(pGfx, _vertices, _indices);
+	obj->pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 
-	obj->model->LoadTextureUsingTextureData(pGfx, albedo, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
-	obj->model->LoadTextureUsingTextureData(pGfx, rmao, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+	obj->pModel->LoadTextureUsingTextureData(pGfx, albedo, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
+	obj->pModel->LoadTextureUsingTextureData(pGfx, rmao, DXGI_FORMAT_B8G8R8A8_UNORM_SRGB);
 
-	obj->transform->SetPosition(position.x, position.y, position.z);
-	obj->transform->SetScale(1.0f, 1.0f, 1.0f);
+	obj->pTransform->SetPosition(position.x, position.y, position.z);
+	obj->pTransform->SetScale(1.0f, 1.0f, 1.0f);
 
 	// Push object into object pool
 	mapObjects.push_back(std::move(obj));

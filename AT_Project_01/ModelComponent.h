@@ -57,28 +57,35 @@ class ModelComponent
 		void SetScale(DirectX::XMFLOAT3 scale);
 		DirectX::XMFLOAT3 GetScale() const;
 
+		// Enables the rendering of the model. By default its enabled.
+		void enableRendering();
+		void disableRendering();
+		const bool& getRenderStatus() const;
+
 	private:
+		// Mesh data
 		std::vector<Vertex> vertices;
 		std::vector<unsigned short> indices;
-
 		std::vector<Mesh> meshes;
 		std::vector<Texture> textures;
 
-
+		// Components
 		TransformComponent* transform;
+
+		// Material
 		Material_BlinnPhong BP_material;
 		Material_PBR PBR_material;
 
+		bool isUsingTexture = false;
 		bool isUsingPBRMat = false;
+		bool m_enable = true;
 
 		// Constant Buffers
-		std::unique_ptr<ConstantBuffer<WorldViewProj>> pWVPbuffer = std::make_unique<ConstantBuffer<WorldViewProj>>();
-		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer = std::make_unique<ConstantBuffer<PerFrame>>();
-		std::unique_ptr<ConstantBuffer<Material_BlinnPhong>> pBPMatBuffer = std::make_unique<ConstantBuffer<Material_BlinnPhong>>();
-		std::unique_ptr<ConstantBuffer<Material_PBR>> pPBRMatBuffer = std::make_unique<ConstantBuffer<Material_PBR>>();
+		std::unique_ptr<ConstantBuffer<WorldViewProj>> pWVPbuffer			= std::make_unique<ConstantBuffer<WorldViewProj>>();
+		std::unique_ptr<ConstantBuffer<PerFrame>> pFrameBuffer				= std::make_unique<ConstantBuffer<PerFrame>>();
+		std::unique_ptr<ConstantBuffer<Material_BlinnPhong>> pBPMatBuffer	= std::make_unique<ConstantBuffer<Material_BlinnPhong>>();
+		std::unique_ptr<ConstantBuffer<Material_PBR>> pPBRMatBuffer			= std::make_unique<ConstantBuffer<Material_PBR>>();
 		// Shaders
 		std::unique_ptr<VSShader> pVertexShader = std::make_unique<VSShader>();
-		std::unique_ptr<PSShader> pPixelShader = std::make_unique<PSShader>();
-
-		bool isUsingTexture = false;
+		std::unique_ptr<PSShader> pPixelShader	= std::make_unique<PSShader>();
 };

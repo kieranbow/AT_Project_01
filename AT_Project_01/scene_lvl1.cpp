@@ -130,6 +130,47 @@ void Scenelvl1::Update(SceneData& sceneData)
 	// Entity
 	pPlayer->Update(sceneData.dt);
 
+	for (auto& bullet : pPlayer->gun->getBulletPool())
+	{
+		XMFLOAT3 position;
+		XMStoreFloat3(&position, pPlayer->camera->GetPosition());
+
+		if (bullet->DistanceFromPlayer(200.0f, position))
+		{
+			bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
+			bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);
+			//bullet->pModel->disableRendering();
+		}
+	}
+
+	for(auto& object : lvl1Map.getMapObjects())
+	{
+		XMFLOAT3 position;
+		XMStoreFloat3(&position, pPlayer->camera->GetPosition());
+
+		XMVECTOR objNormal;
+		float objDepthColl;
+		int objFColl;
+
+		if (CollisionHandler::AABBIntersect(object->pCollision->min, object->pCollision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, objNormal, objDepthColl, objFColl))
+		{
+			// faces on x axis
+			if (objFColl == 0 || objFColl == 1)
+			{
+				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
+			}
+			// faces on z axis
+			if (objFColl == 2 || objFColl == 3)
+			{
+				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
+			}
+			else
+			{
+				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
+			}
+		}
+	}
+
 	for (auto& enemy : pEnemy)
 	{
 		XMFLOAT3 position;
@@ -150,9 +191,8 @@ void Scenelvl1::Update(SceneData& sceneData)
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
 				pPlayer->pHealth->subtractHealth(10.0f);
 				
-				std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
-				OutputDebugStringW(string.c_str());
-
+				//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
+				//OutputDebugStringW(string.c_str());
 			}
 			// faces on z axis
 			if (enemyFColl == 2 || enemyFColl == 3)
@@ -160,8 +200,8 @@ void Scenelvl1::Update(SceneData& sceneData)
 				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
 				pPlayer->pHealth->subtractHealth(10.0f);
 
-				std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
-				OutputDebugStringW(string.c_str());
+				//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
+				//OutputDebugStringW(string.c_str());
 			}
 			else
 			{
@@ -180,14 +220,15 @@ void Scenelvl1::Update(SceneData& sceneData)
 				
 				bullet->pRigidBody->SetVelocity({0.0f, 0.0f, 0.0f});
 				bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);
+				bullet->pModel->disableRendering();
 			}
 		}
 
 		if (enemy->pHealth->getStatus() == 1)
 		{
 			enemy->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
+			enemy->pModel->disableRendering();
 		}
-
 	}
 	
 	//---------------------------------------------
