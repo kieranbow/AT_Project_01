@@ -23,7 +23,7 @@ Player::Player(Graphics* pGfx)
 	pModel->LoadShaders(pGraphics, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGraphics->inputElemDesc, pGraphics->GetSizeOfInputElemDesc());
 
 	// Gun
-	gun = std::make_unique<Gun>();
+	gun = std::make_unique<Gun>(pGraphics);
 }
 
 void Player::Input(Keyboard* keyboard, Mouse* mouse)
@@ -59,8 +59,14 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 		XMFLOAT3 camPosition;
 		XMStoreFloat3(&camPosition, camera->GetPosition());
 
-		gun->fire(pGraphics, camPosition, {cam_x, cam_y, cam_z});
+		gun->fire(camPosition, {cam_x, cam_y, cam_z});
 	}
+	if (keyboard->IsKeyPressed('R'))
+	{
+		OutputDebugStringA("Reloaded");
+		gun->reload();
+	}
+
 	if (keyboard->IsKeyPressed('Z'))
 	{
 		//camera->UpdatePosition({ 0.0f, -1.0f * pRigidBody->GetVelocity().y, 0.0f, 0.0f });

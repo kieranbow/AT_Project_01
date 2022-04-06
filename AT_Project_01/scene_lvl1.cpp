@@ -135,7 +135,7 @@ void Scenelvl1::Update(SceneData& sceneData)
 		XMFLOAT3 position;
 		XMStoreFloat3(&position, pPlayer->camera->GetPosition());
 
-		if (bullet->DistanceFromPlayer(200.0f, position))
+		if (bullet->distanceCull(200.0f, position))
 		{
 			bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
 			bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);

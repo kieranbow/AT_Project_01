@@ -13,7 +13,7 @@ class Bullet : public GameObject
 		Bullet(Graphics* pGfx, std::string model_filePath);
 		~Bullet() override = default;
 
-		bool DistanceFromPlayer(float distanceFromPlayer, XMFLOAT3 playerPosition);
+		bool distanceCull(float distanceFromPlayer, XMFLOAT3 playerPosition);
 		void Update(float dt) final;
 		void Draw(Graphics* pGfx);
 
@@ -22,6 +22,11 @@ class Bullet : public GameObject
 		std::unique_ptr<CollisionComponent> pCollision;
 		std::unique_ptr<ModelComponent> pModel;
 
+		void setBulletVelocity(float velX, float velY, float velZ);
+		void setBulletVelocity(XMFLOAT3 velocity);
+
+		const XMFLOAT3& getBulletVelocity() const;
+
 	private:
-		DirectX::XMFLOAT3 bulletVelocity = { 0.0f, 0.0f, 0.1f };
+		DirectX::XMFLOAT3 m_velocity = { 0.01f, 0.01f, 0.01f };
 };

@@ -8,15 +8,16 @@ class Mouse;
 class Gun : public GameObject
 {
 	public:
-		Gun();
+		Gun(Graphics* pGfx);
 		~Gun() override = default;
 
-		void fire(Graphics* pGfx, DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 velocity);
+		void reload();
+		void fire(DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 velocity);
 
 		void Update(float dt) final;
 		void Draw(Graphics* pGfx) final;
 
-		std::unique_ptr<TransformComponent> transform;
+		std::unique_ptr<TransformComponent> pTransform;
 
 		const std::vector<std::unique_ptr<Bullet>>& getBulletPool() const;
 
@@ -24,8 +25,8 @@ class Gun : public GameObject
 		std::unique_ptr<ModelComponent> model;
 		std::vector<std::unique_ptr<Bullet>> bulletPool;
 
-		int rate_of_fire = 0;
-		float distanceCull = 400.0f;
+		size_t currentBullet = 0;
+		bool empty = false;
 
-		float offset = 0.0f;
+		float distanceCull = 200.0f;
 };
