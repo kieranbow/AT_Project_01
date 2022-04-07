@@ -24,6 +24,8 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	pPlayer = std::make_unique<Player>(sceneData.gfx);
 	pPlayer->pTransform->SetPosition(0.0f, 0.0f, -10.0f);
 
+
+
 	float width = 10.0f;
 	float height = 10.0f;
 	float distance = 10.0f;
@@ -88,7 +90,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Map
-	lvl1Map.LoadMap(sceneData.gfx, "Assets\\Levels\\lvl1_layout.txt");
+	lvl1Map.LoadMap(sceneData.gfx, "Assets\\Levels\\lvl1_layout.txt", 56); // width * 2
 
 	//---------------------------------------------
 	// Game Objects
@@ -149,12 +151,30 @@ void Scenelvl1::Update(SceneData& sceneData)
 		{
 			if (CollisionHandler::AABBIntersect(object->pCollision->min, object->pCollision->max, bullet->pCollision->min, bullet->pCollision->max, bulletNormal, bulletDepthColl, bulletFColl))
 			{
-				if (bulletFColl == 0) bullet->pRigidBody->SetVelocity({ -0.02f, 0.0f, 0.0f });	// X-
-				if (bulletFColl == 1) bullet->pRigidBody->SetVelocity({ 0.02f, 0.0f, 0.0f });	// X+
-				if (bulletFColl == 2) bullet->pRigidBody->SetVelocity({ 0.0f, -0.02f, 0.0f });	// Y-
-				if (bulletFColl == 3) bullet->pRigidBody->SetVelocity({ 0.0f, 0.02f, 0.0f });	// Y+
-				if (bulletFColl == 4) bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, -0.02f });	// Z-
-				if (bulletFColl == 5) bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.02f });	// Z+
+				switch (bulletFColl)
+				{
+					case CollisionHandler::Faces::negX:
+						bullet->pRigidBody->SetVelocity({ -0.02f, 0.0f, 0.0f });
+						break;
+					case CollisionHandler::Faces::posX:
+						bullet->pRigidBody->SetVelocity({ 0.02f, 0.0f, 0.0f });
+						break;
+					case CollisionHandler::Faces::negY:
+						bullet->pRigidBody->SetVelocity({ 0.0f, -0.02f, 0.0f });
+						break;
+					case CollisionHandler::Faces::posY:
+						bullet->pRigidBody->SetVelocity({ 0.0f, 0.02f, 0.0f });
+						break;
+					case CollisionHandler::Faces::negZ:
+						bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, -0.02f });
+						break;
+					case CollisionHandler::Faces::posZ:
+						bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.02f });
+						break;
+
+					default:
+						break;
+				}
 			}
 		}
 	}
@@ -221,21 +241,13 @@ void Scenelvl1::Update(SceneData& sceneData)
 	// Camera manager
 
 	// https://www.jscodetips.com/examples/calculate-the-position-of-an-orbiting-object
-	auto distance = [=](XMFLOAT3 lhs, XMFLOAT3 rhs)
-	{
-		float x = (lhs.x - rhs.x) * (lhs.x - rhs.x);
-		float y = (lhs.y - rhs.y) * (lhs.y - rhs.y);
-		float z = (lhs.z - rhs.z) * (lhs.z - rhs.z);
-		return std::sqrtf(x + y + z);
-	};
-
-	float distToPlayer = distance(pPlayer->camera->GetPositionFloat(), staticCamera->GetPositionFloat());
-	float degree = 45.0f * time;
+	float distance = 30.0f;
+	float degree = 10.0f * time;
 
 	float radians = degree * (XM_PI / 180.0f);
 
-	float x = std::cosf(radians) * 10.0f;
-	float z = std::sinf(radians) * 10.0f;
+	float x = pPlayer->camera->GetPositionFloat().x + distance * std::cosf(radians);
+	float z = pPlayer->camera->GetPositionFloat().z + distance * std::sinf(radians);
 
 	staticCamera->SetPosition({ x, 30.0f, z });
 

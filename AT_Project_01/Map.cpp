@@ -15,7 +15,7 @@ Map::Map()
 	objectIDMap.emplace("4:3", mapObjectID::Pillar_3_high);
 }
 
-bool Map::LoadMap(Graphics* pGfx, std::string file_path)
+bool Map::LoadMap(Graphics* pGfx, std::string file_path, int mapWidth)
 {
 	ModelLoader floor("Assets\\Model\\Plane.obj");
 	ModelLoader wall("Assets\\Model\\cube_proj.obj");
@@ -40,7 +40,6 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 
 	float x = 0.0f;
 	float z = 0.0f;
-	float map_width = 56.0f; // width * 2
 
 	map_file.open(file_path);
 
@@ -49,7 +48,7 @@ bool Map::LoadMap(Graphics* pGfx, std::string file_path)
 		// Stream every word from the file into word string
 		while (map_file >> word)
 		{
-			if (x == map_width)
+			if (x == mapWidth)
 			{
 				x = 0.0f;
 				z += 2.0f;

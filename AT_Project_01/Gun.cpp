@@ -8,7 +8,7 @@ Gun::Gun(Graphics* pGfx)
 
 	for (size_t i = 0; i < 60; i++)
 	{
-		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\cube_proj.obj");
+		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\sphere.obj");
 		bullet->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
 		bullet->pTransform->SetScale(0.5f, 0.5f, 0.5f);
 		bullet->pRigidBody->SetVelocity({0.0f, 0.0f, 0.0f});
