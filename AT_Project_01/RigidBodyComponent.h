@@ -21,6 +21,8 @@ class RigidBodyComponent
 		void SetVelocity(XMFLOAT3 newVelocity);
 		XMFLOAT3 GetVelocity() const;
 
+		XMFLOAT3 direction;
+
 	private:
 		XMFLOAT3 f_position;
 		XMFLOAT3 f_velocity;

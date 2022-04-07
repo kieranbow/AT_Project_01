@@ -28,5 +28,5 @@ class Gun : public GameObject
 		size_t currentBullet = 0;
 		bool empty = false;
 
-		float distanceCull = 200.0f;
+		float distanceCull = 100.0f;
 };

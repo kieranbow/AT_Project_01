@@ -130,44 +130,16 @@ void Scenelvl1::Update(SceneData& sceneData)
 	// Entity
 	pPlayer->Update(sceneData.dt);
 
-	for (auto& bullet : pPlayer->gun->getBulletPool())
-	{
-		XMFLOAT3 position;
-		XMStoreFloat3(&position, pPlayer->camera->GetPosition());
-
-		if (bullet->distanceCull(200.0f, position))
-		{
-			bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
-			bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);
-			//bullet->pModel->disableRendering();
-		}
-	}
-
 	for(auto& object : lvl1Map.getMapObjects())
 	{
-		XMFLOAT3 position;
-		XMStoreFloat3(&position, pPlayer->camera->GetPosition());
-
 		XMVECTOR objNormal;
 		float objDepthColl;
 		int objFColl;
 
 		if (CollisionHandler::AABBIntersect(object->pCollision->min, object->pCollision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, objNormal, objDepthColl, objFColl))
 		{
-			// faces on x axis
-			if (objFColl == 0 || objFColl == 1)
-			{
-				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
-			}
-			// faces on z axis
-			if (objFColl == 2 || objFColl == 3)
-			{
-				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
-			}
-			else
-			{
-				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
-			}
+			XMVECTOR something = pPlayer->camera->GetPosition() + (objNormal * objDepthColl);
+			pPlayer->camera->SetPosition(something);
 		}
 	}
 
@@ -185,28 +157,47 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 		if (CollisionHandler::AABBIntersect(enemy->collision->min, enemy->collision->max, pPlayer->pCollision->min, pPlayer->pCollision->max, enemyNormal, enemyDepthColl, enemyFColl))
 		{
-			// faces on x axis
-			if (enemyFColl == 0 || enemyFColl == 1)
-			{
-				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
-				pPlayer->pHealth->subtractHealth(10.0f);
-				
-				//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
-				//OutputDebugStringW(string.c_str());
-			}
-			// faces on z axis
-			if (enemyFColl == 2 || enemyFColl == 3)
-			{
-				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.0f });
-				pPlayer->pHealth->subtractHealth(10.0f);
+			XMVECTOR direction = { pPlayer->pRigidBody->direction.x, 0.0f, pPlayer->pRigidBody->direction.z, 0.0f };
+			XMVECTOR reflect = (direction - 2.0f * XMVector3Dot(direction, enemyNormal) * enemyNormal) * enemyDepthColl;
 
-				//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
-				//OutputDebugStringW(string.c_str());
-			}
-			else
-			{
-				pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
-			}
+			XMFLOAT3 velocity;
+			XMStoreFloat3(&velocity, reflect + pPlayer->camera->GetPosition());
+
+			pPlayer->pRigidBody->SetPosition(velocity);
+
+			XMVECTOR something = pPlayer->camera->GetPosition() + (enemyNormal * enemyDepthColl);
+			pPlayer->camera->SetPosition(something);
+
+			pPlayer->pHealth->subtractHealth(10.0f);
+
+			//// faces on x axis
+			//if (enemyFColl == 0 || enemyFColl == 1)
+			//{
+			//	XMVECTOR direction = { pPlayer->pRigidBody->direction.x, 0.0f, pPlayer->pRigidBody->direction.z, 0.0f };
+			//	XMVECTOR reflect = direction - 2.0f * XMVector3Dot(direction, enemyNormal) * enemyNormal;
+
+			//	XMFLOAT3 velocity;
+			//	XMStoreFloat3(&velocity, reflect);
+
+			//	pPlayer->pRigidBody->SetVelocity(velocity);
+			//	pPlayer->pHealth->subtractHealth(10.0f);
+			//	
+			//	//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
+			//	//OutputDebugStringW(string.c_str());
+			//}
+			//// faces on z axis
+			//if (enemyFColl == 2 || enemyFColl == 3)
+			//{
+			//	pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
+			//	pPlayer->pHealth->subtractHealth(10.0f);
+
+			//	//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
+			//	//OutputDebugStringW(string.c_str());
+			//}
+			//else
+			//{
+			//	pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
+			//}
 		}
 
 		XMVECTOR bulletNormal;

@@ -9,7 +9,7 @@ Player::Player(Graphics* pGfx)
 
 	// Camera
 	camera = std::make_shared<Camera>(pGraphics->GetWindowSize().first, pGraphics->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
-	camera->SetPosition({ 0.0f, 2.0f, 0.0f, 0.0f });
+	camera->SetPosition({ 2.0f, 2.0f, 5.0f, 0.0f });
 
 	// Components
 	pTransform	= std::make_unique<TransformComponent>();
@@ -32,18 +32,22 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	if (keyboard->IsKeyPressed('W'))
 	{
 		camera->UpdatePosition(camera->GetDirection().v_forward * pRigidBody->GetVelocity().z);
+		pRigidBody->direction.z = 1.0f;
 	}
 	if (keyboard->IsKeyPressed('S'))
 	{
 		camera->UpdatePosition(camera->GetDirection().v_backward * pRigidBody->GetVelocity().z);
+		pRigidBody->direction.z = -1.0f;
 	}
 	if (keyboard->IsKeyPressed('A'))
 	{
 		camera->UpdatePosition(camera->GetDirection().v_left * pRigidBody->GetVelocity().x);
+		pRigidBody->direction.x = -1.0f;
 	}
 	if (keyboard->IsKeyPressed('D'))
 	{
 		camera->UpdatePosition(camera->GetDirection().v_right * pRigidBody->GetVelocity().x);
+		pRigidBody->direction.x = 1.0f;
 	}
 	if (keyboard->IsKeyPressed(VK_SPACE))
 	{

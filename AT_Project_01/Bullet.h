@@ -27,6 +27,8 @@ class Bullet : public GameObject
 
 		const XMFLOAT3& getBulletVelocity() const;
 
+		bool m_fired = false;
+
 	private:
 		DirectX::XMFLOAT3 m_velocity = { 0.01f, 0.01f, 0.01f };
 };
