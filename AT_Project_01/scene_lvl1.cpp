@@ -47,7 +47,7 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	// Cameras & Camera manager
 	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 45.0f, 0.01f, 10000.0f, false);
 	staticCamera->SetPosition({ -10.0f, 20.0f, 10.0f });
-	staticCamera->SetRotation({ 1.5f, 0.0f, 0.0f });
+	//staticCamera->SetRotation({ 1.5f, 0.0f, 0.0f });
 
 	cameraManager.AddCamera(pPlayer->camera, CamID::player_cam);
 	cameraManager.AddCamera(staticCamera, CamID::static_cam);
@@ -141,6 +141,22 @@ void Scenelvl1::Update(SceneData& sceneData)
 			XMVECTOR something = pPlayer->camera->GetPosition() + (objNormal * objDepthColl);
 			pPlayer->camera->SetPosition(something);
 		}
+
+		XMVECTOR bulletNormal;
+		float bulletDepthColl;
+		int bulletFColl;
+		for (auto& bullet : pPlayer->gun->getBulletPool())
+		{
+			if (CollisionHandler::AABBIntersect(object->pCollision->min, object->pCollision->max, bullet->pCollision->min, bullet->pCollision->max, bulletNormal, bulletDepthColl, bulletFColl))
+			{
+				if (bulletFColl == 0) bullet->pRigidBody->SetVelocity({ -0.02f, 0.0f, 0.0f });	// X-
+				if (bulletFColl == 1) bullet->pRigidBody->SetVelocity({ 0.02f, 0.0f, 0.0f });	// X+
+				if (bulletFColl == 2) bullet->pRigidBody->SetVelocity({ 0.0f, -0.02f, 0.0f });	// Y-
+				if (bulletFColl == 3) bullet->pRigidBody->SetVelocity({ 0.0f, 0.02f, 0.0f });	// Y+
+				if (bulletFColl == 4) bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, -0.02f });	// Z-
+				if (bulletFColl == 5) bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.02f });	// Z+
+			}
+		}
 	}
 
 	for (auto& enemy : pEnemy)
@@ -169,35 +185,6 @@ void Scenelvl1::Update(SceneData& sceneData)
 			pPlayer->camera->SetPosition(something);
 
 			pPlayer->pHealth->subtractHealth(10.0f);
-
-			//// faces on x axis
-			//if (enemyFColl == 0 || enemyFColl == 1)
-			//{
-			//	XMVECTOR direction = { pPlayer->pRigidBody->direction.x, 0.0f, pPlayer->pRigidBody->direction.z, 0.0f };
-			//	XMVECTOR reflect = direction - 2.0f * XMVector3Dot(direction, enemyNormal) * enemyNormal;
-
-			//	XMFLOAT3 velocity;
-			//	XMStoreFloat3(&velocity, reflect);
-
-			//	pPlayer->pRigidBody->SetVelocity(velocity);
-			//	pPlayer->pHealth->subtractHealth(10.0f);
-			//	
-			//	//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
-			//	//OutputDebugStringW(string.c_str());
-			//}
-			//// faces on z axis
-			//if (enemyFColl == 2 || enemyFColl == 3)
-			//{
-			//	pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.0f, 0.0f });
-			//	pPlayer->pHealth->subtractHealth(10.0f);
-
-			//	//std::wstring string = std::to_wstring(pPlayer->pHealth->getCurrentHealth());
-			//	//OutputDebugStringW(string.c_str());
-			//}
-			//else
-			//{
-			//	pPlayer->pRigidBody->SetVelocity({ 0.2f, 0.2f, 0.2f });
-			//}
 		}
 
 		XMVECTOR bulletNormal;
@@ -232,6 +219,28 @@ void Scenelvl1::Update(SceneData& sceneData)
 
 	//---------------------------------------------
 	// Camera manager
+
+	// https://www.jscodetips.com/examples/calculate-the-position-of-an-orbiting-object
+	auto distance = [=](XMFLOAT3 lhs, XMFLOAT3 rhs)
+	{
+		float x = (lhs.x - rhs.x) * (lhs.x - rhs.x);
+		float y = (lhs.y - rhs.y) * (lhs.y - rhs.y);
+		float z = (lhs.z - rhs.z) * (lhs.z - rhs.z);
+		return std::sqrtf(x + y + z);
+	};
+
+	float distToPlayer = distance(pPlayer->camera->GetPositionFloat(), staticCamera->GetPositionFloat());
+	float degree = 45.0f * time;
+
+	float radians = degree * (XM_PI / 180.0f);
+
+	float x = std::cosf(radians) * 10.0f;
+	float z = std::sinf(radians) * 10.0f;
+
+	staticCamera->SetPosition({ x, 30.0f, z });
+
+	staticCamera->SetLookAt(pPlayer->camera->GetPositionFloat());
+
 	sceneData.gfx->currentCamera.SetPosition(cameraManager.GetCurrentCamera()->GetPosition());
 	cameraManager.Update(sceneData.dt);
 }
