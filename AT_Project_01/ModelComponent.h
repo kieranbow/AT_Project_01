@@ -25,7 +25,7 @@ class ModelComponent
 		void LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std::vector<unsigned short> _indices);
 
 		// When the vertex and pixel shaders are provided. This will read and create each shader and set the input layout.
-		void LoadShaders(Graphics* pGfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements);
+		void LoadShaders(Graphics* pGfx, std::wstring vs_filename, std::wstring ps_filename, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements);
 
 		// Textures are loaded using Texture class functions
 		void LoadTextures(Graphics* pGfx, std::string str_texture_file_path, DXGI_FORMAT format);

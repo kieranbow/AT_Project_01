@@ -359,3 +359,4 @@ MigrationBackup/
 #*.obj
 #*.fbx
 #*.txt
+*.db

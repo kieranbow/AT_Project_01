@@ -148,7 +148,7 @@ void SceneTest::onCreate(SceneData& sceneData)
 		temp->pModel->SetPBRMaterial(material);
 		//temp->model->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
 		temp->pModel->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-		temp->pModel->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+		temp->pModel->LoadShaders(sceneData.gfx, L"VS_Default.cso", L"PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 		temp->pTransform->SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
 		temp->pTransform->SetScale(2.0f, 2.0f, 2.0f);
 		cube.push_back(std::move(temp));

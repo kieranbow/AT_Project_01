@@ -8,6 +8,8 @@
 // Microsoft
 #include <wrl/client.h>
 
+#include <string>
+
 // Description
 // Pixel Shader class which handles reading pixel shader files, creating pixel shader 
 // and bind them to the pipeline.
@@ -22,9 +24,9 @@ public:
 
 	// Description
 	// Reads shader file and copies data to shader blob.
-	HRESULT ReadPSShaderToBlob(LPCWSTR filePath)
+	HRESULT ReadPSShaderToBlob(std::wstring filePath)
 	{
-		return D3DReadFileToBlob(filePath, &pPixelShaderBlob);
+		return D3DReadFileToBlob(filePath.c_str(), &pPixelShaderBlob);
 	}
 
 	// Description

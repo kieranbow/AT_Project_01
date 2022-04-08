@@ -20,7 +20,7 @@ Player::Player(Graphics* pGfx)
 	// Model
 	pModel = std::make_unique<ModelComponent>(pTransform.get());
 	pModel->LoadMeshFromSource(pGraphics, "Assets\\Model\\cube_proj.obj");
-	pModel->LoadShaders(pGraphics, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBR.cso", pGraphics->inputElemDesc, pGraphics->GetSizeOfInputElemDesc());
+	pModel->LoadShaders(pGraphics, L"VS_Default.cso", L"PS_PBR.cso", pGraphics->inputElemDesc, pGraphics->GetSizeOfInputElemDesc());
 
 	// Gun
 	gun = std::make_unique<Gun>(pGraphics);
@@ -67,7 +67,6 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 	}
 	if (keyboard->IsKeyPressed('R'))
 	{
-		OutputDebugStringA("Reloaded");
 		gun->reload();
 	}
 
@@ -86,14 +85,14 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 		camera->UpdateRotation({ 0.0f, rotationSpeed, 0.0f, 0.0f });
 	}
 
-	if (keyboard->IsKeyPressed(38)) // Up arrow
-	{
-		camera->UpdateRotation({ -rotationSpeed, 0.0f, 0.0f, 0.0f });
-	}
-	if (keyboard->IsKeyPressed(40)) // Down arrow
-	{
-		camera->UpdateRotation({ rotationSpeed, 0.0f, 0.0f, 0.0f });
-	}
+	//if (keyboard->IsKeyPressed(38)) // Up arrow
+	//{
+	//	camera->UpdateRotation({ -rotationSpeed, 0.0f, 0.0f, 0.0f });
+	//}
+	//if (keyboard->IsKeyPressed(40)) // Down arrow
+	//{
+	//	camera->UpdateRotation({ rotationSpeed, 0.0f, 0.0f, 0.0f });
+	//}
 }
 
 void Player::Update(float dt)
@@ -102,7 +101,7 @@ void Player::Update(float dt)
 
 	pTransform->Update();
 
-	//pRigidBody->Update(dt);
+	pRigidBody->Update(dt);
 
 	XMFLOAT3 position;
 	XMStoreFloat3(&position, camera->GetPosition());

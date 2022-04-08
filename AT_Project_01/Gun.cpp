@@ -6,7 +6,7 @@ Gun::Gun(Graphics* pGfx)
 {
 	pTransform = std::make_unique<TransformComponent>();
 
-	for (size_t i = 0; i < 60; i++)
+	for (size_t i = 0; i < 30; i++)
 	{
 		std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(pGfx, "Assets\\Model\\sphere.obj");
 		bullet->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
@@ -19,7 +19,6 @@ Gun::Gun(Graphics* pGfx)
 
 void Gun::reload()
 {
-	OutputDebugStringA("Reloaded");
 	empty = false;
 	currentBullet = 0;
 }
@@ -28,15 +27,14 @@ void Gun::fire(DirectX::XMFLOAT3 position, DirectX::XMFLOAT3 velocity)
 {
 	if (currentBullet == bulletPool.size())
 	{
-		OutputDebugStringA("Empty");
 		empty = true;
 	}
-	if (!empty && !bulletPool[currentBullet]->m_fired)
+	if (!empty && !bulletPool[currentBullet]->hasFired())
 	{
 		bulletPool[currentBullet]->pModel->enableRendering();
 		bulletPool[currentBullet]->pTransform->SetPosition(position.x, position.y, position.z);
 		bulletPool[currentBullet]->pRigidBody->SetVelocity(velocity);
-		bulletPool[currentBullet]->m_fired = true;
+		bulletPool[currentBullet]->isFired(true);
 		currentBullet++;
 	}
 }
@@ -56,7 +54,7 @@ void Gun::Update(float dt)
 		{
 			bullet->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
 			bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
-			bullet->m_fired = false;
+			bullet->isFired(false);
 			bullet->pModel->disableRendering();
 		}
 	}

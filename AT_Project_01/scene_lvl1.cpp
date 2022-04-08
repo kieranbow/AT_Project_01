@@ -1,6 +1,6 @@
 #include "scene_lvl1.h"
 #include "CollisionHandler.h"
-
+#include "ErrorChecker.h"
 #include <iostream>
 
 Scenelvl1::Scenelvl1(SceneManager& sceneManager) : currentSceneManager(sceneManager)
@@ -20,18 +20,19 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	sceneData.gfx->directionalLight = directionalLight;
 
 	//---------------------------------------------
-	// Entity
+	// Player
 	pPlayer = std::make_unique<Player>(sceneData.gfx);
 	pPlayer->pTransform->SetPosition(0.0f, 0.0f, -10.0f);
 
-
 	//---------------------------------------------
 	// Map
+
+	// Set player position based on position on the map
 	XMVECTOR playerPosition = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	lvl1Map.LoadMap(sceneData.gfx, "Assets\\Levels\\lvl1_layout.txt", 56, playerPosition); // width * 2
-
 	pPlayer->camera->SetPosition(playerPosition);
 
+	// Set all the enemies position based on their positions found in the map
 	for (int i = 0; i < lvl1Map.getEnemyPosition().size(); i++)
 	{
 		std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(sceneData.gfx);
@@ -40,31 +41,11 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 		enemy.release();
 	}
 
-
-	//float width = 10.0f;
-	//float height = 10.0f;
-	//float distance = 10.0f;
-	//float positionX = 0;
-
-	//for (int e = 0; e < 10; e++)
-	//{
-	//	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(sceneData.gfx);
-	//	enemy->pTransform->SetPosition(positionX - (distance * 10.0f) / 2.0f, 1.0f, 10.0f);
-	//	pEnemy.push_back(std::move(enemy));
-
-	//	positionX += distance;
-	//	if (positionX >= (distance * width))
-	//	{
-	//		positionX = 0.0f;
-	//	}
-	//	enemy.release();
-	//}
-
 	//---------------------------------------------
 	// Cameras & Camera manager
 	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 45.0f, 0.01f, 10000.0f, false);
 	staticCamera->SetPosition({ -10.0f, 20.0f, 10.0f });
-	//staticCamera->SetRotation({ 1.5f, 0.0f, 0.0f });
+	staticCamera->SetRotation({ 1.5f, 0.0f, 0.0f });
 
 	cameraManager.AddCamera(pPlayer->camera, CamID::player_cam);
 	cameraManager.AddCamera(staticCamera, CamID::static_cam);
@@ -102,7 +83,6 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	Texture bdrfLut(sceneData.gfx);
 	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	bdrfLut.SetShaderResource(Bind::Texture::t5, 1u);
-
 
 	//---------------------------------------------
 	// Game Objects
@@ -163,30 +143,35 @@ void Scenelvl1::Update(SceneData& sceneData)
 		{
 			if (CollisionHandler::AABBIntersect(object->pCollision->min, object->pCollision->max, bullet->pCollision->min, bullet->pCollision->max, bulletNormal, bulletDepthColl, bulletFColl))
 			{
-				switch (bulletFColl)
-				{
-					case CollisionHandler::Faces::negX:
-						bullet->pRigidBody->SetVelocity({ -0.02f, 0.0f, 0.0f });
-						break;
-					case CollisionHandler::Faces::posX:
-						bullet->pRigidBody->SetVelocity({ 0.02f, 0.0f, 0.0f });
-						break;
-					case CollisionHandler::Faces::negY:
-						bullet->pRigidBody->SetVelocity({ 0.0f, -0.02f, 0.0f });
-						break;
-					case CollisionHandler::Faces::posY:
-						bullet->pRigidBody->SetVelocity({ 0.0f, 0.02f, 0.0f });
-						break;
-					case CollisionHandler::Faces::negZ:
-						bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, -0.02f });
-						break;
-					case CollisionHandler::Faces::posZ:
-						bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.02f });
-						break;
+				bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.0f });
+				bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);
+				bullet->pModel->disableRendering();
+				bullet->isFired(false);
 
-					default:
-						break;
-				}
+				//switch (bulletFColl)
+				//{
+				//	case CollisionHandler::Faces::negX:
+				//		bullet->pRigidBody->SetVelocity({ -0.02f, 0.0f, 0.0f });
+				//		break;
+				//	case CollisionHandler::Faces::posX:
+				//		bullet->pRigidBody->SetVelocity({ 0.02f, 0.0f, 0.0f });
+				//		break;
+				//	case CollisionHandler::Faces::negY:
+				//		bullet->pRigidBody->SetVelocity({ 0.0f, -0.02f, 0.0f });
+				//		break;
+				//	case CollisionHandler::Faces::posY:
+				//		bullet->pRigidBody->SetVelocity({ 0.0f, 0.02f, 0.0f });
+				//		break;
+				//	case CollisionHandler::Faces::negZ:
+				//		bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, -0.02f });
+				//		break;
+				//	case CollisionHandler::Faces::posZ:
+				//		bullet->pRigidBody->SetVelocity({ 0.0f, 0.0f, 0.02f });
+				//		break;
+
+				//	default:
+				//		break;
+				//}
 			}
 		}
 	}
@@ -231,16 +216,17 @@ void Scenelvl1::Update(SceneData& sceneData)
 				bullet->pRigidBody->SetVelocity({0.0f, 0.0f, 0.0f});
 				bullet->pTransform->SetPosition(0.0f, -5.0f, 0.0f);
 				bullet->pModel->disableRendering();
+				bullet->isFired(false);
+
+				if (enemy->pHealth->getStatus() == 1)
+				{
+					enemy->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
+					enemy->pModel->disableRendering();
+				}
 			}
 		}
-
-		if (enemy->pHealth->getStatus() == 1)
-		{
-			enemy->pTransform->SetPosition(0.0f, -10.0f, 0.0f);
-			enemy->pModel->disableRendering();
-		}
 	}
-	
+
 	//---------------------------------------------
 	// Map
 	lvl1Map.Update(sceneData.dt);

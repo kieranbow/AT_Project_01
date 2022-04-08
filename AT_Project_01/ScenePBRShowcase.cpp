@@ -76,7 +76,7 @@ void ScenePBRShowcase::onCreate(SceneData& sceneData)
 
 		sphere->pModel->SetPBRMaterial(blue_rubber);
 		sphere->pModel->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\sphere.obj");
-		sphere->pModel->LoadShaders(sceneData.gfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+		sphere->pModel->LoadShaders(sceneData.gfx, L"VS_Default.cso", L"PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 		sphere->pTransform->SetPosition(positionX, positionY, 0.0f);
 		spheres.push_back(std::move(sphere));
 

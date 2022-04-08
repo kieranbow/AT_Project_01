@@ -12,7 +12,7 @@ Enemy::Enemy(Graphics* pGfx)
 	pHealth = std::make_unique<HealthComponent>();
 
 	pModel->LoadMeshFromSource(pGfx, "Assets\\Model\\billboard.obj");
-	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	pModel->LoadShaders(pGfx, L"VS_Default.cso", L"PS_BlinnPhong.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 	pModel->LoadTextures(pGfx, "Assets\\Texture\\icon.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 

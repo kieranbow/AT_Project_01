@@ -5,7 +5,7 @@
 
 Bullet::Bullet(Graphics* pGfx, std::string model_filePath)
 {
-	// Create the components for the bullet
+	// Init the components for the bullet
 	pTransform = std::make_unique<TransformComponent>();
 	pRigidBody = std::make_unique<RigidBodyComponent>(pTransform->GetPosition(), m_velocity);
 	pCollision = std::make_unique<CollisionComponent>(pRigidBody->GetPosition(), pTransform->GetScale());
@@ -22,7 +22,7 @@ Bullet::Bullet(Graphics* pGfx, std::string model_filePath)
 
 	pModel->SetPBRMaterial(material);
 	pModel->LoadMeshFromSource(pGfx, model_filePath);
-	pModel->LoadShaders(pGfx, L"..\\x64\\Debug\\VS_Default.cso", L"..\\x64\\Debug\\PS_PBRMaterial.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
+	pModel->LoadShaders(pGfx, L"VS_Default.cso", L"PS_PBRMaterial.cso", pGfx->inputElemDesc, pGfx->GetSizeOfInputElemDesc());
 }
 
 bool Bullet::distanceCull(float distanceFromPlayer, XMFLOAT3 playerPosition)
@@ -44,12 +44,9 @@ void Bullet::Update(float dt)
 {
 	// Update all the components
 	pTransform->Update();
-
 	pRigidBody->SetPosition(pTransform->GetPosition());
 	pRigidBody->Update(dt);
-
 	pCollision->Update(pTransform->GetPosition(), pTransform->GetScale());
-
 	pModel->SetPosition(pRigidBody->GetPosition());
 	pModel->Update(dt);
 }
@@ -59,19 +56,12 @@ void Bullet::Draw(Graphics* pGfx)
 	pModel->Draw(pGfx);
 }
 
-void Bullet::setBulletVelocity(float velX, float velY, float velZ)
+void Bullet::isFired(bool fired)
 {
-	m_velocity.x = velX;
-	m_velocity.y = velY;
-	m_velocity.z = velZ;
+	m_fired = fired;
 }
 
-void Bullet::setBulletVelocity(XMFLOAT3 velocity)
+bool Bullet::hasFired()
 {
-	m_velocity = velocity;
-}
-
-const XMFLOAT3& Bullet::getBulletVelocity() const
-{
-	return m_velocity;
+	return m_fired;
 }

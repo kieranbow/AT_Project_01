@@ -91,14 +91,22 @@ void ModelComponent::LoadMesh(Graphics* pGfx, std::vector<Vertex> _vertices, std
 	}
 }
 
-void ModelComponent::LoadShaders(Graphics* gfx, LPCWSTR vs_file_path, LPCWSTR ps_file_path, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements)
+void ModelComponent::LoadShaders(Graphics* gfx, std::wstring vs_filename, std::wstring ps_filename, D3D11_INPUT_ELEMENT_DESC* pInputDesc, UINT numElements)
 {
+	std::wstring shaderFolder = L"";
+
+#if _DEBUG
+	shaderFolder = L"..\\x64\\Debug\\";
+#else // DEBUG
+	shaderFolder = L"..\\x64\\Release\\";
+#endif
+
 	// Read and Create vertex shader
-	pVertexShader->ReadVSShaderToBlob(vs_file_path);
+	pVertexShader->ReadVSShaderToBlob(shaderFolder + vs_filename);
 	pVertexShader->CreateVSShader(gfx->GetDevice(), pInputDesc, numElements);
 
 	// Read and create pixel shader
-	pPixelShader->ReadPSShaderToBlob(ps_file_path);
+	pPixelShader->ReadPSShaderToBlob(shaderFolder + ps_filename);
 	pPixelShader->CreatePSShader(gfx->GetDevice());
 
 	// Set inputlayout and primitivetopology

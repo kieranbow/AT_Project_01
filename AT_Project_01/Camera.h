@@ -50,15 +50,15 @@ class Camera
 
 	private:
 		// Camera Propertices
-		float width			= 800.0f;
-		float height		= 600.0f;
-		float fovDeg		= 90.0f;
-		float fovRad		= 0.0f;
-		float aspectRatio	= 0.0f;
-		float nearZ			= 0.01f;
-		float farZ			= 10000.0f;
+		float width				= 800.0f;
+		float height			= 600.0f;
+		float fovDeg			= 90.0f;
+		float fovRad			= 0.0f;
+		float aspectRatio		= 0.0f;
+		float nearZ				= 0.01f;
+		float farZ				= 10000.0f;
 		bool enableOrthographic = false;
-		bool enable			= false;
+		bool enable				= false;
 
 		Direction direction;
 

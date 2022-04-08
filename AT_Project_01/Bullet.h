@@ -4,7 +4,6 @@
 #include "TransformComponent.h"
 #include "RigidBodyComponent.h"
 #include "CollisionComponent.h"
-
 #include "ModelComponent.h"
 
 class Bullet : public GameObject
@@ -22,13 +21,9 @@ class Bullet : public GameObject
 		std::unique_ptr<CollisionComponent> pCollision;
 		std::unique_ptr<ModelComponent> pModel;
 
-		void setBulletVelocity(float velX, float velY, float velZ);
-		void setBulletVelocity(XMFLOAT3 velocity);
-
-		const XMFLOAT3& getBulletVelocity() const;
-
-		bool m_fired = false;
-
+		void isFired(bool fired);
+		bool hasFired();
 	private:
 		DirectX::XMFLOAT3 m_velocity = { 0.01f, 0.01f, 0.01f };
+		bool m_fired = false;
 };

@@ -8,6 +8,8 @@
 // Microsoft
 #include <wrl/client.h>
 
+#include <string>
+
 // Description
 // Vertex Shader class which handles reading vertex shader files, creating vertex shader 
 // and bind them to the pipeline.
@@ -22,9 +24,9 @@ class VSShader
 
 		// Description
 		// Reads shader file and copies data to shader blob.
-		HRESULT ReadVSShaderToBlob(LPCWSTR filePath)
+		HRESULT ReadVSShaderToBlob(std::wstring filePath)
 		{
-			return D3DReadFileToBlob(filePath, &pVertexShaderBlob);
+			return D3DReadFileToBlob(filePath.c_str(), &pVertexShaderBlob);
 		}
 
 		// Description
