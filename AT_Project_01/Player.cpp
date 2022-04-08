@@ -9,7 +9,7 @@ Player::Player(Graphics* pGfx)
 
 	// Camera
 	camera = std::make_shared<Camera>(pGraphics->GetWindowSize().first, pGraphics->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
-	camera->SetPosition({ 2.0f, 2.0f, 5.0f, 0.0f });
+	camera->SetPosition({ 0.0f, 2.0f, 0.0f, 0.0f });
 
 	// Components
 	pTransform	= std::make_unique<TransformComponent>();

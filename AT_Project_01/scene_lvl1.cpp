@@ -25,25 +25,40 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	pPlayer->pTransform->SetPosition(0.0f, 0.0f, -10.0f);
 
 
+	//---------------------------------------------
+	// Map
+	XMVECTOR playerPosition = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	lvl1Map.LoadMap(sceneData.gfx, "Assets\\Levels\\lvl1_layout.txt", 56, playerPosition); // width * 2
 
-	float width = 10.0f;
-	float height = 10.0f;
-	float distance = 10.0f;
-	float positionX = 0;
+	pPlayer->camera->SetPosition(playerPosition);
 
-	for (int e = 0; e < 10; e++)
+	for (int i = 0; i < lvl1Map.getEnemyPosition().size(); i++)
 	{
 		std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(sceneData.gfx);
-		enemy->pTransform->SetPosition(positionX - (distance * 10.0f) / 2.0f, 1.0f, 10.0f);
+		enemy->pTransform->SetPosition(lvl1Map.getEnemyPosition()[i].x, 1.0f, lvl1Map.getEnemyPosition()[i].z);
 		pEnemy.push_back(std::move(enemy));
-
-		positionX += distance;
-		if (positionX >= (distance * width))
-		{
-			positionX = 0.0f;
-		}
 		enemy.release();
 	}
+
+
+	//float width = 10.0f;
+	//float height = 10.0f;
+	//float distance = 10.0f;
+	//float positionX = 0;
+
+	//for (int e = 0; e < 10; e++)
+	//{
+	//	std::unique_ptr<Enemy> enemy = std::make_unique<Enemy>(sceneData.gfx);
+	//	enemy->pTransform->SetPosition(positionX - (distance * 10.0f) / 2.0f, 1.0f, 10.0f);
+	//	pEnemy.push_back(std::move(enemy));
+
+	//	positionX += distance;
+	//	if (positionX >= (distance * width))
+	//	{
+	//		positionX = 0.0f;
+	//	}
+	//	enemy.release();
+	//}
 
 	//---------------------------------------------
 	// Cameras & Camera manager
@@ -88,9 +103,6 @@ void Scenelvl1::onCreate(SceneData& sceneData)
 	bdrfLut.LoadAndCreateTexture("Assets\\Texture\\integrateBrdf.png", DXGI_FORMAT_R8G8B8A8_UNORM);
 	bdrfLut.SetShaderResource(Bind::Texture::t5, 1u);
 
-	//---------------------------------------------
-	// Map
-	lvl1Map.LoadMap(sceneData.gfx, "Assets\\Levels\\lvl1_layout.txt", 56); // width * 2
 
 	//---------------------------------------------
 	// Game Objects

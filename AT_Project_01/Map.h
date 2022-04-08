@@ -23,7 +23,7 @@ class Map
 		Map& operator=(const Map&) = delete;
 
 		// Loads a map using text file. Returns false if map failed to load.
-		bool LoadMap(Graphics* pGfx, std::string file_path, int mapWidth);
+		bool LoadMap(Graphics* pGfx, std::string file_path, int mapWidth, DirectX::XMVECTOR& playerPosition);
 
 		// Updates all map objects
 		void Update(float dt);
@@ -32,6 +32,7 @@ class Map
 		void Draw(Graphics* pGfx);
 
 		const std::vector<std::unique_ptr<DefaultObject>>& getMapObjects() const { return mapObjects; }
+		const std::vector<XMFLOAT3>& getEnemyPosition() const { return enemyPosition; }
 
 	private:
 		// Returns an enum using a string
@@ -43,8 +44,9 @@ class Map
 		// Creates a map object that uses PBR rendering
 		void CreateMapObjectPBR(Graphics* pGfx, std::string model_filePath, std::string albedo_filePath, std::string rmao_filePath, DirectX::XMFLOAT3 position);
 
-		void CreateMapObjectPBRFromLoader(Graphics* pGfx, const TextureData & albedo, const TextureData & rmao, const DirectX::XMFLOAT3 & position, const std::vector<Vertex>& _vertices, const std::vector<unsigned short>& _indices);
+		void CreateMapObjectPBRFromLoader(Graphics* pGfx, const TextureData & albedo, const TextureData & rmao, const DirectX::XMFLOAT3 & position, DirectX::XMFLOAT3 rotation, const std::vector<Vertex>& _vertices, const std::vector<unsigned short>& _indices);
 
 		std::map<std::string, mapObjectID> objectIDMap;
 		std::vector<std::unique_ptr<DefaultObject>> mapObjects;
+		std::vector<XMFLOAT3> enemyPosition;
 };

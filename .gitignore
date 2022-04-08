@@ -350,12 +350,12 @@ MigrationBackup/
 .ionide/
 
 # Project assets
-*.png
-*.jpeg
-*.jpg
-*.tga
-*.dds
+#*.png
+#*.jpeg
+#*.jpg
+#*.tga
+#*.dds
 *.mtl
-*.obj
-*.fbx
-*.txt
+#*.obj
+#*.fbx
+#*.txt
