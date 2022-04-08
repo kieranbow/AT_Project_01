@@ -98,7 +98,7 @@ void ModelComponent::LoadShaders(Graphics* gfx, std::wstring vs_filename, std::w
 #if _DEBUG
 	shaderFolder = L"..\\x64\\Debug\\";
 #else // DEBUG
-	shaderFolder = L"..\\x64\\Release\\";
+	shaderFolder = L"";
 #endif
 
 	// Read and Create vertex shader

@@ -85,14 +85,14 @@ void Player::Input(Keyboard* keyboard, Mouse* mouse)
 		camera->UpdateRotation({ 0.0f, rotationSpeed, 0.0f, 0.0f });
 	}
 
-	//if (keyboard->IsKeyPressed(38)) // Up arrow
-	//{
-	//	camera->UpdateRotation({ -rotationSpeed, 0.0f, 0.0f, 0.0f });
-	//}
-	//if (keyboard->IsKeyPressed(40)) // Down arrow
-	//{
-	//	camera->UpdateRotation({ rotationSpeed, 0.0f, 0.0f, 0.0f });
-	//}
+	if (keyboard->IsKeyPressed(38)) // Up arrow
+	{
+		camera->UpdateRotation({ -rotationSpeed, 0.0f, 0.0f, 0.0f });
+	}
+	if (keyboard->IsKeyPressed(40)) // Down arrow
+	{
+		camera->UpdateRotation({ rotationSpeed, 0.0f, 0.0f, 0.0f });
+	}
 }
 
 void Player::Update(float dt)
