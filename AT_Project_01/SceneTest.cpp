@@ -7,6 +7,11 @@ SceneTest::SceneTest(SceneManager& sceneManager) : currentSceneManager(sceneMana
 
 void SceneTest::onCreate(SceneData& sceneData)
 {
+	directionalLight.SetLightDirection({ 0.0f, -0.3f, 0.5f });
+	directionalLight.SetLightIntensity(1.0f);
+	directionalLight.SetLightColor({ 0.98f, 0.95f, 0.85f });
+	directionalLight.SetAmbientColor({ 0.36f, 0.49f, 0.76f });
+
 	//---------------------------------------------
 	// Cameras
 	staticCamera = std::make_shared<Camera>(sceneData.gfx->GetWindowSize().first, sceneData.gfx->GetWindowSize().second, 90.0f, 0.01f, 10000.0f, false);
@@ -128,13 +133,13 @@ void SceneTest::onCreate(SceneData& sceneData)
 
 	float distance = 100.0f;
 
-	int amount = 1000;
+	int amount = 10000;
 
 	float positionX = 0;
 	float positionY = 0;
 	float positionZ = 0;
 
-	//ModelLoader loader("Assets\\Model\\Helmet_paintable_v2.obj");
+	ModelLoader loader("Assets\\Model\\Helmet_paintable_v2.obj");
 
 	Material_PBR material;
 	material.ambientOcculsion = 1.0f;
@@ -146,11 +151,11 @@ void SceneTest::onCreate(SceneData& sceneData)
 	{
 		std::unique_ptr temp = std::make_unique<DefaultObject>();
 		temp->pModel->SetPBRMaterial(material);
-		//temp->model->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
-		temp->pModel->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\Helmet_paintable_v2.obj");
-		temp->pModel->LoadShaders(sceneData.gfx, L"VS_Default.cso", L"PS_PBRMaterial.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
+		temp->pModel->LoadMesh(sceneData.gfx, loader.GetVertices(), loader.GetIndices());
+		//temp->pModel->LoadMeshFromSource(sceneData.gfx, "Assets\\Model\\cube.obj");
+		temp->pModel->LoadShaders(sceneData.gfx, L"VS_Default.cso", L"PS_BlinnPhong.cso", sceneData.gfx->inputElemDesc, sceneData.gfx->GetSizeOfInputElemDesc());
 		temp->pTransform->SetPosition(positionX - (distance * 10) / 2, positionY - (distance * 10) / 2, positionZ - (distance * 10) / 2);
-		temp->pTransform->SetScale(2.0f, 2.0f, 2.0f);
+		temp->pTransform->SetScale(1.0f, 1.0f, 1.0f);
 		cube.push_back(std::move(temp));
 
 		positionX += distance;

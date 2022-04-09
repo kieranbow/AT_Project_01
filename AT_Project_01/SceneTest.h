@@ -43,6 +43,9 @@ class SceneTest : public Scene
 		ModelComponent sky;
 		ModelComponent pyramid;
 		ModelComponent single_cube;
+
+		// Lighting
+		DirectionalLight directionalLight;
 		
 		std::vector< std::unique_ptr<DefaultObject>> cube;
 		std::shared_ptr<Camera> staticCamera;

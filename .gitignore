@@ -355,8 +355,12 @@ MigrationBackup/
 #*.jpg
 #*.tga
 #*.dds
-*.mtl
+#*.mtl
 #*.obj
 #*.fbx
 #*.txt
-*.db
+#*.db
+
+!*/Assets/Model/*
+!*/Assets/Model/lvl/Wall/Corner/*
+!*/Assets/Model/lvl/Wall/Mid/*
